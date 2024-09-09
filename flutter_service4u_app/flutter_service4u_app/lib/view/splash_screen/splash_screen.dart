@@ -52,9 +52,9 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                  height: 163.h,
-                  width: 179.h,
-                  child: getSvgImage("splash_logo.svg"))
+                  height: 500,
+                  width: 500,
+                  child:  getAssetImage("Ejadah (1).png"))
             ],
           ),
         ),
