@@ -19,6 +19,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   backClick() {
@@ -77,6 +78,15 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           getVerSpace(28.h),
                           phone_number_field(mobileNumberController),
                           getVerSpace(28.h),
+                          getTextField("Location", "location_icon.svg",
+                              controller: locationController,
+                              validator: (location) {
+                            if (location == null || location.isEmpty) {
+                              return 'Please select Location';
+                            }
+                            return null;
+                          }),
+                          getVerSpace(28.h),
                           getTextField(
                               function: () {},
                               obsequrePermition:
@@ -107,20 +117,25 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap:(){
+                                onTap: () {
                                   sinUpEmptyStateController.setCheakPos();
                                 },
-                                child: getSvgImage(sinUpEmptyStateController.cheak
-                                    ? "select_cheak_button.svg"
-                                    : "unselect_cheak_button.svg"),
+                                child: getSvgImage(
+                                    sinUpEmptyStateController.cheak
+                                        ? "select_cheak_button.svg"
+                                        : "unselect_cheak_button.svg"),
                               ),
                               getHorSpace(10.h),
                               GestureDetector(
-                                onTap: (){
-                                  Constant.sendToNext(context,Routes.termsAndConditionScreenRoute);
+                                onTap: () {
+                                  Constant.sendToNext(context,
+                                      Routes.termsAndConditionScreenRoute);
                                 },
-                                child: getCustomFont("I agree with Terms & Privacy",
-                                    14.sp, grey40, 1,
+                                child: getCustomFont(
+                                    "I agree with Terms & Privacy",
+                                    14.sp,
+                                    grey40,
+                                    1,
                                     fontWeight: FontWeight.w400),
                               ),
                             ],
