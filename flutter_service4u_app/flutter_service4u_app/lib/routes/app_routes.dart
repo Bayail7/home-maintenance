@@ -3,9 +3,11 @@ abstract class Routes {
   static const onBoardingScreenRoute = Paths.onBoardingScreenPath;
   static const signInEmptyStateRoute = Paths.signInEmptyStatePath;
   static const sinUpEmptyStateRoute = Paths.sinUpEmptyStatePath;
+  static const SignUpProviderEmptyState= Paths.SignUpProviderEmptyStatePath;
   static const forgotPasswordEmptyStateRoute =
       Paths.forgotPasswordEmptyStatePath;
   static const verificationScreenRoute = Paths.verificationScreenPath;
+   static const verificationproviderScreenRoute = Paths.verificationproviderScreenPath;
   static const resetPasswordScreenRoute = Paths.resetPasswordScreenPath;
   static const homeMainScreenRoute = Paths.homeMainScreenPath;
   static const homeScreenRoute = Paths.homeScreenPath;
@@ -66,14 +68,18 @@ abstract class Routes {
   static const securityScreenRoute = Paths.securityScreenPath;
   static const recommendedServiceScreenRoute =
       Paths.recommendedServiceScreenPath;
+
+  
 }
 
 abstract class Paths {
   static const splashScreenPath = "/";
   static const onBoardingScreenPath = "/OnBoardingScreen";
   static const signInEmptyStatePath = "/SignInEmptyState";
+  static const SignUpProviderEmptyStatePath = "/SignUpProviderEmptyState";
   static const sinUpEmptyStatePath = "/SinUpEmptyState";
   static const verificationScreenPath = "/VerificationScreen";
+    static const verificationproviderScreenPath = "/VerificationproviderScreen";
   static const forgotPasswordEmptyStatePath = "/ForgotPasswordEmptyState";
   static const resetPasswordScreenPath = "/ResetPasswordScreen";
   static const homeMainScreenPath = "/HomeMainScreen";

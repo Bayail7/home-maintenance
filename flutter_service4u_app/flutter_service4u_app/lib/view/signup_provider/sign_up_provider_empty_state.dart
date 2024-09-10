@@ -7,42 +7,44 @@ import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
 
-class SinUpEmptyState extends StatefulWidget {
+class SignUpProviderEmptyState extends StatefulWidget {
   @override
-  State<SinUpEmptyState> createState() => _SinUpEmptyStateState();
+  State<SignUpProviderEmptyState> createState() => _SignUpProviderEmptyStateState();
 }
 
-class _SinUpEmptyStateState extends State<SinUpEmptyState> {
-  SinUpEmptyStateController sinUpEmptyStateController =
-      Get.put(SinUpEmptyStateController());
-  TextEditingController nameController = TextEditingController();
+class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
+  // Initialize controller
+  final SignUpProviderEmptyStateController signUpProviderEmptyStateController = Get.put(SignUpProviderEmptyStateController());
+   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final TextEditingController serviceTypeController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  backClick() {
+   backClick() {
     Constant.backToFinish();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Ensure ScreenUtil is initialized properly
     initializeScreenSize(context);
-    return GetBuilder<SinUpEmptyStateController>(
-      init: SinUpEmptyStateController(),
-      builder: (sinUpEmptyStateController) => WillPopScope(
-          onWillPop: () async {
-            backClick();
-            return false;
-          },
-          child: Scaffold(
-            backgroundColor: context.theme.scaffoldBackgroundColor,
-            resizeToAvoidBottomInset: false,
-            body: SafeArea(
-                child: Form(
+
+    return GetBuilder<SignUpProviderEmptyStateController>(
+      builder: (controller) => WillPopScope(
+        onWillPop: () async {
+          backClick();
+          return false; // Prevent the default back navigation
+        },
+        child: Scaffold(
+          backgroundColor: context.theme.scaffoldBackgroundColor,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Form(
               key: formKey,
-              child: Column(
+                         child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getVerSpace(30.h),
@@ -90,17 +92,18 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           getTextField(
                               function: () {},
                               obsequrePermition:
-                                  sinUpEmptyStateController.passVisibility,
+                                  signUpProviderEmptyStateController.passVisibility,
                               "Password",
                               "lock_icon.svg",
                               suffixiconpermition: true,
                               controller: passwordController,
                               widget: GestureDetector(
                                   onTap: () {
-                                    sinUpEmptyStateController
-                                        .setPasswordVisibility();
+                                    signUpProviderEmptyStateController
+                                    .setPasswordVisibility();
+                                    
                                   },
-                                  child: getSvgImage(sinUpEmptyStateController
+                                  child: getSvgImage(signUpProviderEmptyStateController
                                               .passVisibility
                                           ? "eye_icon.svg"
                                           : "selected_eye_icon.svg")
@@ -118,10 +121,10 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  sinUpEmptyStateController.setCheakPos();
+                                  signUpProviderEmptyStateController.isChecked;
                                 },
                                 child: getSvgImage(
-                                    sinUpEmptyStateController.cheak
+                                      signUpProviderEmptyStateController.isChecked                                              
                                         ? "select_cheak_button.svg"
                                         : "unselect_cheak_button.svg"),
                               ),
@@ -143,7 +146,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           getVerSpace(54.h),
                           getCustomButton("Sign Up", () {
                             if (formKey.currentState!.validate() &&
-                                sinUpEmptyStateController.cheak == true) {
+                                signUpProviderEmptyStateController.isChecked == true) {
                               // PrefData.setIsSignIn(false);
                               Constant.sendToNext(
                                   context, Routes.verificationScreenRoute);

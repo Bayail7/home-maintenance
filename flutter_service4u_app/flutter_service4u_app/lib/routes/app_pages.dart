@@ -54,7 +54,9 @@ import '../view/sign_in/forgot_password_empty_state.dart';
 import '../view/sign_in/reset_password_screen.dart';
 import '../view/sign_in/sign_in_empty_state.dart';
 import '../view/sign_up/sign_up_empty_state.dart';
+import '../view/signup_provider/sign_up_provider_empty_state.dart';
 import '../view/sign_up/verification_screen.dart';
+import '../view/signup_provider/verification_Provider_screen.dart';
 import '../view/splash_screen/splash_screen.dart';
 import 'app_routes.dart';
 
@@ -65,7 +67,9 @@ class AppPages {
     Routes.onBoardingScreenRoute: (context) => OnBoardingScreen(),
     Routes.signInEmptyStateRoute: (context) => SignInEmptyState(),
     Routes.sinUpEmptyStateRoute: (context) => SinUpEmptyState(),
+    Routes.SignUpProviderEmptyState:(context) => SignUpProviderEmptyState(),
     Routes.verificationScreenRoute: (context) => VerificationScreen(),
+    Routes.verificationproviderScreenRoute:(context) => VerificationProviderScreen(),
     Routes.forgotPasswordEmptyStateRoute: (context) =>
         ForgotPasswordEmptyState(),
     Routes.resetPasswordScreenRoute: (context) => ResetPasswordScreen(),

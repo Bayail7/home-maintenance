@@ -20,6 +20,7 @@ import '../models/service_offer_model.dart';
 import '../models/side_menu_data_model.dart';
 import '../utils/color_category.dart';
 
+
 class SplashScreenController extends GetxController {}
 
 class OnBoardingScreenController extends GetxController {
@@ -70,13 +71,37 @@ class SinUpEmptyStateController extends GetxController {
     update();
   }
 
+
   void setPasswordVisibility() {
     passVisibility = !passVisibility;
     update();
   }
 }
 
+
+class SignUpProviderEmptyStateController extends GetxController {
+  // Renamed from `cheak` to `isChecked` for clarity
+  bool isChecked = false;
+  bool passVisibility = false;
+
+  // Method to toggle the state of `isChecked`
+  void toggleCheck() {
+    isChecked = !isChecked;
+    update(); // Notify listeners of the change
+  }
+
+  // Method to toggle the visibility of the password
+  void togglePasswordVisibility() {
+    passVisibility = !passVisibility;
+    update(); // Notify listeners of the change
+  }
+
+  void setPasswordVisibility() {}
+}
+
 class VerificationScreenController extends GetxController {}
+
+class VerificationProviderScreenController extends GetxController {}
 
 class HomeMainScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
