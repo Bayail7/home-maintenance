@@ -16,18 +16,18 @@ import '../view/home_tab/categories_screens/ac_repair_categories_screens/payment
 import '../view/home_tab/categories_screens/ac_repair_categories_screens/phone_number_screen.dart';
 import '../view/home_tab/categories_screens/appliance_categories_screens/place_order_screen.dart';
 import '../view/home_tab/categories_screens/appliance_categories_screens/promo_code_screen.dart';
-import '../view/home_tab/categories_screens/beauty_categories_screens/beaty_screen.dart';
-import '../view/home_tab/categories_screens/beauty_categories_screens/beauty_service_detail.dart';
+// import '../view/home_tab/categories_screens/beauty_categories_screens/beaty_screen.dart';
+// import '../view/home_tab/categories_screens/beauty_categories_screens/beauty_service_detail.dart';
 import '../view/home_tab/categories_screens/categories_screen.dart';
-import '../view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_detail.dart';
-import '../view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_screen.dart';
+// import '../view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_detail.dart';
+// import '../view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_screen.dart';
 import '../view/home_tab/categories_screens/electronics_categories_screens/electronics_screen.dart';
-import '../view/home_tab/categories_screens/mens_salon_categories_screens/mens_slon_screen.dart';
+// import '../view/home_tab/categories_screens/mens_salon_categories_screens/mens_slon_screen.dart';
 import '../view/home_tab/categories_screens/order_cancle_dialogue.dart';
 import '../view/home_tab/categories_screens/order_confirm_dialogue.dart';
-import '../view/home_tab/categories_screens/painting_categories_screens/painting_screen.dart';
+// import '../view/home_tab/categories_screens/painting_categories_screens/painting_screen.dart';
 import '../view/home_tab/categories_screens/plumbing_categories_screens/plumbing_screen.dart';
-import '../view/home_tab/categories_screens/shifting_categories_screens/shifting_screen.dart';
+// import '../view/home_tab/categories_screens/shifting_categories_screens/shifting_screen.dart';
 import '../view/home_tab/home_screen.dart';
 import '../view/home_tab/recommended_service_screen.dart';
 import '../view/home_tab/side_menu_screens/add_new_address_screen.dart';
@@ -74,15 +74,15 @@ class AppPages {
     Routes.bookingScreenRoute: (context) => BookingScreen(),
     Routes.notificationScreenRoute: (context) => NotificationScreen(),
     Routes.profileScreenRoute: (context) => ProfileScreen(),
-    Routes.cleaningServiceScreenRoute: (context) => CleaningServiceScreen(),
+    // Routes.cleaningServiceScreenRoute: (context) => CleaningServiceScreen(),
     Routes.categoriesScreenRoute: (context) => CategoriesScreen(),
     Routes.aCRepairScreenRoute: (context) => ACRepairScreen(),
-    Routes.beautyScreenRoute: (context) => BeautyScreen(),
-    Routes.paintingScreenRoute: (context) => PaintingScreen(),
+    // Routes.beautyScreenRoute: (context) => BeautyScreen(),
+    // Routes.paintingScreenRoute: (context) => PaintingScreen(),
     Routes.plumbingScreenRoute: (context) => PlumbingScreen(),
     Routes.electronicScreenRoute: (context) => ElectronicScreen(),
-    Routes.shiftingScreenRoute: (context) => ShiftingScreen(),
-    Routes.mensSalonScreenRoute: (context) => MensSalonScreen(),
+    // Routes.shiftingScreenRoute: (context) => ShiftingScreen(),
+    // Routes.mensSalonScreenRoute: (context) => MensSalonScreen(),
     Routes.applianceCategoriesScreenRoute: (context) =>
         ApplianceCategoriesScreen(),
     Routes.sideMenuProfifileScreenRoute: (context) => SideMenuProfifileScreen(),
@@ -96,9 +96,9 @@ class AppPages {
     Routes.sideMenuSupportScreenRoute: (context) => SideMenuSupportScreen(),
     Routes.acRepairServiceDetailScreenRoute: (context) =>
         AcRepairServiceDetailScreen(),
-    Routes.cleaningServiceDetailScreenRoute: (context) =>
-        CleaningServiceDetailScreen(),
-    Routes.beautyServiceDetailRoute: (context) => BeautyServiceDetail(),
+    // Routes.cleaningServiceDetailScreenRoute: (context) =>
+    //     CleaningServiceDetailScreen(),
+    // Routes.beautyServiceDetailRoute: (context) => BeautyServiceDetail(),
     Routes.cheakOutScreenRoute: (context) => CheakOutScreen(),
     Routes.phoneNumberScreenRoute: (context) => PhoneNumberScreen(),
     Routes.promoCodeScreenRoute: (context) => PromoCodeScreen(),

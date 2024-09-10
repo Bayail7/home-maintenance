@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:service_hub_app/models/categories_model.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constant.dart';
-import 'package:service_hub_app/view/home_tab/categories_screens/beauty_categories_screens/beaty_screen.dart';
-import 'package:service_hub_app/view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_screen.dart';
+// import 'package:service_hub_app/view/home_tab/categories_screens/beauty_categories_screens/beaty_screen.dart';
+// import 'package:service_hub_app/view/home_tab/categories_screens/cleaning_categories_screens/cleaning_service_screen.dart';
 import '../../../controller/controller.dart';
 import '../../../utils/constantWidget.dart';
 import 'ac_repair_categories_screens/ac_repair_screen.dart';
@@ -28,10 +28,10 @@ class CategoriesScreen extends StatefulWidget {
 // ];
 List categoriesClass = [
   ACRepairScreen(),
-  BeautyScreen(),
+  // BeautyScreen(),
   ACRepairScreen(),
   ACRepairScreen(),
-  CleaningServiceScreen(),
+  // CleaningServiceScreen(),
   ACRepairScreen(),
   ACRepairScreen(),
   ACRepairScreen(),

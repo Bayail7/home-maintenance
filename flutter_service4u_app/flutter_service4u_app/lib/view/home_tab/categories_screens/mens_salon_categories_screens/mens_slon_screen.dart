@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 
-class MensSalonScreen extends StatefulWidget {
+// class MensSalonScreen extends StatefulWidget {
 
 
-  @override
-  State<MensSalonScreen> createState() => _MensSalonScreenState();
-}
+//   @override
+//   State<MensSalonScreen> createState() => _MensSalonScreenState();
+// }
 
-class _MensSalonScreenState extends State<MensSalonScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+// class _MensSalonScreenState extends State<MensSalonScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
