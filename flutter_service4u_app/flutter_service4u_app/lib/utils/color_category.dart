@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 // Color lightGrey = '#F8F8F8'.toColor();
 Color lightThemebgColor = "#F9F9F9".toColor();
 Color darkThemebgColor = "#0F1621".toColor();
-Color darkYellow = '#FEAE5A'.toColor();
+Color darkYellow = '#78B7D0'.toColor();
 Color blue = '#6759FF'.toColor();
 Color hintColor = '#9B9E9F'.toColor();
 Color lightThemeTextColor = textColor;
@@ -25,6 +25,7 @@ Color plumbingServiceColor = '#CBEBA4'.toColor();
 Color electronicServiceColor = '#FB9B9B'.toColor();
 Color shiftingServiceColor = '#F8B0ED'.toColor();
 Color salonServiceColor = '#AFC6FF'.toColor();
+
 
 Color titleColor = '#172B4D'.toColor();
 Color neutralShades = '#9A9FA5'.toColor();

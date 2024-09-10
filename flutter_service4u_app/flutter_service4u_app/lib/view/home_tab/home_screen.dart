@@ -70,27 +70,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         ).paddingSymmetric(horizontal: 20.h, vertical: 20.h),
                       ),
                       Container(
-                        height: 140.h,
+                        height: 180.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
-                                  Constant.assetImagePath + "banner_image.png",
+                                  Constant.assetImagePath + "ai_image.jpg",
                                 ),
                                 fit: BoxFit.fill)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            getVerSpace(20.h),
                             getCustomFont(
-                                "Offer On Home Service", 14.sp, regularBlack, 1,
+                                "Not sure what's wrong?", 20.sp, regularWhite, 1,
                                 fontWeight: FontWeight.w500),
-                            getVerSpace(6.h),
-                            getCustomFont("Get 20% Off", 20.sp, regularBlack, 1,
+                            getVerSpace(15.h),
+                            getCustomFont("Let Ejadah AI figure it out!", 20.sp, regularWhite, 1,
                                 fontWeight: FontWeight.w700),
                             getVerSpace(12.h),
-                            getCustomButton("Book Now", () {},
+                            getCustomButton("Try it", () {},
                                 buttonheight: 34.h,
-                                fontSize: 14.sp,
+                                fontSize: 16.sp,
                                 weight: FontWeight.w500,
                                 buttonwidth: 100.h)
                           ],
@@ -109,18 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 getCustomFont(
-                                    "Select Service", 16.sp, regularBlack, 1,
+                                    "Select Service", 17.sp, regularBlack, 1,
                                     fontWeight: FontWeight.w500),
-                                GestureDetector(
-                                  onTap: () {
-                                    // HomeMainScreenController.drawerKey.currentState!.isDrawerOpen?HomeMainScreenController.drawerKey.currentState!.closeDrawer():SizedBox();
-                                    Constant.sendToNext(
-                                        context, Routes.categoriesScreenRoute);
-                                  },
-                                  child: getCustomFont(
-                                      "See all", 14.sp, grey40, 1,
-                                      fontWeight: FontWeight.w400),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     // HomeMainScreenController.drawerKey.currentState!.isDrawerOpen?HomeMainScreenController.drawerKey.currentState!.closeDrawer():SizedBox();
+                                //     Constant.sendToNext(
+                                //         context, Routes.categoriesScreenRoute);
+                                //   },
+                                //   child: getCustomFont(
+                                //       "See all", 14.sp, grey40, 1,
+                                //       fontWeight: FontWeight.w400),
+                                // ),
                               ],
                             ),
                             getVerSpace(20.h),
