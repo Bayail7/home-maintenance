@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     getSvgImage("location_icon.svg"),
                                     getHorSpace(12.h),
-                                    getCustomFont("New Jersey", 14.sp,
+                                    getCustomFont("Buraydah", 14.sp,
                                         context.theme.primaryColor, 1,
                                         fontWeight: FontWeight.w400),
                                   ],
@@ -73,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 180.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
                             image: DecorationImage(
                                 image: AssetImage(
                                   Constant.assetImagePath + "ai_image.jpg",
@@ -82,11 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             getVerSpace(20.h),
-                            getCustomFont(
-                                "Not sure what's wrong?", 20.sp, regularWhite, 1,
+                            getCustomFont("Not sure what's wrong?", 20.sp,
+                                regularWhite, 1,
                                 fontWeight: FontWeight.w500),
                             getVerSpace(15.h),
-                            getCustomFont("Let Ejadah AI figure it out!", 20.sp, regularWhite, 1,
+                            getCustomFont("Let Ejadah AI figure it out!", 20.sp,
+                                regularWhite, 1,
                                 fontWeight: FontWeight.w700),
                             getVerSpace(12.h),
                             getCustomButton("Try it", () {},
