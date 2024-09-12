@@ -43,50 +43,56 @@ class DataFile {
 
   static List<CleaningService> getCleaningService() {
     return [
-      CleaningService(
-          "cleaning_service1st.png", "Home Cleaning ", "10", "150","4.8","87", 1),
-      CleaningService(
-          "cleaning_service2nd.png", "Carpet Cleaning", "0", "140", "4.5","87",2),
-      CleaningService(
-          "cleaning_service3rd.png", "Bathroom Cleaning", "0", "128","4.5","87",3),
-      CleaningService(
-          "cleaning_service4th.png", "Kitchen Cleaning", "0", "130","4.5","87", 4),
-    ];
-  }
-  //this.image,this.title,this.price,this.rating,this.discount,this.id
-  static List<CleaningServiceOffer> getCleaningOfferData(){
-    return[
-      CleaningServiceOffer("cleaning_service1st.png","Home Cleaning Service","15.00","4.5","10",1),
-      CleaningServiceOffer("cleaning_service2nd.png","Carpet Cleaning Service","15.00","4.5","10",2),
-      CleaningServiceOffer("cleaning_service3rd.png","Bathroom Cleaning Service","15.00","4.5","",3),
-      CleaningServiceOffer("cleaning_service4th.png","Kitchen Cleaning Service","15.00","4.5","",4),
+      CleaningService("cleaning_service1st.png", "Home Cleaning ", "10", "150",
+          "4.8", "87", 1),
+      CleaningService("cleaning_service2nd.png", "Carpet Cleaning", "0", "140",
+          "4.5", "87", 2),
+      CleaningService("cleaning_service3rd.png", "Bathroom Cleaning", "0",
+          "128", "4.5", "87", 3),
+      CleaningService("cleaning_service4th.png", "Kitchen Cleaning", "0", "130",
+          "4.5", "87", 4),
     ];
   }
 
-  static List<RecommendedData> getRecommendedData(){
+  //this.image,this.title,this.price,this.rating,this.discount,this.id
+  static List<CleaningServiceOffer> getCleaningOfferData() {
     return [
-      RecommendedData("ac_service_1st.png","AC Repair Service","30.00",'4.5','',1),
-      RecommendedData("recommended_2nd.png","Manicure","25.00",'4.5','',2),
-      RecommendedData("recommended_3rd.png","Bathroom Cleaning","20.00",'4.5','',3),
+      CleaningServiceOffer("cleaning_service1st.png", "Home Cleaning Service",
+          "15.00", "4.5", "10", 1),
+      CleaningServiceOffer("cleaning_service2nd.png", "Carpet Cleaning Service",
+          "15.00", "4.5", "10", 2),
+      CleaningServiceOffer("cleaning_service3rd.png",
+          "Bathroom Cleaning Service", "15.00", "4.5", "", 3),
+      CleaningServiceOffer("cleaning_service4th.png",
+          "Kitchen Cleaning Service", "15.00", "4.5", "", 4),
     ];
   }
+
+  static List<RecommendedData> getRecommendedData() {
+    return [
+      RecommendedData(
+          "ac_service_1st.png", "AC Repair Service", "30.00", '4.5', '', 1),
+      RecommendedData("recommended_2nd.png", "Manicure", "25.00", '4.5', '', 2),
+      RecommendedData(
+          "recommended_3rd.png", "Bathroom Cleaning", "20.00", '4.5', '', 3),
+    ];
+  }
+
   static List<BeautyData> getBeautyData() {
     return [
       BeautyData(
-          "beauty_1st.png", "Dklayut Makeup Service", "150",'10',"4.8",1),
+          "beauty_1st.png", "Dklayut Makeup Service", "150", '10', "4.8", 1),
+      BeautyData("beauty_2nd.png", "Hair Style Service", "140", '', "4.5", 2),
+      BeautyData("beauty_3rd.png", "Multi Mask  Service", "128", '', "4.5", 3),
       BeautyData(
-          "beauty_2nd.png", "Hair Style Service", "140",'' ,"4.5",2),
-      BeautyData(
-          "beauty_3rd.png", "Multi Mask  Service", "128",'',"4.5",3),
-      BeautyData(
-          "beauty_4th.png", "Hair Rebonding Service", "130",'',"4.5", 4),
+          "beauty_4th.png", "Hair Rebonding Service", "130", '', "4.5", 4),
     ];
   }
 
   static List<Categories> getCategories() {
     return [
       Categories("AC Repair", "ac_repair_icon.png", 1),
-      Categories("Beauty",  "beauty_icon.png", 2),
+      Categories("Beauty", "beauty_icon.png", 2),
       Categories("Appliance", "appliance_icon.png", 3),
       Categories("Painting", "painting_icon.png", 4),
       Categories("Cleaning", "cleaning_icon.png", 5),
@@ -98,33 +104,41 @@ class DataFile {
       Categories("Ironing", "ironing_icon.png", 11),
     ];
   }
-  static List<Address> getAddressData(){
+
+  static List<Address> getAddressData() {
     return [
-      Address("home_icon_black.svg","Home","2972 Westheimer Rd. Santa Ana, Illinois 85486",1),
-      Address("office_unselect_icon.svg","Office","8502 Preston Rd. Inglewood, Maine 98380",2),
+      Address("home_icon_black.svg", "Home",
+          "2972 Westheimer Rd. Santa Ana, Illinois 85486", 1),
+      Address("office_unselect_icon.svg", "Office",
+          "8502 Preston Rd. Inglewood, Maine 98380", 2),
     ];
   }
 
-  static List<PhoneNumbers> getPhoneNumberData(){
+  static List<PhoneNumbers> getPhoneNumberData() {
     return [
-      PhoneNumbers("phone_nubemer_user.png","(603) 555-0123","Primary",1),
+      PhoneNumbers("phone_nubemer_user.png", "(603) 555-0123", "Primary", 1),
     ];
   }
 
-  static List<PromoCode> getPromocodeData(){
+  static List<PromoCode> getPromocodeData() {
     return [
-      PromoCode("Xyz2022","You will get 10% discount for this promo code",1),
-      PromoCode("Service22","You will get 20% discount for this promo code",2),
+      PromoCode("Xyz2022", "You will get 10% discount for this promo code", 1),
+      PromoCode(
+          "Service22", "You will get 20% discount for this promo code", 2),
     ];
   }
 
-  static List<AllacService> getAllacService(){
+  static List<AllacService> getAllacService() {
     return [
-      AllacService("ac_service_1st.png","AC Repair Service","30.00","4.2","10",1),
-      AllacService("ac_service_2nd.png","AC Installation","30.00","4.8","",2),
-      AllacService("ac_service_3rd.png","AC leak detection","30.00","4.5","",3),
-      AllacService("ac_service_4th.png","AC cleaning","30.00","4.0","",4),
-      AllacService("ac_service_5th.png","AC compressor repairing","30.00","4.2","",5),
+      AllacService(
+          "ac_service_1st.png", "AC Repair Service", "30.00", "4.2", "10", 1),
+      AllacService(
+          "ac_service_2nd.png", "AC Installation", "30.00", "4.8", "", 2),
+      AllacService(
+          "ac_service_3rd.png", "AC leak detection", "30.00", "4.5", "", 3),
+      AllacService("ac_service_4th.png", "AC cleaning", "30.00", "4.0", "", 4),
+      AllacService("ac_service_5th.png", "AC compressor repairing", "30.00",
+          "4.2", "", 5),
     ];
   }
 
@@ -135,8 +149,6 @@ class DataFile {
       Offer("Offer AC Service", "25%", Color(0XFFFFBC99), Color(0XFFFFBC99)),
     ];
   }
-
-
 
 /*
 String? image,   String? rate,   String? ratting,   String? serviceName,   String? numberOfReview,   int? id,
@@ -165,10 +177,6 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
           "Address", 3),
       SideMenu("unselected_notification_icon.svg",
           "selected_notification_icon.svg", "Notification", 4),
-      SideMenu("unselected_offers_icon_lt.svg", "selected_offers_icon_lt.svg",
-          "Offers", 5),
-      SideMenu("unselected_referfriend_icon_lt.svg",
-          "selected_referfriend_icon_lt.svg", "Refer a Friend", 6),
       SideMenu("unselected_support_icon_lt.svg", "selected_support_icon_lt.svg",
           "Support", 7),
     ];
@@ -231,38 +239,122 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
    */
   static List<Booking> getBookingData() {
     return [
-      Booking("ac_repair_icon.png", acServiceColor, "AC Installation", 'Confirmed','8:00-9:00 AM',"09 Dec","#D-571224","westing_house_icon.svg","Westinghouse","1 Ton-1.5 Ton x2","Mr Dan Atkinson",1),
-      Booking("beauty_icon.png", beautyServiceColor, "Multi Mask Facial", 'Pending','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","Repairing Group","Sindenayu","Mr Dathan Carr",2),
-      Booking("cleaning_icon.png", cleaningServiceColor, "Multi Mask Facial", 'Complete','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","The Brown Brush","Sindenayu","Mr Deacon Nicholso",3),
-      Booking("ac_repair_icon.png", acServiceColor, "AC Installation", 'Complete','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","Sindenayu","Home Cured Place","Mr Duncan Glover",4),
-      Booking("beauty_icon.png", beautyServiceColor, "Multi Mask Facial", 'Complete','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","Sindenayu","The Glowing Nut","Mr Daylan Cross",5),
-      Booking("ac_repair_icon.png", acServiceColor, "AC Installation", 'Darft','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","Sindenayu","The Glowing Nut","Mr Dilan Mccarthy",6),
-      Booking("beauty_icon.png", beautyServiceColor, "Multi Mask Facial", 'Darft','8:00-9:00 AM',"09 Dec","#D-571224","sindenayu_icon.svg","Sindenayu","The Glowing Nut","Mr Darion Coates",7),
+      Booking(
+          "ac_repair_icon.png",
+          acServiceColor,
+          "AC Installation",
+          'Confirmed',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "westing_house_icon.svg",
+          "Westinghouse",
+          "1 Ton-1.5 Ton x2",
+          "Mr Dan Atkinson",
+          1),
+      Booking(
+          "beauty_icon.png",
+          beautyServiceColor,
+          "Multi Mask Facial",
+          'Pending',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "Repairing Group",
+          "Sindenayu",
+          "Mr Dathan Carr",
+          2),
+      Booking(
+          "cleaning_icon.png",
+          cleaningServiceColor,
+          "Multi Mask Facial",
+          'Complete',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "The Brown Brush",
+          "Sindenayu",
+          "Mr Deacon Nicholso",
+          3),
+      Booking(
+          "ac_repair_icon.png",
+          acServiceColor,
+          "AC Installation",
+          'Complete',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "Sindenayu",
+          "Home Cured Place",
+          "Mr Duncan Glover",
+          4),
+      Booking(
+          "beauty_icon.png",
+          beautyServiceColor,
+          "Multi Mask Facial",
+          'Complete',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "Sindenayu",
+          "The Glowing Nut",
+          "Mr Daylan Cross",
+          5),
+      Booking(
+          "ac_repair_icon.png",
+          acServiceColor,
+          "AC Installation",
+          'Darft',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "Sindenayu",
+          "The Glowing Nut",
+          "Mr Dilan Mccarthy",
+          6),
+      Booking(
+          "beauty_icon.png",
+          beautyServiceColor,
+          "Multi Mask Facial",
+          'Darft',
+          '8:00-9:00 AM',
+          "09 Dec",
+          "#D-571224",
+          "sindenayu_icon.svg",
+          "Sindenayu",
+          "The Glowing Nut",
+          "Mr Darion Coates",
+          7),
     ];
   }
 
-  static List<CancelReason> getReasonData(){
+  static List<CancelReason> getReasonData() {
     return [
-      CancelReason("Not happy with the punctuality",1),
-      CancelReason("Not getting the crew member I asked for",2),
-      CancelReason("Got a full time maid",3),
-      CancelReason("Leaviing the country",4),
-      CancelReason("Perfer to have one time bookings",5),
-      CancelReason("I am not available at that time anymore",6),
-      CancelReason("Not happy with the quality",7),
+      CancelReason("Not happy with the punctuality", 1),
+      CancelReason("Not getting the crew member I asked for", 2),
+      CancelReason("Got a full time maid", 3),
+      CancelReason("Leaviing the country", 4),
+      CancelReason("Perfer to have one time bookings", 5),
+      CancelReason("I am not available at that time anymore", 6),
+      CancelReason("Not happy with the quality", 7),
     ];
   }
 
   static List<OfferData> getOfferData() {
     return [
-      OfferData(
-          "appliance_service_1st.png", "128", "4.8", "AC Check-Up", "87", "10%","30 Jun",false,1),
-      OfferData("appliance_service_2nd.png", "128","4.5",
-          "AC Regular Service", "87","5%", "30 Jun",false,2),
+      OfferData("appliance_service_1st.png", "128", "4.8", "AC Check-Up", "87",
+          "10%", "30 Jun", false, 1),
+      OfferData("appliance_service_2nd.png", "128", "4.5", "AC Regular Service",
+          "87", "5%", "30 Jun", false, 2),
       OfferData("appliance_service_3rd.png", "170", "4.5", "AC Installation",
-          "87", "20%","30 Jun",false,3),
-      OfferData("appliance_service_4th.png", "170", "4.5",
-          "AC Uninstallation", "87", "7%","30 Jun",false,4),
+          "87", "20%", "30 Jun", false, 3),
+      OfferData("appliance_service_4th.png", "170", "4.5", "AC Uninstallation",
+          "87", "7%", "30 Jun", false, 4),
     ];
   }
 }

@@ -36,8 +36,6 @@ import '../view/home_tab/side_menu_screens/rewards_point_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_calender_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_address_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_notification_screen.dart';
-import '../view/home_tab/side_menu_screens/side_menu_offers_screen.dart';
-import '../view/home_tab/side_menu_screens/side_menu_refer_a_friend_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_support_screen.dart';
 import '../view/home_tab/side_menu_screens/sidemenu_profile_screen.dart';
 import '../view/notification_tab/notification_screen.dart';
@@ -67,9 +65,10 @@ class AppPages {
     Routes.onBoardingScreenRoute: (context) => OnBoardingScreen(),
     Routes.signInEmptyStateRoute: (context) => SignInEmptyState(),
     Routes.sinUpEmptyStateRoute: (context) => SinUpEmptyState(),
-    Routes.SignUpProviderEmptyState:(context) => SignUpProviderEmptyState(),
+    Routes.SignUpProviderEmptyState: (context) => SignUpProviderEmptyState(),
     Routes.verificationScreenRoute: (context) => VerificationScreen(),
-    Routes.verificationproviderScreenRoute:(context) => VerificationProviderScreen(),
+    Routes.verificationproviderScreenRoute: (context) =>
+        VerificationProviderScreen(),
     Routes.forgotPasswordEmptyStateRoute: (context) =>
         ForgotPasswordEmptyState(),
     Routes.resetPasswordScreenRoute: (context) => ResetPasswordScreen(),
@@ -94,9 +93,6 @@ class AppPages {
     Routes.sideMenuAddressScreenRoute: (context) => SideMenuAddressScreen(),
     Routes.sideMenuNotificationScreenRoute: (context) =>
         SideMenuNotificationScreen(),
-    Routes.sideMenuOfferScreenRoute: (context) => SideMenuOfferScreen(),
-    Routes.sideMenuRaferFriendScreenRoute: (context) =>
-        SideMenuRaferFriendScreen(),
     Routes.sideMenuSupportScreenRoute: (context) => SideMenuSupportScreen(),
     Routes.acRepairServiceDetailScreenRoute: (context) =>
         AcRepairServiceDetailScreen(),

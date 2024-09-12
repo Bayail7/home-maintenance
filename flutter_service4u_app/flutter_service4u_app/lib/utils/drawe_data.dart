@@ -13,12 +13,9 @@ import '../view/home_tab/categories_screens/ac_repair_categories_screens/payment
 import '../view/home_tab/side_menu_screens/side_menu_address_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_calender_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_notification_screen.dart';
-import '../view/home_tab/side_menu_screens/side_menu_offers_screen.dart';
-import '../view/home_tab/side_menu_screens/side_menu_refer_a_friend_screen.dart';
 import '../view/home_tab/side_menu_screens/side_menu_support_screen.dart';
 
 class DrawerData extends StatefulWidget {
-
   @override
   State<DrawerData> createState() => _DrawerDataState();
 }
@@ -30,8 +27,6 @@ class _DrawerDataState extends State<DrawerData> {
     PayMentScreen(),
     SideMenuAddressScreen(),
     SideMenuNotificationScreen(),
-    SideMenuOfferScreen(),
-    SideMenuRaferFriendScreen(),
     SideMenuSupportScreen(),
   ];
   @override
@@ -47,20 +42,27 @@ class _DrawerDataState extends State<DrawerData> {
             children: [
               Row(
                 children: [
-                  Container(height:42.h,width: 42.h,child: getAssetImage("user_image.png")),
+                  Container(
+                      height: 42.h,
+                      width: 42.h,
+                      child: getAssetImage("user_image.png")),
                   getHorSpace(12.h),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getCustomFont("Jacob Jones", 16.sp, regularBlack, 1,fontWeight: FontWeight.w400),
-                      getCustomFont("jacobjones@gmail.com", 12.sp, grey40, 1,fontWeight: FontWeight.w400),
+                      getCustomFont("Jacob Jones", 16.sp, regularBlack, 1,
+                          fontWeight: FontWeight.w400),
+                      getCustomFont("jacobjones@gmail.com", 12.sp, grey40, 1,
+                          fontWeight: FontWeight.w400),
                     ],
                   )
                 ],
               ),
-              GestureDetector(onTap: (){
-                backClick();
-              },child: getSvgImage("close_icon.svg"))
+              GestureDetector(
+                  onTap: () {
+                    backClick();
+                  },
+                  child: getSvgImage("close_icon.svg"))
             ],
           ),
           getVerSpace(24.h),
@@ -69,40 +71,42 @@ class _DrawerDataState extends State<DrawerData> {
             shrinkWrap: true,
             itemCount: sideDrawerController.sidemenu.length,
             itemBuilder: (context, index) {
-              SideMenu side =
-              sideDrawerController.sidemenu[index];
+              SideMenu side = sideDrawerController.sidemenu[index];
               return GetBuilder<SideDrawerController>(
                 init: SideDrawerController(),
-                builder:(sideDrawerController) =>  GetBuilder<SideMenuPaymentMenuScreenController>(
+                builder: (sideDrawerController) =>
+                    GetBuilder<SideMenuPaymentMenuScreenController>(
                   init: SideMenuPaymentMenuScreenController(),
-                  builder:(sideMenuPaymentMenuScreenController) =>  GestureDetector(
+                  builder: (sideMenuPaymentMenuScreenController) =>
+                      GestureDetector(
                     onTap: () {
                       sideDrawerController.setSelectedId(side.id);
-                      if(index==2) {
-                        sideDrawerController
-                            .addAddessScreen(false);
+                      if (index == 2) {
+                        sideDrawerController.addAddessScreen(false);
                       }
-                      if(index==1) {
-                        sideMenuPaymentMenuScreenController.setPaymentScreen(false);
+                      if (index == 1) {
+                        sideMenuPaymentMenuScreenController
+                            .setPaymentScreen(false);
                       }
                       Get.to(sideMenuClass[index]);
                     },
                     child: Container(
-                      decoration: sideDrawerController.selectedID ==
-                          side.id
+                      decoration: sideDrawerController.selectedID == side.id
                           ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.h),
-                          color: grey10)
+                              borderRadius: BorderRadius.circular(15.h),
+                              color: grey10)
                           : BoxDecoration(),
                       child: Row(
                         children: [
-                          getSvgImage( sideDrawerController.selectedID ==
-                              side.id?side.selectedicon!:side.unselectedicon!),
+                          getSvgImage(sideDrawerController.selectedID == side.id
+                              ? side.selectedicon!
+                              : side.unselectedicon!),
                           getHorSpace(12.h),
-                          getCustomFont(
-                              side.name!, 16.sp,
-                            regularBlack, 1,
-                           fontWeight:    sideDrawerController.selectedID ==side.id?FontWeight.w500:FontWeight.w400,
+                          getCustomFont(side.name!, 16.sp, regularBlack, 1,
+                              fontWeight:
+                                  sideDrawerController.selectedID == side.id
+                                      ? FontWeight.w500
+                                      : FontWeight.w400,
                               txtHeight: 1.5.h)
                         ],
                       ).paddingAll(16.h),

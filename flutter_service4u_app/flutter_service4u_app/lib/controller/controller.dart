@@ -12,14 +12,12 @@ import '../models/categories_model.dart';
 import '../models/cleaning_service_model.dart';
 import '../models/cleaninng_service_offer_model.dart';
 import '../models/notification_data_model.dart';
-import '../models/offer_data_model.dart';
 import '../models/phone_number_data_model.dart';
 import '../models/promocode_data_model.dart';
 import '../models/recommended_data_model.dart';
 import '../models/service_offer_model.dart';
 import '../models/side_menu_data_model.dart';
 import '../utils/color_category.dart';
-
 
 class SplashScreenController extends GetxController {}
 
@@ -71,13 +69,11 @@ class SinUpEmptyStateController extends GetxController {
     update();
   }
 
-
   void setPasswordVisibility() {
     passVisibility = !passVisibility;
     update();
   }
 }
-
 
 class SignUpProviderEmptyStateController extends GetxController {
   // Renamed from `cheak` to `isChecked` for clarity
@@ -406,29 +402,6 @@ class SideMenuPaymentMenuScreenController extends GetxController {
 class SideMenuNotificationScreenController extends GetxController {
   List<NotificationData> notification = DataFile.getNotificationData();
 }
-
-class SideMenuOfferScreenController extends GetxController {
-  List<OfferData> offerData = DataFile.getOfferData();
-  int? likeid;
-  bool grid = false;
-
-  void setGrid(bool val) {
-    grid = val;
-    update();
-  }
-
-  void setLike(int index) {
-    if (offerData[index].like == false) {
-      offerData[index].like = true;
-      update();
-    } else {
-      offerData[index].like = false;
-      update();
-    }
-  }
-}
-
-class SideMenuRaferFriendScreenController extends GetxController {}
 
 class SideMenuSupportScreenController extends GetxController {}
 
