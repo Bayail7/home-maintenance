@@ -6,8 +6,6 @@ import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import '../../controller/controller.dart';
-// import '../../models/cleaninng_service_offer_model.dart';
-// import '../../models/recommended_data_model.dart';
 import '../../routes/app_routes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,10 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     getCustomFont("Buraydah", 14.sp,
                                         context.theme.primaryColor, 1,
                                         fontWeight: FontWeight.w400),
+                                    SizedBox(width: 150),
                                   ],
                                 ),
-                                getSvgImage("unselected_notification_icon.svg",
-                                    color: regularBlack),
+                                //getSvgImage("unselected_notification_icon.svg",
+                                //color: regularBlack),
                               ],
                             ),
                             getVerSpace(32.h),
