@@ -282,7 +282,8 @@ Widget getTextField(String hint, String prefix,
     obscureText: obsequrePermition,
     obscuringCharacter: '*',
     onTap: () {
-      function!() ?? () {};
+      // function!() ?? () {};
+      function?.call() ?? () {};
     },
     decoration: InputDecoration(
       hintText: hint,
@@ -476,7 +477,7 @@ Widget phone_number_field(controller) {
           borderRadius: BorderRadius.circular(16.h),
           borderSide: BorderSide(color: grey10, width: 1.w)),
     ),
-    initialCountryCode: 'IN',
+    initialCountryCode: 'SA',
     onChanged: (phone) {
       print(phone.completeNumber);
     },
@@ -1179,7 +1180,7 @@ Widget getDivider({double? horPadding, Color? color}) {
 Widget getProfileOption(String image, String name, Function function,
     {double? height, double? width}) {
   return GestureDetector(
-    onTap: (){
+    onTap: () {
       function();
     },
     child: Container(
@@ -1232,15 +1233,16 @@ Widget getMyprofileDetailFormate(
     ],
   );
 }
+
 Widget getEditProfileOptionFormate(bool suffixIconPosition,
     {String? iconImage,
-      double? height,
-      int? maxline,
-      bool requredImage = false,
-      String? hint,
-      String? userdetail}) {
+    double? height,
+    int? maxline,
+    bool requredImage = false,
+    String? hint,
+    String? userdetail}) {
   return Container(
-    height: height??60.h,
+    height: height ?? 60.h,
     width: double.infinity,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.h),
@@ -1252,32 +1254,45 @@ Widget getEditProfileOptionFormate(bool suffixIconPosition,
         ],
         color: regularWhite),
     child: TextFormField(
-
-      maxLines: maxline??1,
+      maxLines: maxline ?? 1,
       initialValue: userdetail,
       decoration: InputDecoration(
-
-          suffixIcon: suffixIconPosition?getSvgImage("arrow_down.svg",height: 16.h,width: 16.h).paddingOnly(top: 20.h,bottom: 20.h,right: 20.h):null,
+          suffixIcon: suffixIconPosition
+              ? getSvgImage("arrow_down.svg", height: 16.h, width: 16.h)
+                  .paddingOnly(top: 20.h, bottom: 20.h, right: 20.h)
+              : null,
           border: InputBorder.none,
           hintText: hint,
-          hintStyle: TextStyle(fontFamily: Constant.fontsFamily,color: regularBlack),
-          contentPadding: suffixIconPosition?EdgeInsets.only(left: 18.h,top: 20.h):EdgeInsets.only(left: 18.h,top: 10.h)),
+          hintStyle:
+              TextStyle(fontFamily: Constant.fontsFamily, color: regularBlack),
+          contentPadding: suffixIconPosition
+              ? EdgeInsets.only(left: 18.h, top: 20.h)
+              : EdgeInsets.only(left: 18.h, top: 10.h)),
     ),
   );
 }
 
-Widget question_answer(q,a){
+Widget question_answer(q, a) {
   return Container(
-
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.h),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.h),
         border: Border.all(color: grey20)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getMultilineCustomFont(q, 18.sp,regularBlack, fontWeight: FontWeight.w700,),
+        getMultilineCustomFont(
+          q,
+          18.sp,
+          regularBlack,
+          fontWeight: FontWeight.w700,
+        ),
         getVerSpace(16.h),
-        getMultilineCustomFont(a, 14.sp,grey40, fontWeight: FontWeight.w400,)
-
+        getMultilineCustomFont(
+          a,
+          14.sp,
+          grey40,
+          fontWeight: FontWeight.w400,
+        )
       ],
     ).paddingAll(16.h),
   );

@@ -82,7 +82,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               controller: locationController,
                               validator: (location) {
                             if (location == null || location.isEmpty) {
-                              return 'Please select Location';
+                              return 'Please select location';
                             }
                             return null;
                           }),
@@ -146,7 +146,8 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                                 sinUpEmptyStateController.cheak == true) {
                               // PrefData.setIsSignIn(false);
                               Constant.sendToNext(
-                                  context, Routes.verificationScreenRoute);
+                                  // context, Routes.verificationScreenRoute);
+                                  context, Routes.homeMainScreenRoute);
                             }
                           }),
                           getVerSpace(50.h),
