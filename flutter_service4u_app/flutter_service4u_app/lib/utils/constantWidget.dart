@@ -272,7 +272,8 @@ Widget getTextField(String hint, String prefix,
     Color? fillColor,
     bool suffixiconpermition = false,
     Widget? widget,
-    bool obsequrePermition = false}) {
+    bool obsequrePermition = false,
+    InputDecoration? decoration = const InputDecoration()}) {
   return TextFormField(
     keyboardType: type,
     cursorColor: buttonColor,

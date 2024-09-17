@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:service_hub_app/utils/constantWidget.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
+import '/firestore_test_page.dart';
 
 class SinUpEmptyState extends StatefulWidget {
   @override
@@ -20,6 +22,8 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  //  final latitudeController = TextEditingController();
+  // final longitudeController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   backClick() {
@@ -60,7 +64,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               return 'Please enter Name';
                             }
                             return null;
-                          }),
+                          }, decoration: InputDecoration(labelText: 'name')),
                           getVerSpace(28.h),
                           getTextField("Email Address", "email_icon.svg",
                               controller: emailController, validator: (email) {
@@ -74,7 +78,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               }
                             }
                             return null;
-                          }),
+                          }, decoration: InputDecoration(labelText: 'email')),
                           getVerSpace(28.h),
                           phone_number_field(mobileNumberController),
                           getVerSpace(28.h),
@@ -85,7 +89,9 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               return 'Please select location';
                             }
                             return null;
-                          }),
+                          },
+                              decoration:
+                                  InputDecoration(labelText: 'location')),
                           getVerSpace(28.h),
                           getTextField(
                               function: () {},
@@ -112,7 +118,10 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               return 'Please enter valid password';
                             }
                             return null;
-                          }),
+                          },
+                              decoration:
+                                  InputDecoration(labelText: 'password')),
+                          SizedBox(height: 20),
                           getVerSpace(28.h),
                           Row(
                             children: [
@@ -144,10 +153,18 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           getCustomButton("Sign Up", () {
                             if (formKey.currentState!.validate() &&
                                 sinUpEmptyStateController.cheak == true) {
+                              final name = nameController.text;
+                              final email = emailController.text;
+                              final mobile = mobileNumberController.text;
+                              final password = passwordController.text;
+                              final location = locationController.text;
+                              FirestoreTestPageState.addUserData(
+                                  name, email, mobile, location, password);
                               // PrefData.setIsSignIn(false);
                               Constant.sendToNext(
                                   // context, Routes.verificationScreenRoute);
-                                  context, Routes.homeMainScreenRoute);
+                                  context,
+                                  Routes.homeMainScreenRoute);
                             }
                           }),
                           getVerSpace(50.h),
