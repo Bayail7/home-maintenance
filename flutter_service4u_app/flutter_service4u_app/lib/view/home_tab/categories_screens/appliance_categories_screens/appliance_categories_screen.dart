@@ -1,19 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:service_hub_app/models/appliance_categories_data_model.dart';
+import 'package:service_hub_app/utils/color_category.dart';
+import '../../../../controller/controller.dart';
+import '../../../../models/ac_repair_all_service_data_model.dart';
+import '../../../../routes/app_routes.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/constantWidget.dart';
 
-class ApplianceCategoriesScreen extends StatefulWidget {
+class ApplianceScreen extends StatefulWidget {
   @override
-  State<ApplianceCategoriesScreen> createState() =>
-      _ApplianceCategoriesScreenState();
+  State<ApplianceScreen> createState() => _ApplianceScreenState();
 }
 
-class _ApplianceCategoriesScreenState extends State<ApplianceCategoriesScreen> {
-  // ApplianceCategoriesScreenController applianceCategoriesScreenController =
-  //     Get.put(ApplianceCategoriesScreenController());
+class _ApplianceScreenState extends State<ApplianceScreen> {
+  ApplianceRepairScreenController applianceScreenController =
+      Get.put(ApplianceRepairScreenController());
   TextEditingController searchController = TextEditingController();
 
   backclick() {
@@ -23,345 +26,361 @@ class _ApplianceCategoriesScreenState extends State<ApplianceCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
-    return WillPopScope(
-        onWillPop: () async {
-          backclick();
-          return false;
-        },
-        child: SizedBox()
-        // GetBuilder<ApplianceCategoriesScreenController>(
-        //   init: ApplianceCategoriesScreenController(),
-        //   builder: (applianceCategoriesScreenController) => Scaffold(
-        //     backgroundColor: context.theme.scaffoldBackgroundColor,
-        //     body: SafeArea(
-        //       child: Column(
-        //         children: [
-        //           Container(
-        //             color: context.theme.focusColor,
-        //             child:
-        //                 getSearchTextField(prefixFunction: (){backclick();},searchController, "Search Category")
-        //                     .paddingSymmetric(horizontal: 16.h, vertical: 12.h),
-        //           ),
-        //           Expanded(
-        //               child: Container(
-        //             color: context.theme.focusColor,
-        //             child: Column(
-        //               children: [
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                   children: [
-        //                     Row(
-        //                       children: [
-        //                         getSvgImage("cleaning_service_tag.svg"),
-        //                         getHorSpace(10.h),
-        //                         getCustomFont("Appliance Repair", 18.sp,
-        //                             context.theme.primaryColor, 1,
-        //                             fontWeight: FontWeight.w600, txtHeight: 1.h)
-        //                       ],
-        //                     ),
-        //                     Row(
-        //                       children: [
-        //                         list_grid_button(() {
-        //                           applianceCategoriesScreenController
-        //                               .setGrid(false);
-        //                         },
-        //                             applianceCategoriesScreenController.grid
-        //                                 ? "inactive_list_icon.svg"
-        //                                 : "active_list_icon.svg",
-        //                             applianceCategoriesScreenController.grid
-        //                                 ? BoxDecoration(
-        //                                     borderRadius:
-        //                                         BorderRadius.circular(8.h),
-        //                                     color: Color(0XFFF7F7F7))
-        //                                 : BoxDecoration(
-        //                                     borderRadius:
-        //                                         BorderRadius.circular(8.h),
-        //                                     boxShadow: [
-        //                                         BoxShadow(
-        //                                             offset: Offset(0, 8),
-        //                                             blurRadius: 8,
-        //                                             spreadRadius: -4,
-        //                                             color: regularBlack
-        //                                                 .withOpacity(0.10)),
-        //                                       ])),
-        //                         getHorSpace(8.h),
-        //                         list_grid_button(() {
-        //                           applianceCategoriesScreenController
-        //                               .setGrid(true);
-        //                         },
-        //                             applianceCategoriesScreenController.grid
-        //                                 ? "active_grid_icon.svg"
-        //                                 : "inactive_grid_icon.svg",
-        //                             applianceCategoriesScreenController.grid
-        //                                 ? BoxDecoration(
-        //                                     borderRadius:
-        //                                         BorderRadius.circular(8.h),
-        //                                     boxShadow: [
-        //                                         BoxShadow(
-        //                                             offset: Offset(0, 8),
-        //                                             blurRadius: 8,
-        //                                             spreadRadius: -4,
-        //                                             color: regularBlack
-        //                                                 .withOpacity(0.10))
-        //                                       ])
-        //                                 : BoxDecoration(
-        //                                     borderRadius:
-        //                                         BorderRadius.circular(8.h),
-        //                                     color: Color(0XFFF7F7F7))),
-        //                       ],
-        //                     )
-        //                   ],
-        //                 ),
-        //                 getVerSpace(20.h),
-        //                 Expanded(
-        //                   child: Container(
-        //                     child: GridView.builder(
-        //                       itemCount: applianceCategoriesScreenController
-        //                           .allianceData.length,
-        //                       gridDelegate:
-        //                           SliverGridDelegateWithFixedCrossAxisCount(
-        //                               crossAxisCount:
-        //                                   applianceCategoriesScreenController
-        //                                           .grid
-        //                                       ? 2
-        //                                       : 1,
-        //                               mainAxisSpacing:
-        //                                   applianceCategoriesScreenController
-        //                                           .grid
-        //                                       ? 24.h
-        //                                       : 12.h,
-        //                               crossAxisSpacing:
-        //                                   applianceCategoriesScreenController
-        //                                           .grid
-        //                                       ? 14.4.h
-        //                                       : 0,
-        //                               mainAxisExtent:
-        //                                   applianceCategoriesScreenController
-        //                                           .grid
-        //                                       ? 236.92.h
-        //                                       : 127.h),
-        //                       itemBuilder: (context, index) {
-        //                         AllianceData alliance =
-        //                             applianceCategoriesScreenController
-        //                                 .allianceData[index];
-        //                         return applianceCategoriesScreenController.grid
-        //                             ? GestureDetector(
-        //                           onTap: (){
-        //                             Constant.sendToNext(context, Routes.AcRepairServiceDetailScreenRoute);
-        //                           },
-        //                               child: Container(
-        //                                   child: Column(
-        //                                     crossAxisAlignment:
-        //                                         CrossAxisAlignment.start,
-        //                                     children: [
-        //                                       Container(
-        //                                         width: double.infinity,
-        //                                         height: 165.21.h,
-        //                                         decoration: BoxDecoration(
-        //                                           borderRadius:
-        //                                               BorderRadius.circular(14.h),
-        //                                         ),
-        //                                         child: getAssetImage(
-        //                                             alliance.image!,
-        //                                             boxFit: BoxFit.fill),
-        //                                       ),
-        //                                       getVerSpace(8.h),
-        //                                       getCustomFont(
-        //                                           alliance.serviceName!,
-        //                                           15.sp,
-        //                                           context.theme.primaryColor,
-        //                                           1,
-        //                                           fontWeight: FontWeight.w600),
-        //                                       getVerSpace(2.h),
-        //                                       getCustomFont("Starts From", 12.sp,
-        //                                           Color(0XFF9A9FA5), 1,
-        //                                           fontWeight: FontWeight.w500),
-        //                                       getVerSpace(6.h),
-        //                                       Row(
-        //                                         mainAxisAlignment:
-        //                                             MainAxisAlignment
-        //                                                 .spaceBetween,
-        //                                         children: [
-        //                                           Container(
-        //                                             height: 24.h,
-        //                                             width: 41.h,
-        //                                             decoration: BoxDecoration(
-        //                                                 borderRadius:
-        //                                                     BorderRadius.circular(
-        //                                                         6.h),
-        //                                                 color: Color(0XFFB5E4CA)),
-        //                                             child: Center(
-        //                                                 child: getCustomFont(
-        //                                                     "\$${alliance.rate!}",
-        //                                                     12.sp,
-        //                                                     context.theme
-        //                                                         .primaryColor,
-        //                                                     1,
-        //                                                     fontWeight:
-        //                                                         FontWeight.w700)),
-        //                                           ),
-        //                                           Container(
-        //                                               height: 24.h,
-        //                                               width: 51.h,
-        //                                               decoration: BoxDecoration(
-        //                                                   borderRadius:
-        //                                                       BorderRadius
-        //                                                           .circular(
-        //                                                               100.h),
-        //                                                   color: Color(0XFFFFC554)
-        //                                                       .withOpacity(0.10)),
-        //                                               child: Row(
-        //                                                 mainAxisAlignment:
-        //                                                     MainAxisAlignment
-        //                                                         .center,
-        //                                                 children: [
-        //                                                   getSvgImage(
-        //                                                       "star_icon.svg"),
-        //                                                   getHorSpace(5.h),
-        //                                                   getCustomFont(
-        //                                                       alliance.ratting!,
-        //                                                       12.sp,
-        //                                                       context.theme
-        //                                                           .primaryColor,
-        //                                                       1,
-        //                                                       fontWeight:
-        //                                                           FontWeight.w700)
-        //                                                 ],
-        //                                               ))
-        //                                         ],
-        //                                       )
-        //                                     ],
-        //                                   ),
-        //                                 ),
-        //                             )
-        //                             : GestureDetector(
-        //                           onTap: (){
-        //                             Constant.sendToNext(context, Routes.AcRepairServiceDetailScreenRoute);
-        //                           },
-        //                               child: Container(
-        //                                   decoration: BoxDecoration(
-        //                                       border: Border(
-        //                                           bottom: BorderSide(
-        //                                               color: index ==
-        //                                                       applianceCategoriesScreenController
-        //                                                               .allianceData
-        //                                                               .length -
-        //                                                           1
-        //                                                   ? context
-        //                                                       .theme.focusColor
-        //                                                   : greyButton))),
-        //                                   child: Row(
-        //                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                                     children: [
-        //                                       Row(
-        //                                         children: [
-        //                                           Container(
-        //                                             width: 105.h,
-        //                                             height: 116.h,
-        //                                             decoration: BoxDecoration(
-        //                                               borderRadius:
-        //                                                   BorderRadius.circular(
-        //                                                       14.h),
-        //                                             ),
-        //                                             child: getAssetImage(
-        //                                                 alliance.image!,
-        //                                                 boxFit: BoxFit.fill),
-        //                                           ),
-        //                                           getHorSpace(16.h),
-        //                                           Column(
-        //                                             crossAxisAlignment:
-        //                                                 CrossAxisAlignment.start,
-        //                                             children: [
-        //                                               Row(
-        //                                                 children: [
-        //                                                   getSvgImage(
-        //                                                       "star_icon.svg"),
-        //                                                   getHorSpace(5.h),
-        //                                                   getCustomFont(
-        //                                                       alliance.ratting!,
-        //                                                       12.sp,
-        //                                                       context.theme
-        //                                                           .primaryColor,
-        //                                                       1,
-        //                                                       fontWeight:
-        //                                                           FontWeight
-        //                                                               .w700),
-        //                                                   getCustomFont(
-        //                                                       "(87)",
-        //                                                       12.sp,
-        //                                                       Color(0XFF6F767E),
-        //                                                       1,
-        //                                                       fontWeight:
-        //                                                           FontWeight
-        //                                                               .w700),
-        //                                                 ],
-        //                                               ),
-        //                                               getVerSpace(8.h),
-        //                                               getCustomFont(
-        //                                                   alliance.serviceName!,
-        //                                                   14.sp,
-        //                                                   context
-        //                                                       .theme.primaryColor,
-        //                                                   1,
-        //                                                   fontWeight:
-        //                                                       FontWeight.w600),
-        //                                               getVerSpace(7.h),
-        //                                               getCustomFont("Starts From", 12.sp, neutralShades, 1,fontWeight: FontWeight.w500),
-        //                                               getVerSpace(10.h),
-        //                                               Container(
-        //                                                 height: 24.h,
-        //                                                 width: 41.h,
-        //                                                 decoration: BoxDecoration(
-        //                                                     borderRadius:
-        //                                                     BorderRadius.circular(
-        //                                                         6.h),
-        //                                                     color: Color(0XFFB5E4CA)),
-        //                                                 child: Center(
-        //                                                     child: getCustomFont(
-        //                                                         "\$${alliance.rate!}",
-        //                                                         12.sp,
-        //                                                         context.theme
-        //                                                             .primaryColor,
-        //                                                         1,
-        //                                                         fontWeight:
-        //                                                         FontWeight.w700)),
-        //                                               ),
-        //                                             ],
-        //                                           )
-        //                                         ],
-        //                                       ),
-        //                                       getSvgImage("more_hor_rounded.svg")
-        //                                     ],
-        //                                   ).paddingOnly(bottom: 10.h),
-        //                                 ),
-        //                             );
-        //                       },
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ).paddingAll(16.h),
-        //           ).paddingSymmetric(horizontal: 17.h, vertical: 17.h))
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // )
-        );
-  }
+    return GetBuilder<ApplianceRepairScreenController>(
+        init: ApplianceRepairScreenController(),
+        builder: (applianceScreenController) => WillPopScope(
+            onWillPop: () async {
+              backclick();
+              return false;
+            },
+            child: Scaffold(
+              body: SafeArea(
+                child: all_service_categories_screen_formate(
+                    "Appliance Repair",
+                    () {
+                      applianceScreenController.setList();
+                    },
+                    applianceScreenController.list,
+                    () {
+                      applianceScreenController.setGrid();
+                    },
+                    applianceScreenController.grid,
+                    GridView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount:
+                          applianceScreenController.allApplianceService.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              applianceScreenController.list ? 1 : 2,
+                          mainAxisSpacing: 24.h,
+                          crossAxisSpacing:
+                              applianceScreenController.list ? 0 : 20.h,
+                          mainAxisExtent:
+                              applianceScreenController.list ? 110 : 203.h),
+                      itemBuilder: (BuildContext context, int index) {
+                        ApplianceService service = applianceScreenController
+                            .allApplianceService[index];
+                        return applianceScreenController.list
+                            ? animation_function(
+                                index,
+                                GestureDetector(
+                                  onTap: () {
+                                    Constant.sendToNext(
+                                        context,
+                                        Routes
+                                            .acRepairServiceDetailScreenRoute);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.h),
+                                        border: Border.all(color: grey20)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              height: 102.h,
+                                              width: 101.h,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16.h),
+                                                  image: DecorationImage(
+                                                      image: AssetImage(Constant
+                                                              .assetImagePath +
+                                                          service.image!),
+                                                      fit: BoxFit.fill)),
+                                            ),
+                                            getHorSpace(10.h),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                getCustomFont(service.title!,
+                                                    14.sp, regularBlack, 1,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                                getVerSpace(4.h),
+                                                getCustomFont(
+                                                    "\$${service.price}",
+                                                    14.sp,
+                                                    regularBlack,
+                                                    1,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                                getVerSpace(12.h),
+                                                Center(
+                                                  child: Row(
+                                                    children: [
+                                                      getSvgImage(
+                                                          "star_icon.svg"),
+                                                      getHorSpace(6.h),
+                                                      Center(
+                                                        child: getCustomFont(
+                                                            service.rating!,
+                                                            14.sp,
+                                                            regularBlack,
+                                                            1,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        service.discount == ""
+                                            ? SizedBox()
+                                            : Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  SizedBox(),
+                                                  getCustomFont(
+                                                      "Off ${service.discount}%",
+                                                      14.sp,
+                                                      grey40,
+                                                      1,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ],
+                                              ).paddingOnly(
+                                                right: 12.h, bottom: 24.h)
+                                      ],
+                                    ).paddingSymmetric(
+                                        vertical: 4.h, horizontal: 4.h),
+                                  ),
+                                ),
+                              )
+                            : animation_function(
+                                index,
+                                GestureDetector(
+                                  onTap: () {
+                                    Constant.sendToNext(
+                                        context,
+                                        Routes
+                                            .acRepairServiceDetailScreenRoute);
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: 146.h,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16.h),
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    Constant.assetImagePath +
+                                                        service.image!),
+                                                fit: BoxFit.fill)),
+                                      ),
+                                      getVerSpace(12.h),
+                                      getCustomFont(service.title!, 14.sp,
+                                          regularBlack, 1,
+                                          fontWeight: FontWeight.w700),
+                                      getVerSpace(4.h),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          getCustomFont("\$${service.price}",
+                                              14.sp, regularBlack, 1,
+                                              fontWeight: FontWeight.w400),
+                                          Container(
+                                            height: 21.h,
+                                            child: Row(
+                                              children: [
+                                                getSvgImage("star_icon.svg",
+                                                    height: 16.h, width: 16.h),
+                                                getHorSpace(2.h),
+                                                getCustomFont(service.rating!,
+                                                    14.sp, regularBlack, 1,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                      },
+                    )),
+              ),
+            )));
 
-  Widget list_grid_button(function, icon, Decoration boxdecoration) {
-    return GestureDetector(
-      onTap: () {
-        function();
-        //
-      },
-      child: Container(
-        height: 36.h,
-        width: 36.h,
-        decoration: boxdecoration,
-        child: getSvgImage(icon).paddingAll(8.h),
-      ),
-    );
+    // WillPopScope(
+    //   onWillPop: () async {
+    //     backclick();
+    //     return false;
+    //   },
+    //   child: GetBuilder<ACRepairScreenController>(
+    //     init: ACRepairScreenController(),
+    //     builder: (acRepairScreenController) => Scaffold(
+    //       backgroundColor: context.theme.scaffoldBackgroundColor,
+    //       body: SafeArea(
+    //         child: Column(
+    //           children: [
+    //             getVerSpace(24.h),
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 getCustomAppBar("Ac Repair", () {
+    //                   backclick();
+    //                 }),
+    //                 Row(
+    //                   children: [
+    //                     GestureDetector(
+    //                         onTap: () {
+    //                           acRepairScreenController.setList();
+    //                         },
+    //                         child: getSvgImage(acRepairScreenController.list
+    //                             ? "selected_list_icon.svg"
+    //                             : "unselected_list_icon.svg")),
+    //                     getHorSpace(10.h),
+    //                     GestureDetector(
+    //                         onTap: () {
+    //                           acRepairScreenController.setGrid();
+    //                         },
+    //                         child: getSvgImage(acRepairScreenController.grid
+    //                             ? "selected_grid_icon.svg"
+    //                             : "unselected_grid_icon.svg")),
+    //                   ],
+    //                 )
+    //               ],
+    //             ),
+    //             getVerSpace(32.h),
+    //             getSearchField("Search...", fillColor: grey10),
+    //             getVerSpace(32.h),
+    //             Expanded(
+    //               child: Container(
+    //                 child: GridView.builder(
+    //                   physics: BouncingScrollPhysics(),
+    //                   itemCount: acRepairScreenController.allacservice.length,
+    //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //                       crossAxisCount: acRepairScreenController.list?1:2,
+    //                       mainAxisSpacing: 24.h,
+    //                       crossAxisSpacing: acRepairScreenController.list?0:20.h,
+    //                       mainAxisExtent: acRepairScreenController.list?110:203.h),
+    //                   itemBuilder: (BuildContext context, int index) {
+    //                     AllacService service =
+    //                         acRepairScreenController.allacservice[index];
+    //                     return acRepairScreenController.list?GestureDetector(
+    //                       onTap: (){
+    //                         Constant.sendToNext(context, Routes.acRepairServiceDetailScreenRoute);
+    //                       },
+    //                       child: Container(
+    //                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.h),border: Border.all(color: grey20)),
+    //                         child: Row(
+    //                           children: [
+    //                             Container(
+    //                               height: 102.h,
+    //                               width: 101.h,
+    //                               decoration: BoxDecoration(
+    //                                   borderRadius:
+    //                                   BorderRadius.circular(16.h),
+    //                                   image: DecorationImage(image: AssetImage(Constant.assetImagePath+service.image!),fit: BoxFit.fill )),
+    //
+    //                             ),
+    //                             getHorSpace(10.h),
+    //                             Column(
+    //                               crossAxisAlignment: CrossAxisAlignment.start,
+    //                               mainAxisAlignment: MainAxisAlignment.center,
+    //                               children: [
+    //                                 getCustomFont(service.title!, 14.sp, regularBlack, 1,fontWeight: FontWeight.w700),
+    //                                 getVerSpace(4.h),
+    //                                 getCustomFont("\$${service.price}", 14.sp, regularBlack, 1,fontWeight: FontWeight.w400),
+    //                                 getVerSpace(12.h),
+    //                                 Row(
+    //                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                   children: [
+    //                                     Row(
+    //                                       children: [
+    //                                         getSvgImage("star_icon.svg"),
+    //                                         getHorSpace(6.h),
+    //                                         getCustomFont(service.rating!, 14.sp, regularBlack, 1,fontWeight: FontWeight.w400),
+    //                                       ],
+    //                                     ),
+    //                                     getHorSpace(176.h),
+    //
+    //                                     service.discount==""?SizedBox():getCustomFont("Off ${service.discount}%", 14.sp, grey40, 1,fontWeight: FontWeight.w400)
+    //                                   ],
+    //                                 ),
+    //                               ],
+    //                             ),
+    //                           ],
+    //                         ).paddingSymmetric(vertical: 4.h,horizontal: 4.h),
+    //                       ),
+    //                     )
+    //                         :
+    //                     GestureDetector(
+    //                       onTap: (){
+    //                         Constant.sendToNext(context, Routes.acRepairServiceDetailScreenRoute);
+    //                       },
+    //                       child: Column(
+    //                         crossAxisAlignment: CrossAxisAlignment.start,
+    //                         children: [
+    //                           Container(
+    //                             height: 146.h,
+    //                             decoration: BoxDecoration(
+    //                                 borderRadius: BorderRadius.circular(16.h),
+    //                                 image: DecorationImage(
+    //                                     image: AssetImage(
+    //                                         Constant.assetImagePath +
+    //                                             service.image!),
+    //                                     fit: BoxFit.fill)),
+    //                           ),
+    //                           getVerSpace(12.h),
+    //                           getCustomFont(
+    //                               service.title!, 14.sp, regularBlack, 1,
+    //                               fontWeight: FontWeight.w700),
+    //                           getVerSpace(4.h),
+    //                           Row(
+    //                             mainAxisAlignment:
+    //                                 MainAxisAlignment.spaceBetween,
+    //                             children: [
+    //                               getCustomFont("\$${service.price}", 14.sp,
+    //                                   regularBlack, 1,
+    //                                   fontWeight: FontWeight.w400),
+    //                               Container(
+    //                                 height: 21.h,
+    //                                 child: Row(
+    //                                   children: [
+    //                                     getSvgImage("star_icon.svg",
+    //                                         height: 16.h, width: 16.h),
+    //                                     getHorSpace(2.h),
+    //                                     getCustomFont(service.rating!, 14.sp,
+    //                                         regularBlack, 1,
+    //                                         fontWeight: FontWeight.w400),
+    //                                   ],
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     );
+    //                   },
+    //                 ),
+    //               ),
+    //             )
+    //           ],
+    //         ).paddingSymmetric(horizontal: 20.h),
+    //       ),
+    //     ),
+    //   ));
   }
 }

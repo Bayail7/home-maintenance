@@ -153,16 +153,40 @@ class DataFile {
 /*
 String? image,   String? rate,   String? ratting,   String? serviceName,   String? numberOfReview,   int? id,
  */
-  static List<AllianceData> getAllianceData() {
+  static List<ApplianceService> getApplianceService() {
     return [
-      AllianceData(
-          "appliance_service_1st.png", "128", "4.8", "AC Check-Up", "87", 1),
-      AllianceData("appliance_service_2nd.png", "128", "4.5",
-          "AC Regular Service", "87", 2),
-      AllianceData("appliance_service_3rd.png", "170", "4.5", "AC Installation",
-          "87", 3),
-      AllianceData("appliance_service_4th.png", "170", "4.5",
-          "AC Uninstallation", "87", 4),
+      ApplianceService(
+        image: "appliance_service_1st.png",
+        price: "128",
+        rating: "4.8",
+        title: "Refrigerator Repair",
+        discount: "87",
+        // id: 1, // Add 'id' if you include it in the class
+      ),
+      ApplianceService(
+        image: "appliance_service_2nd.png",
+        price: "128",
+        rating: "4.5",
+        title: "Dishwasher Repair",
+        discount: "87",
+        // id: 2,
+      ),
+      ApplianceService(
+        image: "appliance_service_3rd.png",
+        price: "170",
+        rating: "4.5",
+        title: "Washing Machine Repair",
+        discount: "87",
+        // id: 3,
+      ),
+      ApplianceService(
+        image: "appliance_service_4th.png",
+        price: "170",
+        rating: "4.5",
+        title: "TV Repair",
+        discount: "87",
+        // id: 4,
+      ),
     ];
   }
 

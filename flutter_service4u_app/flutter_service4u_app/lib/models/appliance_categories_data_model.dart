@@ -1,10 +1,10 @@
-class AllianceData{
+class ApplianceService {
   String? image;
-  String? rate;
-  String? ratting;
-  String? serviceName;
-  String? numberOfReview;
-  final int? id;
+  String? title;
+  String? price;
+  String? rating;
+  String? discount;
 
-  AllianceData(this.image,this.rate,this.ratting,this.serviceName,this.numberOfReview,this.id);
+  ApplianceService(
+      {this.image, this.title, this.price, this.rating, this.discount});
 }

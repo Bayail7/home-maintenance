@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }),
                                   getHorSpace(20.h),
                                   service_formate(
-                                      "electronics_icon.png", "Electronics",
+                                      "electronics_icon.png", "Electricity",
                                       () {
                                     Constant.sendToNext(
                                         context, Routes.electronicScreenRoute);
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   service_formate(
                                       "appliance_icon.png", "Appliance", () {
                                     Constant.sendToNext(
-                                        context, Routes.aCRepairScreenRoute);
+                                        context, Routes.applianceCategoriesScreenRoute);
                                   }),
                                   getHorSpace(20.h),
                                   service_formate(

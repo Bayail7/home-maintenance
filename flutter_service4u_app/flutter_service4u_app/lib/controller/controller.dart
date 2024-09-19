@@ -182,6 +182,29 @@ class ACRepairScreenController extends GetxController {
   }
 }
 
+class ApplianceRepairScreenController extends GetxController {
+  // List of appliance repair services
+  List<ApplianceService> allApplianceService = DataFile.getApplianceService();
+
+  // Toggle for grid or list view
+  bool grid = true;
+  bool list = false;
+
+  // Switch to grid view
+  void setGrid() {
+    grid = true;
+    list = false;
+    update(); // Notifies the UI to update
+  }
+
+  // Switch to list view
+  void setList() {
+    list = true;
+    grid = false;
+    update(); // Notifies the UI to update
+  }
+}
+
 // class ApplianceCategoriesScreenController extends GetxController{
 //   List<AllianceData> allianceData = DataFile.getAllianceData();
 //   bool grid = false;
@@ -241,7 +264,43 @@ class SideMenuScreenController extends GetxController {
 }
 
 class AcRepairServiceDetailScreenController extends GetxController {
-  List<AllianceData> allianceData = DataFile.getAllianceData();
+  List<ApplianceService> allianceData = DataFile.getApplianceService();
+  int selectedPropertyID = 2;
+  int units = 0;
+  int bedRoom = 0;
+
+  void setSelectProperty(id) {
+    selectedPropertyID = id;
+    update();
+  }
+
+  void addUnits() {
+    units++;
+    update();
+  }
+
+  void removeUnit() {
+    if (units > 0) {
+      units--;
+      update();
+    }
+  }
+
+  void addBedroom() {
+    bedRoom++;
+    update();
+  }
+
+  void removeBedroom() {
+    if (bedRoom > 0) {
+      bedRoom--;
+      update();
+    }
+  }
+}
+
+class ApplianceServiceDetailScreenController extends GetxController {
+  List<ApplianceService> allianceData = DataFile.getApplianceService();
   int selectedPropertyID = 2;
   int units = 0;
   int bedRoom = 0;

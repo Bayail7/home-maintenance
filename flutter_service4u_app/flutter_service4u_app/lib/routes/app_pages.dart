@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
+import 'package:service_hub_app/view/home_tab/categories_screens/appliance_categories_screens/appliance_service_detail_screen.dart';
 import '../view/booking_tab/booking_tab_screen.dart';
 import '../view/booking_tab/histry_detail_screen.dart';
 import '../view/home_main_screen.dart';
@@ -86,16 +86,15 @@ class AppPages {
     Routes.electronicScreenRoute: (context) => ElectronicScreen(),
     // Routes.shiftingScreenRoute: (context) => ShiftingScreen(),
     // Routes.mensSalonScreenRoute: (context) => MensSalonScreen(),
-    Routes.applianceCategoriesScreenRoute: (context) =>
-        ApplianceCategoriesScreen(),
+    Routes.applianceCategoriesScreenRoute: (context) => ApplianceScreen(),
+    //Routes.applianceServiceDetailScreenRoute: (context) => ApplianceScreen(),
     Routes.sideMenuProfifileScreenRoute: (context) => SideMenuProfifileScreen(),
     Routes.calendarScreenRoute: (context) => CalendarScreen(),
     Routes.sideMenuAddressScreenRoute: (context) => SideMenuAddressScreen(),
     Routes.sideMenuNotificationScreenRoute: (context) =>
         SideMenuNotificationScreen(),
     Routes.sideMenuSupportScreenRoute: (context) => SideMenuSupportScreen(),
-    Routes.acRepairServiceDetailScreenRoute: (context) =>
-        AcRepairServiceDetailScreen(),
+    Routes.acRepairServiceDetailScreenRoute: (context) => AcRepairServiceDetailScreen(),
     // Routes.cleaningServiceDetailScreenRoute: (context) =>
     //     CleaningServiceDetailScreen(),
     // Routes.beautyServiceDetailRoute: (context) => BeautyServiceDetail(),

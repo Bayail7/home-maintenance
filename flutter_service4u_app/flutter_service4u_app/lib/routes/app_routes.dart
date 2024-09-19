@@ -3,11 +3,12 @@ abstract class Routes {
   static const onBoardingScreenRoute = Paths.onBoardingScreenPath;
   static const signInEmptyStateRoute = Paths.signInEmptyStatePath;
   static const sinUpEmptyStateRoute = Paths.sinUpEmptyStatePath;
-  static const SignUpProviderEmptyState= Paths.SignUpProviderEmptyStatePath;
+  static const SignUpProviderEmptyState = Paths.SignUpProviderEmptyStatePath;
   static const forgotPasswordEmptyStateRoute =
       Paths.forgotPasswordEmptyStatePath;
   static const verificationScreenRoute = Paths.verificationScreenPath;
-   static const verificationproviderScreenRoute = Paths.verificationproviderScreenPath;
+  static const verificationproviderScreenRoute =
+      Paths.verificationproviderScreenPath;
   static const resetPasswordScreenRoute = Paths.resetPasswordScreenPath;
   static const homeMainScreenRoute = Paths.homeMainScreenPath;
   static const homeScreenRoute = Paths.homeScreenPath;
@@ -17,8 +18,12 @@ abstract class Routes {
   static const cleaningServiceScreenRoute = Paths.cleaningServiceScreenPath;
   static const categoriesScreenRoute = Paths.categoriesScreenPath;
   static const aCRepairScreenRoute = Paths.aCRepairScreenPath;
+  static const applianceScreenRoute = Paths.applianceScreenPath;
   static const applianceCategoriesScreenRoute =
       Paths.applianceCategoriesScreenPath;
+  static const applianceServiceDetailScreenRoute =
+      Paths.applianceServiceDetailPath;
+
   static const beautyScreenRoute = Paths.beautyScreenPath;
   static const paintingScreenRoute = Paths.paintingScreenPath;
   static const plumbingScreenRoute = Paths.plumbingScreenPath;
@@ -68,8 +73,6 @@ abstract class Routes {
   static const securityScreenRoute = Paths.securityScreenPath;
   static const recommendedServiceScreenRoute =
       Paths.recommendedServiceScreenPath;
-
-  
 }
 
 abstract class Paths {
@@ -79,7 +82,7 @@ abstract class Paths {
   static const SignUpProviderEmptyStatePath = "/SignUpProviderEmptyState";
   static const sinUpEmptyStatePath = "/SinUpEmptyState";
   static const verificationScreenPath = "/VerificationScreen";
-    static const verificationproviderScreenPath = "/VerificationproviderScreen";
+  static const verificationproviderScreenPath = "/VerificationproviderScreen";
   static const forgotPasswordEmptyStatePath = "/ForgotPasswordEmptyState";
   static const resetPasswordScreenPath = "/ResetPasswordScreen";
   static const homeMainScreenPath = "/HomeMainScreen";
@@ -90,7 +93,9 @@ abstract class Paths {
   static const cleaningServiceScreenPath = "/CleaningServiceScreen";
   static const categoriesScreenPath = "/CategoriesScreen";
   static const aCRepairScreenPath = "/ACRepairScreen";
+  static const applianceScreenPath = "/ApplianceScreen";
   static const applianceCategoriesScreenPath = "/ApplianceCategoriesScreen";
+  static const applianceServiceDetailPath = "/ApplianceServiceDetailScreen";
   static const beautyScreenPath = "/BeautyScreenScreen";
   static const paintingScreenPath = "/PaintingScreen";
   static const plumbingScreenPath = "/PlumbingScreen";
