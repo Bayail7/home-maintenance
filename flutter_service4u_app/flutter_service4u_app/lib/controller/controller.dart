@@ -5,6 +5,8 @@ import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
 import '../models/appliance_categories_data_model.dart';
+import '../models/electronics_categories_data_model.dart';
+import '../models/plumbing_categories_data_model.dart';
 import '../models/beauty_category_data_model.dart';
 import '../models/booking_upcoming_data_model.dart';
 import '../models/cancel_order_reason_model.dart';
@@ -205,6 +207,50 @@ class ApplianceRepairScreenController extends GetxController {
   }
 }
 
+class ElectronicsRepairScreenController extends GetxController {
+  // List of appliance repair services
+  List<ElectronicsService> allElectronicsService = DataFile.getElectronicsService();
+
+  // Toggle for grid or list view
+  bool grid = true;
+  bool list = false;
+
+  // Switch to grid view
+  void setGrid() {
+    grid = true;
+    list = false;
+    update(); // Notifies the UI to update
+  }
+
+  // Switch to list view
+  void setList() {
+    list = true;
+    grid = false;
+    update(); // Notifies the UI to update
+  }
+}
+class PlumbingRepairScreenController extends GetxController {
+  // List of appliance repair services
+  List<PlumbingService> allPlumbingService = DataFile.getPlumbingService();
+
+  // Toggle for grid or list view
+  bool grid = true;
+  bool list = false;
+
+  // Switch to grid view
+  void setGrid() {
+    grid = true;
+    list = false;
+    update(); // Notifies the UI to update
+  }
+
+  // Switch to list view
+  void setList() {
+    list = true;
+    grid = false;
+    update(); // Notifies the UI to update
+  }
+}
 // class ApplianceCategoriesScreenController extends GetxController{
 //   List<AllianceData> allianceData = DataFile.getAllianceData();
 //   bool grid = false;

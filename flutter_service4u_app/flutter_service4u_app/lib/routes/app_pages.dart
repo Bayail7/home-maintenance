@@ -83,7 +83,7 @@ class AppPages {
     // Routes.beautyScreenRoute: (context) => BeautyScreen(),
     // Routes.paintingScreenRoute: (context) => PaintingScreen(),
     Routes.plumbingScreenRoute: (context) => PlumbingScreen(),
-    Routes.electronicScreenRoute: (context) => ElectronicScreen(),
+    Routes.electronicScreenRoute: (context) => ElectronicsScreen(),
     // Routes.shiftingScreenRoute: (context) => ShiftingScreen(),
     // Routes.mensSalonScreenRoute: (context) => MensSalonScreen(),
     Routes.applianceCategoriesScreenRoute: (context) => ApplianceScreen(),

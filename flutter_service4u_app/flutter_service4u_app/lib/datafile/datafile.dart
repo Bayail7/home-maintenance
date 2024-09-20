@@ -4,6 +4,8 @@ import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
 import '../models/appliance_categories_data_model.dart';
+import '../models/electronics_categories_data_model.dart';
+import '../models/plumbing_categories_data_model.dart';
 import '../models/beauty_category_data_model.dart';
 import '../models/booking_upcoming_data_model.dart';
 import '../models/cancel_order_reason_model.dart';
@@ -180,6 +182,88 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         // id: 3,
       ),
       ApplianceService(
+        image: "appliance_service_4th.png",
+        price: "170",
+        rating: "4.5",
+        title: "TV Repair",
+        discount: "87",
+        // id: 4,
+      ),
+      ApplianceService(
+        image: "appliance_service_4th.png",
+        price: "170",
+        rating: "4.5",
+        title: "Oven Repair",
+        discount: "87",
+        // id: 4,
+      ),
+    ];
+  }
+
+  static List<ElectronicsService> getElectronicsService() {
+    return [
+      ElectronicsService(
+        image: "electronics_service_1st.jpg",
+        price: "128",
+        rating: "4.8",
+        title: "Installing Lamps & Lights ",
+        discount: "87",
+        // id: 1, // Add 'id' if you include it in the class
+      ),
+      ElectronicsService(
+        image: "electronics_service_2nd.jpg",
+        price: "128",
+        rating: "4.5",
+        title: "Changing electric outlet",
+        discount: "87",
+        // id: 2,
+      ),
+      ElectronicsService(
+        image: "electronics_service_4th.jpeg",
+        price: "170",
+        rating: "4.5",
+        title: "Cable test termination",
+        discount: "87",
+        // id: 3,
+      ),
+      ElectronicsService(
+        image: "electronics_service_3rd.jpg",
+        price: "170",
+        rating: "4.5",
+        title: "Laying cables",
+        discount: "87",
+        // id: 4,
+      ),
+    ];
+  }
+
+  static List<PlumbingService> getPlumbingService() {
+    return [
+      PlumbingService(
+        image: "appliance_service_1st.png",
+        price: "128",
+        rating: "4.8",
+        title: "Installing a water faucet",
+        discount: "87",
+        // id: 1, // Add 'id' if you include it in the class
+      ),
+      PlumbingService(
+        image: "appliance_service_2nd.png",
+        price: "128",
+        rating: "4.5",
+        title: "Dishwasher Repair",
+        discount: "87",
+        // id: 2,
+      ),
+      PlumbingService(
+        image: "appliance_service_3rd.png",
+        price: "170",
+        rating: "4.5",
+        title: "Washing Machine Repair",
+        discount: "87",
+        // id: 3,
+      ),
+      PlumbingService(
         image: "appliance_service_4th.png",
         price: "170",
         rating: "4.5",
