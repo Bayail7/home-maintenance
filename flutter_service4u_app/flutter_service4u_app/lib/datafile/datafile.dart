@@ -158,7 +158,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
   static List<ApplianceService> getApplianceService() {
     return [
       ApplianceService(
-        image: "appliance_service_1st.png",
+        image: "appliance_service_1st.jpg",
         price: "128",
         rating: "4.8",
         title: "Refrigerator Repair",
@@ -166,7 +166,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         // id: 1, // Add 'id' if you include it in the class
       ),
       ApplianceService(
-        image: "appliance_service_2nd.png",
+        image: "appliance_service_2nd.jpg",
         price: "128",
         rating: "4.5",
         title: "Dishwasher Repair",
@@ -174,7 +174,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         // id: 2,
       ),
       ApplianceService(
-        image: "appliance_service_3rd.png",
+        image: "appliance_service_3rd.jpeg",
         price: "170",
         rating: "4.5",
         title: "Washing Machine Repair",
@@ -182,7 +182,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         // id: 3,
       ),
       ApplianceService(
-        image: "appliance_service_4th.png",
+        image: "appliance_service_4th.jpg",
         price: "170",
         rating: "4.5",
         title: "TV Repair",
@@ -190,7 +190,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         // id: 4,
       ),
       ApplianceService(
-        image: "appliance_service_4th.png",
+        image: "appliance_service_5th.jpeg",
         price: "170",
         rating: "4.5",
         title: "Oven Repair",
@@ -240,34 +240,50 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
   static List<PlumbingService> getPlumbingService() {
     return [
       PlumbingService(
-        image: "appliance_service_1st.png",
+        image: "plumbing_service_1st.jpg",
         price: "128",
         rating: "4.8",
-        title: "Installing a water faucet",
+        title: "Sink Installation",
         discount: "87",
         // id: 1, // Add 'id' if you include it in the class
       ),
       PlumbingService(
-        image: "appliance_service_2nd.png",
+        image: "plumbing_service_2nd.jpg",
         price: "128",
         rating: "4.5",
-        title: "Dishwasher Repair",
+        title: "Bidet Repair",
         discount: "87",
         // id: 2,
       ),
       PlumbingService(
-        image: "appliance_service_3rd.png",
+        image: "plumbing_service_3rd.jpeg",
         price: "170",
         rating: "4.5",
-        title: "Washing Machine Repair",
+        title: "Shower Repair",
         discount: "87",
         // id: 3,
       ),
       PlumbingService(
-        image: "appliance_service_4th.png",
+        image: "plumbing_service_4th.jpg",
         price: "170",
         rating: "4.5",
-        title: "TV Repair",
+        title: "Blocked Water Pipe Repair",
+        discount: "87",
+        // id: 4,
+      ),
+      PlumbingService(
+        image: "plumbing_service_5th.jpg",
+        price: "170",
+        rating: "4.5",
+        title: "Pipe Repair",
+        discount: "87",
+        // id: 4,
+      ),
+      PlumbingService(
+        image: "plumbing_service_6th.jpg",
+        price: "170",
+        rating: "4.5",
+        title: "Leaking Pipe Repair",
         discount: "87",
         // id: 4,
       ),
