@@ -21,7 +21,7 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   final TextEditingController serviceTypeController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyP = GlobalKey<FormState>();
 
    backClick() {
     Constant.backToFinish();
@@ -43,7 +43,7 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Form(
-              key: formKey,
+              key: formKeyP,
                          child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -145,7 +145,7 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                           ),
                           getVerSpace(54.h),
                           getCustomButton("Sign Up", () {
-                            if (formKey.currentState!.validate() &&
+                            if (formKeyP.currentState!.validate() &&
                                 signUpProviderEmptyStateController.isChecked == true) {
                               // PrefData.setIsSignIn(false);
                               Constant.sendToNext(

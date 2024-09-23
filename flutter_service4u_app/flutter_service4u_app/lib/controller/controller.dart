@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
+import 'package:service_hub_app/routes/app_routes.dart';
+import 'package:service_hub_app/utils/pref_data.dart';
 import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
@@ -209,7 +212,8 @@ class ApplianceRepairScreenController extends GetxController {
 
 class ElectronicsRepairScreenController extends GetxController {
   // List of appliance repair services
-  List<ElectronicsService> allElectronicsService = DataFile.getElectronicsService();
+  List<ElectronicsService> allElectronicsService =
+      DataFile.getElectronicsService();
 
   // Toggle for grid or list view
   bool grid = true;
@@ -229,6 +233,7 @@ class ElectronicsRepairScreenController extends GetxController {
     update(); // Notifies the UI to update
   }
 }
+
 class PlumbingRepairScreenController extends GetxController {
   // List of appliance repair services
   List<PlumbingService> allPlumbingService = DataFile.getPlumbingService();
@@ -251,6 +256,7 @@ class PlumbingRepairScreenController extends GetxController {
     update(); // Notifies the UI to update
   }
 }
+
 // class ApplianceCategoriesScreenController extends GetxController{
 //   List<AllianceData> allianceData = DataFile.getAllianceData();
 //   bool grid = false;
@@ -747,6 +753,51 @@ class RecommendedServiceScreenController extends GetxController {
     list = true;
     grid = false;
     update();
+  }
+}
+
+class AuthController extends GetxController {
+  // createUser function in Authentication > Users
+  Future<void> createUser(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // Sign-in function using Firebase Authentication
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Sign-in successful, handle success (e.g., navigate to home page)
+      Get.snackbar('Success', 'Signed in as: ${userCredential.user?.email}');
+      // Navigate to home page after login
+      Get.offAllNamed(Routes.homeMainScreenRoute);
+      // Update the sign-in status
+      PrefData.setIsSignIn(true); // Set sign-in to true only after successful
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar('Error', 'No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        Get.snackbar('Error', 'Wrong password provided.');
+      } else {
+        Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
   }
 }
 

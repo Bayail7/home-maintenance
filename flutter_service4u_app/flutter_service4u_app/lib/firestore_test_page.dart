@@ -14,7 +14,7 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
   static Future<void> addUserData(String name, String email, String mobile,
       String location, String password) async {
     CollectionReference users =
-        FirebaseFirestore.instance.collection('users info');
+        FirebaseFirestore.instance.collection('users_info');
 
     try {
       await users.add({

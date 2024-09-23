@@ -20,7 +20,7 @@ class _VerificationProviderScreenState extends State<VerificationProviderScreen>
  VerificationScreenController verificationProviderScreenController  =
       Get.put(VerificationScreenController());
   TextEditingController otpController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formKeyV = GlobalKey<FormState>();
 
   backClick() {
     Constant.backToFinish();
@@ -41,7 +41,7 @@ class _VerificationProviderScreenState extends State<VerificationProviderScreen>
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Form(
-              key: formKey,
+              key: formKeyV,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,7 +63,7 @@ class _VerificationProviderScreenState extends State<VerificationProviderScreen>
                           }),
                           getVerSpace(28.h),
                           getCustomButton("Verify OTP", () {
-                            if (formKey.currentState!.validate()) {
+                            if (formKeyV.currentState!.validate()) {
                               // Perform OTP verification logic for the provider
                               // Navigate to the next screen upon successful verification
                             }

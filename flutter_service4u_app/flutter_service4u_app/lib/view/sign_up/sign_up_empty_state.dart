@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
+import 'package:service_hub_app/utils/pref_data.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
@@ -22,9 +23,9 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  //  final latitudeController = TextEditingController();
-  // final longitudeController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
+  final AuthController authControllerSignUp = Get.put(AuthController());
 
   backClick() {
     Constant.backToFinish();
@@ -150,7 +151,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                             ],
                           ),
                           getVerSpace(54.h),
-                          getCustomButton("Sign Up", () {
+                          getCustomButton("Sign Up", () async {
                             if (formKey.currentState!.validate() &&
                                 sinUpEmptyStateController.cheak == true) {
                               final name = nameController.text;
@@ -158,13 +159,11 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               final mobile = mobileNumberController.text;
                               final password = passwordController.text;
                               final location = locationController.text;
-                              FirestoreTestPageState.addUserData(
+                              await FirestoreTestPageState.addUserData(
                                   name, email, mobile, location, password);
-                              // PrefData.setIsSignIn(false);
-                              Constant.sendToNext(
-                                  // context, Routes.verificationScreenRoute);
-                                  context,
-                                  Routes.homeMainScreenRoute);
+                              authControllerSignUp.createUser(email, password);
+                              PrefData.setIsSignIn(true);
+                              Constant.sendToNext(context,Routes.homeMainScreenRoute);
                             }
                           }),
                           getVerSpace(50.h),
