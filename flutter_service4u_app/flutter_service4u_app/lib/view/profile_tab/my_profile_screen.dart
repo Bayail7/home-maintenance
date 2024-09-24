@@ -19,6 +19,32 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   MyProfileScreenController myProfileScreenController =
       Get.put(MyProfileScreenController());
 
+  final AuthController authController = Get.find<AuthController>();
+  // Variables to store user data
+  String name = "";
+  String email = "";
+  String mobile = "";
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch user data when the screen initializes
+    fetchUserData();
+  }
+
+  // This function is marked async to allow awaiting the user data
+  Future<void> fetchUserData() async {
+    // Call the function to get user data
+    Map<String, dynamic>? userData = await authController.getUserData();
+    if (userData != null) {
+      setState(() {
+        name = userData['name'] ?? "N/A";
+        email = userData['email'] ?? "N/A";
+        mobile = userData['mobile'] ?? "N/A";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -38,30 +64,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   children: [
                     getVerSpace(24.h),
                     getCustomAppBar("My Profile", () {
-                      backClick();
+                      Get.back(result:true); // This should trigger the refresh in MyProfileScreen
                     }),
                     getVerSpace(30.h),
-                    getAssetImage("profile_text.png",
+                    getAssetImage("app_icon_user.png",
                         height: 100.h, width: 100.h),
                     getVerSpace(20.h),
                     getVerSpace(40.h),
-                    getMyprofileDetailFormate(
-                        "profile_icon.svg", "Name", "Darlene Robertson"),
+                    getMyprofileDetailFormate("profile_icon.svg", "Name", name),
                     getVerSpace(20.h),
                     getDivider(),
                     getVerSpace(20.h),
-                    getMyprofileDetailFormate("email_icon.svg", "Email",
-                        "darlenerobertson@gmail.com"),
+                    getMyprofileDetailFormate("email_icon.svg", "Email", email),
                     getVerSpace(20.h),
                     getDivider(),
                     getVerSpace(20.h),
                     getMyprofileDetailFormate(
-                        "call_icon.svg", "Phone Number", "(219) 555-0114"),
+                        "call_icon.svg", "Phone Number", mobile),
                     getVerSpace(30.h),
                   ],
                 ).paddingSymmetric(horizontal: 20.h),
-                getCustomButton("Edit Profile", () {
-                  Constant.sendToNext(context, Routes.editProfileSCreenRoute);
+                getCustomButton("Edit Profile", () async {
+                  // Navigate to Edit Profile and await the result
+                  var result = await Get.toNamed(Routes.editProfileSCreenRoute);
+                  // If the result is true, refresh the user data
+                  if (result == true) {
+                    fetchUserData();
+                  }
                 }).paddingSymmetric(horizontal: 20.h),
               ],
             ).paddingOnly(bottom: 30.h),

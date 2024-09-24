@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -781,12 +782,19 @@ class AuthController extends GetxController {
         email: email,
         password: password,
       );
-      // Sign-in successful, handle success (e.g., navigate to home page)
+
+    // Fetch the user data after successful sign-in
+    Map<String, dynamic>? userData = await getUserData();
+
+    if (userData != null) {
       Get.snackbar('Success', 'Signed in as: ${userCredential.user?.email}');
       // Navigate to home page after login
       Get.offAllNamed(Routes.homeMainScreenRoute);
-      // Update the sign-in status
-      PrefData.setIsSignIn(true); // Set sign-in to true only after successful
+    } else {
+      Get.snackbar('Error', 'User data not found');
+    }
+
+    PrefData.setIsSignIn(true); // Set sign-in to true only after successful sign-in
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.snackbar('Error', 'No user found for that email.');
@@ -797,6 +805,40 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // getUserData function
+  Future<Map<String, dynamic>?> getUserData() async {
+    try {
+      // Get current user from FirebaseAuth
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        String uid = currentUser.uid; // Get user ID from FirebaseAuth
+
+        // Retrieve the document from Firestore using the UID
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users_info')
+            .doc(uid)
+            .get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic> userData =
+              userDoc.data() as Map<String, dynamic>;
+          print('User Data: $userData');
+          return userData; // Return the user data
+        } else {
+          print('No user data found for UID: $uid');
+          return null;
+        }
+      } else {
+        print('No user is currently logged in.');
+        return null;
+      }
+    } catch (e) {
+      print('Error retrieving user data: $e');
+      return null;
     }
   }
 }

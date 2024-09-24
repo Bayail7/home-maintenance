@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:service_hub_app/controller/controller.dart';
 import 'package:service_hub_app/routes/app_pages.dart';
 import 'package:service_hub_app/utils/theme_data.dart';
 import 'package:service_hub_app/utils/theme_service.dart';
@@ -11,6 +14,7 @@ import 'firestore_test_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Get.put(AuthController());
   GetStorage.init();
   runApp(const MyApp());
 }

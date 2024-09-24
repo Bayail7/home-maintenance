@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -159,11 +159,33 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               final mobile = mobileNumberController.text;
                               final password = passwordController.text;
                               final location = locationController.text;
-                              await FirestoreTestPageState.addUserData(
-                                  name, email, mobile, location, password);
-                              authControllerSignUp.createUser(email, password);
-                              PrefData.setIsSignIn(true);
-                              Constant.sendToNext(context,Routes.homeMainScreenRoute);
+                              try {
+                                // Create user with Firebase Authentication
+                                UserCredential userCredential =
+                                    await FirebaseAuth.instance
+                                        .createUserWithEmailAndPassword(
+                                  email: email,
+                                  password: password,
+                                );
+                                String uid = userCredential.user!.uid;
+                                // Save user data to Firestore
+                                await FirestoreTestPageState.addUserData(uid,
+                                    name, email, mobile, location, password);
+                                // Set user sign-in state and navigate
+                                PrefData.setIsSignIn(true);
+                                Constant.sendToNext(
+                                    context, Routes.homeMainScreenRoute);
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'weak-password') {
+                                  print('The password provided is too weak.');
+                                } else if (e.code == 'email-already-in-use') {
+                                  print('The account already exists for that email.');
+                                } else {
+                                  print('Error: $e');
+                                }
+                              } catch (e) {
+                                print('An error occurred: $e');
+                              }
                             }
                           }),
                           getVerSpace(50.h),

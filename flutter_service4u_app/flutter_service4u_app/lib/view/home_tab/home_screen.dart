@@ -17,6 +17,31 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController serchController = TextEditingController();
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
 
+ // Variables to hold user data
+  String userLocation = "";
+  
+  // Fetch the auth controller
+  final AuthController authController = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch and pre-fill user data
+    loadUserData();
+  }
+
+  // Function to load user data and pre-fill the form
+  Future<void> loadUserData() async {
+    Map<String, dynamic>? userData = await authController.getUserData();
+
+    if (userData != null) {
+      setState(() {
+        // Pre-fill the fields with the user data
+        userLocation = userData['location'] ?? '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -52,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     getSvgImage("location_icon.svg"),
                                     getHorSpace(12.h),
-                                    getCustomFont("Buraydah", 14.sp,
+                                    getCustomFont(userLocation, 14.sp,
                                         context.theme.primaryColor, 1,
                                         fontWeight: FontWeight.w400),
                                     SizedBox(width: 150),

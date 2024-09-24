@@ -21,6 +21,32 @@ backClick() {
 class _ProfileScreenState extends State<ProfileScreen> {
   SideMenuProfifileScreenController sideMenuProfifileScreenController =
       Get.put(SideMenuProfifileScreenController());
+  // Fetch the AuthController using GetX
+  final AuthController authController = Get.find<AuthController>();
+
+  // Variables to hold user data
+  String userName = "";
+  String userEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch user data when the screen loads
+    fetchUserData();
+  }
+
+  // Function to fetch user data
+  Future<void> fetchUserData() async {
+    Map<String, dynamic>? userData = await authController.getUserData();
+
+    if (userData != null) {
+      setState(() {
+        // Update the UI with user data
+        userName = userData['name'] ?? "N/A";
+        userEmail = userData['email'] ?? "N/A";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +59,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Column(
               children: [
-                getVerSpace(30.h),
-                getAssetImage("user_image.png", height: 100.h, width: 100.w),
-                getVerSpace(20.h),
-                getCustomFont("Darlene Robertson", 18.sp, Color(0XFF000000), 1,
+                getVerSpace(40.h),
+                getAssetImage("app_icon_user.png", height: 100.h, width: 100.w),
+                getVerSpace(10.h),
+                getCustomFont(userName, 18.sp, Color(0XFF000000), 1,
                     fontWeight: FontWeight.w600, txtHeight: 1.5.h),
                 getVerSpace(8.h),
                 getCustomFont(
-                    "darlenerobertson@gmail.com", 16.sp, Color(0XFF808080), 1,
+                    userEmail, 16.sp, Color(0XFF808080), 1,
                     fontWeight: FontWeight.w500),
                 getVerSpace(20.h),
-                getProfileOption("profile_icon.svg", "My Profile", () {
-
-                  Constant.sendToNext(context, Routes.myProfileScreenRoute);
+                getProfileOption("profile_icon.svg", "My Profile", () async {
+                  var result = await Get.toNamed(Routes.myProfileScreenRoute);
+                  if (result == true) {
+                    fetchUserData(); // Re-fetch the data after returning from profile edit
+                  }
                 }),
                 getVerSpace(20.h),
                 GetBuilder<SideDrawerController>(
@@ -70,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 getVerSpace(20.h),
                 getProfileOption("setting_icon.svg", "Settings", () {
-                 Constant.sendToNext(context, Routes.settingScreensRoute);
+                  Constant.sendToNext(context, Routes.settingScreensRoute);
                 }),
                 getVerSpace(41.h),
               ],
