@@ -29,6 +29,32 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
     }
   }
 
+
+
+ static Future<void> addProviderData(String uid, String name, String email,
+      String mobile, String location, String password) async {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('providers_info');
+
+    try {
+      // Use uid as the document ID
+      await users.doc(uid).set({
+        'name': name,
+        'email': email,
+        'mobile': mobile,
+        'location': location,
+        'password': password,
+      });
+      print("User added successfully with UID: $uid");
+    } catch (e) {
+      print("Error adding user: $e");
+    }
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

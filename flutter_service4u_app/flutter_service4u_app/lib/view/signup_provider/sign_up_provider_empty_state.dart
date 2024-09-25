@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:service_hub_app/firestore_test_page.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
+import 'package:service_hub_app/utils/pref_data.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
@@ -13,30 +16,28 @@ class SignUpProviderEmptyState extends StatefulWidget {
 }
 
 class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
-  // Initialize controller
   final SignUpProviderEmptyStateController signUpProviderEmptyStateController = Get.put(SignUpProviderEmptyStateController());
-   TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  final TextEditingController serviceTypeController = TextEditingController();
   final GlobalKey<FormState> formKeyP = GlobalKey<FormState>();
+  final AuthController authControllerSignUp = Get.put(AuthController());
 
-   backClick() {
+  backClick() {
     Constant.backToFinish();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Ensure ScreenUtil is initialized properly
     initializeScreenSize(context);
 
     return GetBuilder<SignUpProviderEmptyStateController>(
       builder: (controller) => WillPopScope(
         onWillPop: () async {
           backClick();
-          return false; // Prevent the default back navigation
+          return false;
         },
         child: Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -44,7 +45,7 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
           body: SafeArea(
             child: Form(
               key: formKeyP,
-                         child: Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getVerSpace(30.h),
@@ -68,12 +69,10 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                               controller: emailController, validator: (email) {
                             if (email == null || email.isEmpty) {
                               return 'Please enter email address';
-                            } else {
-                              if (!RegExp(
-                                      r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-                                  .hasMatch(email)) {
-                                return 'Please enter valid email address';
-                              }
+                            } else if (!RegExp(
+                              r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                              .hasMatch(email)) {
+                              return 'Please enter valid email address';
                             }
                             return null;
                           }),
@@ -91,22 +90,18 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                           getVerSpace(28.h),
                           getTextField(
                               function: () {},
-                              obsequrePermition:
-                                  signUpProviderEmptyStateController.passVisibility,
+                              obsequrePermition: signUpProviderEmptyStateController.passVisibility,
                               "Password",
                               "lock_icon.svg",
                               suffixiconpermition: true,
                               controller: passwordController,
                               widget: GestureDetector(
                                   onTap: () {
-                                    signUpProviderEmptyStateController
-                                    .setPasswordVisibility();
-                                    
+                                    signUpProviderEmptyStateController.setPasswordVisibility();
                                   },
-                                  child: getSvgImage(signUpProviderEmptyStateController
-                                              .passVisibility
-                                          ? "eye_icon.svg"
-                                          : "selected_eye_icon.svg")
+                                  child: getSvgImage(signUpProviderEmptyStateController.passVisibility
+                                      ? "eye_icon.svg"
+                                      : "selected_eye_icon.svg")
                                       .paddingOnly(
                                           top: 15.h,
                                           bottom: 17.h,
@@ -121,10 +116,10 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  signUpProviderEmptyStateController.isChecked;
+                                  signUpProviderEmptyStateController.toggleCheck();
                                 },
                                 child: getSvgImage(
-                                      signUpProviderEmptyStateController.isChecked                                              
+                                    signUpProviderEmptyStateController.isChecked
                                         ? "select_cheak_button.svg"
                                         : "unselect_cheak_button.svg"),
                               ),
@@ -144,12 +139,36 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                             ],
                           ),
                           getVerSpace(54.h),
-                          getCustomButton("Sign Up", () {
+                          getCustomButton("Sign Up", () async {
                             if (formKeyP.currentState!.validate() &&
-                                signUpProviderEmptyStateController.isChecked == true) {
-                              // PrefData.setIsSignIn(false);
-                              Constant.sendToNext(
-                                  context, Routes.verificationScreenRoute);
+                                signUpProviderEmptyStateController.isChecked) {
+                              final name = nameController.text;
+                              final email = emailController.text;
+                              final mobile = mobileNumberController.text;
+                              final password = passwordController.text;
+                              final location = locationController.text;
+                              try {
+                                UserCredential userCredential = await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                  email: email,
+                                  password: password,
+                                );
+                                String uid = userCredential.user!.uid;
+                                await FirestoreTestPageState.addProviderData(uid,
+                                    name, email, mobile, location, password);
+                                PrefData.setIsSignIn(true);
+                               Constant.sendToNext(context, Routes.ProviderServiceScreenRoute);
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'weak-password') {
+                                  print('The password provided is too weak.');
+                                } else if (e.code == 'email-already-in-use') {
+                                  print('The account already exists for that email.');
+                                } else {
+                                  print('Error: $e');
+                                }
+                              } catch (e) {
+                                print('An error occurred: $e');
+                              }
                             }
                           }),
                           getVerSpace(50.h),
@@ -174,8 +193,8 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                   Center(
                     child: getRichtext("You already have an account?", " Login",
                         function: () {
-                      backClick();
-                    },
+                          backClick();
+                        },
                         firstTextwidth: FontWeight.w400,
                         firsttextSize: 14.sp,
                         secondTextwidth: FontWeight.w500,
@@ -185,8 +204,10 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                   ).paddingOnly(bottom: 30.h),
                 ],
               ).paddingOnly(left: 20.h, right: 20.h),
-            )),
-          )),
-    );
+            ))),
+        ),
+      // ignore: dead_code
+      );
+   
   }
 }

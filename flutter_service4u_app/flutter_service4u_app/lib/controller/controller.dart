@@ -86,6 +86,8 @@ class SignUpProviderEmptyStateController extends GetxController {
   bool isChecked = false;
   bool passVisibility = false;
 
+  static var cheak;
+
   // Method to toggle the state of `isChecked`
   void toggleCheck() {
     isChecked = !isChecked;
@@ -99,6 +101,7 @@ class SignUpProviderEmptyStateController extends GetxController {
   }
 
   void setPasswordVisibility() {}
+ 
 }
 
 class VerificationScreenController extends GetxController {}
@@ -122,6 +125,26 @@ class HomeMainScreenController extends GetxController {
     super.onInit();
   }
 }
+
+
+class ProviderServiceScreenController extends GetxController {
+  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
+
+  // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
+  RxInt position = 0.obs;
+
+  onChange(int value) {
+    position.value = value;
+    update();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+}
+
 
 class HomeScreenController extends GetxController {
   List<CleaningServiceOffer> cleaningOffer = DataFile.getCleaningOfferData();
@@ -446,7 +469,9 @@ class BeautyServiceDetailScreenController extends GetxController {
   }
 }
 
-class SideMenuProfifileScreenController extends GetxController {}
+class SideMenuProfifileScreenController extends GetxController {
+  static void addAddessScreen(bool bool) {}
+}
 
 class CalendarScreenController extends GetxController {}
 
@@ -757,8 +782,9 @@ class RecommendedServiceScreenController extends GetxController {
   }
 }
 
+
 class AuthController extends GetxController {
-  // createUser function in Authentication > Users
+  // Create user function
   Future<void> createUser(String email, String password) async {
     try {
       UserCredential userCredential =
@@ -767,6 +793,22 @@ class AuthController extends GetxController {
         password: password,
       );
       Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // Create provider function
+  Future<void> createProvider(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.snackbar('Success', 'Provider created: ${userCredential.user?.email}');
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
     } catch (e) {
@@ -783,18 +825,20 @@ class AuthController extends GetxController {
         password: password,
       );
 
-    // Fetch the user data after successful sign-in
-    Map<String, dynamic>? userData = await getUserData();
+      // Check if the user is a provider
+      bool isProvider = await checkIfProvider(email);
 
-    if (userData != null) {
-      Get.snackbar('Success', 'Signed in as: ${userCredential.user?.email}');
-      // Navigate to home page after login
-      Get.offAllNamed(Routes.homeMainScreenRoute);
-    } else {
-      Get.snackbar('Error', 'User data not found');
-    }
+      if (isProvider) {
+        Get.snackbar('Success', 'Signed in as Provider: ${userCredential.user?.email}');
+         print("Navigating to Provider Service Screen");
+        Get.offAllNamed(Routes.ProviderServiceScreenRoute); // Navigate to Provider Service Screen
+      } else {
+        Get.snackbar('Success', 'Signed in as Customer: ${userCredential.user?.email}');
+        print("Navigating to Home Service Screen");
+        Get.offAllNamed(Routes.homeMainScreenRoute); // Navigate to Home Service Screen
+      }
 
-    PrefData.setIsSignIn(true); // Set sign-in to true only after successful sign-in
+      PrefData.setIsSignIn(true); // Set sign-in to true only after successful sign-in
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.snackbar('Error', 'No user found for that email.');
@@ -808,10 +852,24 @@ class AuthController extends GetxController {
     }
   }
 
-  // getUserData function
+  // Check if the user is a provider
+  Future<bool> checkIfProvider(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('providers_info')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty; // Returns true if provider exists
+    } catch (e) {
+      print('Error checking provider: $e');
+      return false; // Default to false on error
+    }
+  }
+
+  // Get user data function (optional, if you need it)
   Future<Map<String, dynamic>?> getUserData() async {
     try {
-      // Get current user from FirebaseAuth
       User? currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
@@ -824,8 +882,7 @@ class AuthController extends GetxController {
             .get();
 
         if (userDoc.exists) {
-          Map<String, dynamic> userData =
-              userDoc.data() as Map<String, dynamic>;
+          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
           print('User Data: $userData');
           return userData; // Return the user data
         } else {
@@ -845,6 +902,11 @@ class AuthController extends GetxController {
 
 class MyProfileScreenController extends GetxController {}
 
+class ProviderMyProfileScreenController extends GetxController {}
+
 class EditProfileSCreenController extends GetxController {}
+
+class EditProfileProSCreenController extends GetxController {}
+
 
 class SettingScreensController extends GetxController {}
