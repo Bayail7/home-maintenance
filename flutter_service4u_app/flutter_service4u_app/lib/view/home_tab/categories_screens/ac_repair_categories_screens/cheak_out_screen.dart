@@ -22,13 +22,13 @@ backclick() {
 class _CheakOutScreenState extends State<CheakOutScreen> {
   CheakOutScreenController cheakOutScreenController =
       Get.put(CheakOutScreenController());
-  PromoCodeScreenController promoCodeScreenController =
-      Get.put(PromoCodeScreenController());
+  //PromoCodeScreenController promoCodeScreenController =
+  //    Get.put(PromoCodeScreenController());
   PhoneNumberScreenController phoneNumberScreenController =
       Get.put(PhoneNumberScreenController());
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
-  PayMentScreenController payMentScreenController =
-      Get.put(PayMentScreenController());
+ // PayMentScreenController payMentScreenController =
+ //     Get.put(PayMentScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                     borderRadius: BorderRadius.circular(16.h),
                                     border: Border.all(color: grey20)),
                                 child: Row(
-                                  children: [
+                                  /*children: [
                                     Container(
                                       height: 60.h,
                                       width: 60.h,
@@ -82,7 +82,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                           .paddingAll(10.h),
                                     ),
                                     getHorSpace(14.h),
-                                    Column(
+                                    /*Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -97,9 +97,9 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                             grey40, 1,
                                             fontWeight: FontWeight.w400)
                                       ],
-                                    ),
-                                  ],
-                                ).paddingAll(14.h),
+                                    ),*/
+                                  ],*/
+                                ).paddingAll(14.h), 
                               ).paddingSymmetric(horizontal: 20.h),
                               getVerSpace(24.h),
                               GetBuilder<ServiceBookBottomSheetController>(
@@ -183,7 +183,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                               CheakOutScreenCommonWidget()
                             ],
                           )),
-                          Container(
+                         Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(16.h),
@@ -202,7 +202,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
+                                    /*Row(
                                       children: [
                                         getCustomFont(
                                             "Total :", 16.sp, grey40, 1,
@@ -212,8 +212,8 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                             "30.00", 20.sp, regularBlack, 1,
                                             fontWeight: FontWeight.w700)
                                       ],
-                                    ),
-                                    Row(
+                                    ), */ 
+                                   /* Row(
                                       children: [
                                         getCustomFont("Bill Details", 16.sp,
                                             darkYellow, 1,
@@ -222,7 +222,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                         getHorSpace(8.h),
                                         getSvgImage("down_arrow_icon.svg")
                                       ],
-                                    )
+                                    )*/
                                   ],
                                 ),
                                 getVerSpace(30.h),

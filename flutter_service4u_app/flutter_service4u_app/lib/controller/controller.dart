@@ -573,26 +573,26 @@ class PhoneNumberScreenController extends GetxController {
   }
 }
 
-class PromoCodeScreenController extends GetxController {
-  List<PromoCode> promocode = DataFile.getPromocodeData();
-  int? promoId;
-  int? selectPromoCodeIndex;
+//class PromoCodeScreenController extends GetxController {
+//  List<PromoCode> promocode = DataFile.getPromocodeData();
+ // int? promoId;
+ // int? selectPromoCodeIndex;
 
-  void setPromoCode(id) {
-    promoId = id;
-    update();
-  }
+ // void setPromoCode(id) {
+ //   promoId = id;
+ //   update();
+ // }
 
-  void setPromocodeIndex(int index) {
-    selectPromoCodeIndex = index;
-    update();
-  }
+ // void setPromocodeIndex(int index) {
+ //   selectPromoCodeIndex = index;
+ //   update();
+ // }
 
-  void removePromoCode() {
-    selectPromoCodeIndex = null;
-    update();
-  }
-}
+ // void removePromoCode() {
+ //   selectPromoCodeIndex = null;
+ //   update();
+ // }
+//}
 
 class PayMentScreenController extends GetxController {
   List<PaymentCard> card = DataFile.getPaymentCardData();

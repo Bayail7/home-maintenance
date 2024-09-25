@@ -18,8 +18,8 @@ class _CheakOutScreenCommonWidgetState
     extends State<CheakOutScreenCommonWidget> {
   CheakOutScreenController cheakOutScreenController =
       Get.put(CheakOutScreenController());
-  PromoCodeScreenController promoCodeScreenController =
-      Get.put(PromoCodeScreenController());
+  //PromoCodeScreenController promoCodeScreenController =
+   //   Get.put(PromoCodeScreenController());
   PhoneNumberScreenController phoneNumberScreenController =
       Get.put(PhoneNumberScreenController());
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
@@ -34,18 +34,18 @@ class _CheakOutScreenCommonWidgetState
         getVerSpace(24.h),
         phone_number(),
         getVerSpace(24.h),
-        promo_code(),
+//        promo_code(),
         getVerSpace(24.h),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.h),
-            color: context.theme.focusColor,
-          ),
-          child: bill_detail(context.theme.primaryColor),
-        ).paddingSymmetric(
-            horizontal: cheakOutScreenController.cheakOut ? 0.h : 0.h),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(8.h),
+        //     color: context.theme.focusColor,
+        //   ),
+        //   child: bill_detail(context.theme.primaryColor),
+        // ).paddingSymmetric(
+        //     horizontal: cheakOutScreenController.cheakOut ? 0.h : 0.h),
         getVerSpace(24.h),
-        pay_with()
+        //pay_with()
       ],
     );
   }
@@ -246,16 +246,16 @@ class _CheakOutScreenCommonWidgetState
           horizontal: cheakOutScreenController.cheakOut ? 0.h : 16.h),
     );
   }
-
+/*
   Widget promo_code() {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.h),
           color: context.theme.focusColor,
         ),
-        child: GetBuilder<PromoCodeScreenController>(
+       child: GetBuilder<PromoCodeScreenController>(
             init: PromoCodeScreenController(),
-            builder: (promoCodeScreenController) => Column(
+          builder: (promoCodeScreenController) => Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,6 +300,6 @@ class _CheakOutScreenCommonWidgetState
                           ).paddingOnly(top: 8.h)
                         : SizedBox()
                   ],
-                ))).paddingSymmetric(horizontal: 20.h);
+                ))).paddingSymmetric(horizontal: 20.h); */
   }
-}
+//}

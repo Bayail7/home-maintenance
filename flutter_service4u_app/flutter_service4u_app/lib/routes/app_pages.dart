@@ -100,7 +100,7 @@ class AppPages {
     // Routes.beautyServiceDetailRoute: (context) => BeautyServiceDetail(),
     Routes.cheakOutScreenRoute: (context) => CheakOutScreen(),
     Routes.phoneNumberScreenRoute: (context) => PhoneNumberScreen(),
-    Routes.promoCodeScreenRoute: (context) => PromoCodeScreen(),
+   // Routes.promoCodeScreenRoute: (context) => PromoCodeScreen(),
     Routes.placeOrderScreenRoute: (context) => PlaceOrderScreen(),
     Routes.payMentScreenRoute: (context) => PayMentScreen(),
     Routes.orderDetailScreenRoute: (context) => OrderDetailScreen(),

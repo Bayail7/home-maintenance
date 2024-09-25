@@ -5,6 +5,7 @@ import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import 'package:service_hub_app/view/home_tab/categories_screens/ac_repair_categories_screens/service_book_now_bottom_sheet.dart';
 import '../../../../controller/controller.dart';
+import '../../../../models/ac_repair_all_service_data_model.dart';
 import '../../../../utils/constant.dart';
 
 class AcRepairServiceDetailScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _AcRepairServiceDetailScreenState
 
   @override
   Widget build(BuildContext context) {
+    AllacService service = Get.arguments as AllacService;
     initializeScreenSize(context);
     return WillPopScope(
       onWillPop: () async {
@@ -76,20 +78,20 @@ class _AcRepairServiceDetailScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      getCustomFont("AC Repair Service", 20.sp, regularBlack, 1,
+                      getCustomFont("${service.title}", 20.sp, regularBlack, 1,
                           fontWeight: FontWeight.w700),
                       getVerSpace(4.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          getCustomFont("\$${30.00}", 16.sp, regularBlack, 1,
+                          getCustomFont("\$${service.price}", 16.sp, regularBlack, 1,
                               fontWeight: FontWeight.w400),
                           Row(
                             children: [
                               getSvgImage("star_icon.svg",
                                   height: 16.h, width: 16.h),
                               getHorSpace(2.h),
-                              getCustomFont("4.2", 14.sp, regularBlack, 1,
+                              getCustomFont("${service.rating}", 14.sp, regularBlack, 1,
                                   fontWeight: FontWeight.w400),
                             ],
                           )
@@ -189,18 +191,18 @@ class _AcRepairServiceDetailScreenState
                           getCustomFont("Total :", 16.sp, grey40, 1,
                               fontWeight: FontWeight.w400),
                           getHorSpace(6.h),
-                          getCustomFont("30.00", 20.sp, regularBlack, 1,
+                          getCustomFont("${service.price}", 20.sp, regularBlack, 1,
                               fontWeight: FontWeight.w700)
                         ],
                       ),
-                      Row(
+                      /*Row(
                         children: [
                           getCustomFont("Bill Details", 16.sp, darkYellow, 1,
                               fontWeight: FontWeight.w400, letterSpace: 0.01),
                           getHorSpace(8.h),
                           getSvgImage("down_arrow_icon.svg")
                         ],
-                      )
+                      )*/
                     ],
                   ),
                   getVerSpace(30.h),

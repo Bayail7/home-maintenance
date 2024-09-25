@@ -7,7 +7,7 @@ import '../../../../routes/app_routes.dart';
 import '../../../../utils/color_category.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/constantWidget.dart';
-
+/*
 class PromoCodeScreen extends StatefulWidget {
   @override
   State<PromoCodeScreen> createState() => _PromoCodeScreenState();
@@ -178,3 +178,4 @@ class _PromoCodeScreenState extends State<PromoCodeScreen> {
 //   );
 // }
 }
+*/
