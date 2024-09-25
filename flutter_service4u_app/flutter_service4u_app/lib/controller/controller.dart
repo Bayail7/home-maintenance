@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
+import 'package:service_hub_app/routes/app_routes.dart';
+import 'package:service_hub_app/utils/pref_data.dart';
 import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
@@ -82,6 +86,8 @@ class SignUpProviderEmptyStateController extends GetxController {
   bool isChecked = false;
   bool passVisibility = false;
 
+  static var cheak;
+
   // Method to toggle the state of `isChecked`
   void toggleCheck() {
     isChecked = !isChecked;
@@ -95,6 +101,7 @@ class SignUpProviderEmptyStateController extends GetxController {
   }
 
   void setPasswordVisibility() {}
+ 
 }
 
 class VerificationScreenController extends GetxController {}
@@ -118,6 +125,26 @@ class HomeMainScreenController extends GetxController {
     super.onInit();
   }
 }
+
+
+class ProviderServiceScreenController extends GetxController {
+  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
+
+  // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
+  RxInt position = 0.obs;
+
+  onChange(int value) {
+    position.value = value;
+    update();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+}
+
 
 class HomeScreenController extends GetxController {
   List<CleaningServiceOffer> cleaningOffer = DataFile.getCleaningOfferData();
@@ -209,7 +236,8 @@ class ApplianceRepairScreenController extends GetxController {
 
 class ElectronicsRepairScreenController extends GetxController {
   // List of appliance repair services
-  List<ElectronicsService> allElectronicsService = DataFile.getElectronicsService();
+  List<ElectronicsService> allElectronicsService =
+      DataFile.getElectronicsService();
 
   // Toggle for grid or list view
   bool grid = true;
@@ -229,6 +257,7 @@ class ElectronicsRepairScreenController extends GetxController {
     update(); // Notifies the UI to update
   }
 }
+
 class PlumbingRepairScreenController extends GetxController {
   // List of appliance repair services
   List<PlumbingService> allPlumbingService = DataFile.getPlumbingService();
@@ -251,6 +280,7 @@ class PlumbingRepairScreenController extends GetxController {
     update(); // Notifies the UI to update
   }
 }
+
 // class ApplianceCategoriesScreenController extends GetxController{
 //   List<AllianceData> allianceData = DataFile.getAllianceData();
 //   bool grid = false;
@@ -439,7 +469,9 @@ class BeautyServiceDetailScreenController extends GetxController {
   }
 }
 
-class SideMenuProfifileScreenController extends GetxController {}
+class SideMenuProfifileScreenController extends GetxController {
+  static void addAddessScreen(bool bool) {}
+}
 
 class CalendarScreenController extends GetxController {}
 
@@ -750,8 +782,131 @@ class RecommendedServiceScreenController extends GetxController {
   }
 }
 
+
+class AuthController extends GetxController {
+  // Create user function
+  Future<void> createUser(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // Create provider function
+  Future<void> createProvider(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.snackbar('Success', 'Provider created: ${userCredential.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // Sign-in function using Firebase Authentication
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Check if the user is a provider
+      bool isProvider = await checkIfProvider(email);
+
+      if (isProvider) {
+        Get.snackbar('Success', 'Signed in as Provider: ${userCredential.user?.email}');
+         print("Navigating to Provider Service Screen");
+        Get.offAllNamed(Routes.ProviderServiceScreenRoute); // Navigate to Provider Service Screen
+      } else {
+        Get.snackbar('Success', 'Signed in as Customer: ${userCredential.user?.email}');
+        print("Navigating to Home Service Screen");
+        Get.offAllNamed(Routes.homeMainScreenRoute); // Navigate to Home Service Screen
+      }
+
+      PrefData.setIsSignIn(true); // Set sign-in to true only after successful sign-in
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar('Error', 'No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        Get.snackbar('Error', 'Wrong password provided.');
+      } else {
+        Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+
+  // Check if the user is a provider
+  Future<bool> checkIfProvider(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('providers_info')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty; // Returns true if provider exists
+    } catch (e) {
+      print('Error checking provider: $e');
+      return false; // Default to false on error
+    }
+  }
+
+  // Get user data function (optional, if you need it)
+  Future<Map<String, dynamic>?> getUserData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        String uid = currentUser.uid; // Get user ID from FirebaseAuth
+
+        // Retrieve the document from Firestore using the UID
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users_info')
+            .doc(uid)
+            .get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+          print('User Data: $userData');
+          return userData; // Return the user data
+        } else {
+          print('No user data found for UID: $uid');
+          return null;
+        }
+      } else {
+        print('No user is currently logged in.');
+        return null;
+      }
+    } catch (e) {
+      print('Error retrieving user data: $e');
+      return null;
+    }
+  }
+}
+
 class MyProfileScreenController extends GetxController {}
 
+class ProviderMyProfileScreenController extends GetxController {}
+
 class EditProfileSCreenController extends GetxController {}
+
+class EditProfileProSCreenController extends GetxController {}
+
 
 class SettingScreensController extends GetxController {}

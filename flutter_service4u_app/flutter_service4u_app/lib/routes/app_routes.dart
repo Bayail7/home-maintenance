@@ -11,6 +11,7 @@ abstract class Routes {
       Paths.verificationproviderScreenPath;
   static const resetPasswordScreenRoute = Paths.resetPasswordScreenPath;
   static const homeMainScreenRoute = Paths.homeMainScreenPath;
+  static const ProviderServiceScreenRoute = Paths.ProviderServiceScreenPath;
   static const homeScreenRoute = Paths.homeScreenPath;
   static const bookingScreenRoute = Paths.bookingScreenPath;
   static const notificationScreenRoute = Paths.notificationScreenPath;
@@ -65,7 +66,12 @@ abstract class Routes {
   static const orderConfirmScreenRoute = Paths.orderConfirmScreenPath;
   static const addNewAddressScreenRoute = Paths.addNewAddressScreenPath;
   static const myProfileScreenRoute = Paths.myProfileScreenPath;
+    static const providerMyProfileScreenRoute = Paths.providerMyProfileScreenPath;
+    static const ProviderProfileScreenRoute = Paths.ProviderProfileScreenPath;
+
   static const editProfileSCreenRoute = Paths.editProfileSCreenPath;
+    static const EditProfileProSCreenRoute = Paths.EditProfileProSCreenPath;
+
   static const settingScreensRoute = Paths.settingScreensPath;
   static const helpCenterScreenRoute = Paths.helpCenterScreenPath;
   static const privacyPolicyScreenRoute = Paths.privacyPolicyScreenPath;
@@ -132,10 +138,15 @@ abstract class Paths {
   static const recommendedServiceScreenPath = "/RecommendedServiceScreen";
   static const addNewAddressScreenPath = "/AddNewAddressScreen";
   static const myProfileScreenPath = "/MyProfileScreen";
+  static const providerMyProfileScreenPath = "/providerMyProfileScreen";
+    static const   ProviderProfileScreenPath = "/  ProviderProfileScreen";
+
   static const editProfileSCreenPath = "/EditProfileSCreen";
+  static const EditProfileProSCreenPath = "/EditProfileProSCreen";
   static const settingScreensPath = "/SettingScreens";
   static const helpCenterScreenPath = "/HelpCenterScreen";
   static const privacyPolicyScreenPath = "/PrivacyPolicyScreen";
   static const securityScreenPath = "/SecurityScreen";
   static const termsAndConditionScreenPath = "/TermsAndConditionScreen";
+  static const ProviderServiceScreenPath = "/ProviderServiceScreen";
 }

@@ -41,6 +41,7 @@ import '../view/home_tab/side_menu_screens/sidemenu_profile_screen.dart';
 import '../view/notification_tab/notification_screen.dart';
 import '../view/onboarding/onboarding_screen.dart';
 import '../view/profile_tab/edit_profile_screen.dart';
+import '../view/provider_service_screen.dart';
 import '../view/profile_tab/help_center_screen.dart';
 import '../view/profile_tab/my_profile_screen.dart';
 import '../view/profile_tab/privacy_policy_screen.dart';
@@ -57,6 +58,10 @@ import '../view/sign_up/verification_screen.dart';
 import '../view/signup_provider/verification_Provider_screen.dart';
 import '../view/splash_screen/splash_screen.dart';
 import 'app_routes.dart';
+import '../view/provider_profile_tab/edit_profilePro_screen.dart';
+import '../view/provider_profile_tab/provider_my_profile_screen.dart';
+import '../view/provider_profile_tab/provider_profile_screen.dart';
+import '../view/provider_service_screen.dart';
 
 class AppPages {
   static const initialRoute = Routes.splashScreenRoute;
@@ -73,6 +78,7 @@ class AppPages {
         ForgotPasswordEmptyState(),
     Routes.resetPasswordScreenRoute: (context) => ResetPasswordScreen(),
     Routes.homeMainScreenRoute: (context) => HomeMainScreen(),
+    Routes.ProviderServiceScreenRoute: (context) => ProviderServiceScreen(),
     Routes.homeScreenRoute: (context) => HomeScreen(),
     Routes.bookingScreenRoute: (context) => BookingScreen(),
     Routes.notificationScreenRoute: (context) => NotificationScreen(),
@@ -115,7 +121,11 @@ class AppPages {
     Routes.orderConfirmScreenRoute: (context) => OrderConfirmScreen(),
     Routes.addNewAddressScreenRoute: (context) => AddNewAddressScreen(),
     Routes.myProfileScreenRoute: (context) => MyProfileScreen(),
+    Routes.providerMyProfileScreenRoute: (context) => ProviderMyProfileScreen(),
+  
     Routes.editProfileSCreenRoute: (context) => EditProfileSCreen(),
+    Routes.EditProfileProSCreenRoute: (context) => EditProfileProSCreen(),
+
     Routes.settingScreensRoute: (context) => SettingScreens(),
     Routes.helpCenterScreenRoute: (context) => HelpCenterScreen(),
     Routes.privacyPolicyScreenRoute: (context) => PrivacyPolicyScreen(),
