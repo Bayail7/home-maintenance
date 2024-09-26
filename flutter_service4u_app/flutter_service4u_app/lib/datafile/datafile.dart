@@ -130,16 +130,17 @@ class DataFile {
     ];
   }
 
+
   static List<AllacService> getAllacService() {
     return [
       AllacService(
-          "ac_service_1st.png", "AC Repair Service", "30.00", "4.2", "10", 1),
+          "ac_service_1st.png", "AC Repair Service", "10 - 150", "4.2", "10", 1),
       AllacService(
-          "ac_service_2nd.png", "AC Installation", "30.00", "4.8", "", 2),
+          "ac_service_2nd.png", "AC Installation", "10 - 150", "4.8", "", 2),
       AllacService(
-          "ac_service_3rd.png", "AC leak detection", "30.00", "4.5", "", 3),
-      AllacService("ac_service_4th.png", "AC cleaning", "30.00", "4.0", "", 4),
-      AllacService("ac_service_5th.png", "AC compressor repairing", "30.00",
+          "ac_service_3rd.png", "AC leak detection", "10 - 150", "4.5", "", 3),
+      AllacService("ac_service_4th.png", "AC cleaning", "10 - 150", "4.0", "", 4),
+      AllacService("ac_service_5th.png", "AC compressor repairing", "10 - 150",
           "4.2", "", 5),
     ];
   }
@@ -155,11 +156,11 @@ class DataFile {
 /*
 String? image,   String? rate,   String? ratting,   String? serviceName,   String? numberOfReview,   int? id,
  */
-  static List<ApplianceService> getApplianceService() {
+   static List<ApplianceService> getApplianceService() {
     return [
       ApplianceService(
         image: "appliance_service_1st.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.8",
         title: "Refrigerator Repair",
         discount: "87",
@@ -167,7 +168,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ApplianceService(
         image: "appliance_service_2nd.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.5",
         title: "Dishwasher Repair",
         discount: "87",
@@ -175,7 +176,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ApplianceService(
         image: "appliance_service_3rd.jpeg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Washing Machine Repair",
         discount: "87",
@@ -183,7 +184,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ApplianceService(
         image: "appliance_service_4th.jpg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "TV Repair",
         discount: "87",
@@ -191,7 +192,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ApplianceService(
         image: "appliance_service_5th.jpeg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Oven Repair",
         discount: "87",
@@ -199,12 +200,11 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
     ];
   }
-
-  static List<ElectronicsService> getElectronicsService() {
+ static List<ElectronicsService> getElectronicsService() {
     return [
       ElectronicsService(
         image: "electronics_service_1st.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.8",
         title: "Installing Lamps & Lights ",
         discount: "87",
@@ -212,7 +212,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ElectronicsService(
         image: "electronics_service_2nd.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.5",
         title: "Changing electric outlet",
         discount: "87",
@@ -220,7 +220,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ElectronicsService(
         image: "electronics_service_4th.jpeg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Cable test termination",
         discount: "87",
@@ -228,7 +228,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       ElectronicsService(
         image: "electronics_service_3rd.jpg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Laying cables",
         discount: "87",
@@ -236,12 +236,11 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
     ];
   }
-
   static List<PlumbingService> getPlumbingService() {
     return [
       PlumbingService(
         image: "plumbing_service_1st.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.8",
         title: "Sink Installation",
         discount: "87",
@@ -249,7 +248,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       PlumbingService(
         image: "plumbing_service_2nd.jpg",
-        price: "128",
+        price: "10 - 150",
         rating: "4.5",
         title: "Bidet Repair",
         discount: "87",
@@ -257,7 +256,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       PlumbingService(
         image: "plumbing_service_3rd.jpeg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Shower Repair",
         discount: "87",
@@ -265,7 +264,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       PlumbingService(
         image: "plumbing_service_4th.jpg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Blocked Water Pipe Repair",
         discount: "87",
@@ -273,7 +272,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       PlumbingService(
         image: "plumbing_service_5th.jpg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Pipe Repair",
         discount: "87",
@@ -281,7 +280,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
       ),
       PlumbingService(
         image: "plumbing_service_6th.jpg",
-        price: "170",
+        price: "10 - 150",
         rating: "4.5",
         title: "Leaking Pipe Repair",
         discount: "87",

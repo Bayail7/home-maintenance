@@ -66,10 +66,12 @@ class _PlumbingScreenState extends State<PlumbingScreen> {
                                 index,
                                 GestureDetector(
                                   onTap: () {
-                                    Constant.sendToNext(
+                                        Constant.sendToNext(
                                         context,
                                         Routes
-                                            .acRepairServiceDetailScreenRoute);
+                                            .acRepairServiceDetailScreenRoute,
+                                      arguments: service,
+                                    );
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -166,10 +168,12 @@ class _PlumbingScreenState extends State<PlumbingScreen> {
                                 index,
                                 GestureDetector(
                                   onTap: () {
-                                    Constant.sendToNext(
+                                        Constant.sendToNext(
                                         context,
                                         Routes
-                                            .acRepairServiceDetailScreenRoute);
+                                            .acRepairServiceDetailScreenRoute,
+                                      arguments: service,
+                                    );
                                   },
                                   child: Column(
                                     crossAxisAlignment:

@@ -680,6 +680,57 @@ class ServiceBookBottomSheetController extends GetxController {
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
 
+
+  String? provider;
+
+  Future<void> selectProvider(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,  // To make the dialog box fit the content
+              children: <Widget>[
+                Text(
+                  'Select Provider',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                // Empty space where you can add the provider selection logic
+                Text(
+                  'No providers available yet.',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                    onPressed: () {
+                      setProvider();
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: Text('CLOSE'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void setProvider()
+  {
+    provider='empty';
+    update();
+  }
+
   // DateTime _dateTime = DateTime.now();
 
   Future<void> selectDate(BuildContext context) async {
