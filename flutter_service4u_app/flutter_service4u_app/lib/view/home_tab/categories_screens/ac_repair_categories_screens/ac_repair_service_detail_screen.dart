@@ -25,7 +25,7 @@ class _AcRepairServiceDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    AllacService service = Get.arguments as AllacService;
+    var service = Get.arguments ;
     initializeScreenSize(context);
     return WillPopScope(
       onWillPop: () async {
@@ -40,13 +40,13 @@ class _AcRepairServiceDetailScreenState
             Stack(
               children: [
                 Container(
-                  height: 315.h,
+                  height: 215.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16.h),
                       image: DecorationImage(
                           image: AssetImage(
-                              Constant.assetImagePath + "ac_service_1st.png"),
+                              Constant.assetImagePath + "image.png"),
                           fit: BoxFit.fill)),
                   child: SafeArea(
                     child: Column(
@@ -99,7 +99,7 @@ class _AcRepairServiceDetailScreenState
                       ),
                     ],
                   ).paddingAll(16.h),
-                ).paddingOnly(top: 288.h, right: 20.h, left: 20.h)
+                ).paddingOnly(top: 200.h, right: 20.h, left: 20.h)
               ],
             ),
             getVerSpace(24.h),

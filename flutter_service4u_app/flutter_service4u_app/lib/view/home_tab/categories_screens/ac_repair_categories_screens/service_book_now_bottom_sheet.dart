@@ -73,6 +73,27 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
                     .paddingOnly(top: 15.h, bottom: 17.h, right: 18.h),
               )),
           getVerSpace(30.h),
+    getTextField(
+              color: serviceBookBottomSheetController.provider == null
+                  ? grey40
+                  : regularBlack, function: () {
+            serviceBookBottomSheetController.selectProvider(context);
+          },
+              type: TextInputType.none,
+              serviceBookBottomSheetController.provider == null
+                  ? "Select Provider"
+                  : "${serviceBookBottomSheetController.provider}",
+              "drawer_icon.svg",
+              suffixiconpermition: true,
+              fillColor: grey10,
+              widget: GestureDetector(
+                onTap: () {
+                  serviceBookBottomSheetController.selectProvider(context);
+                },
+                child: getSvgImage("down_arrow_icon_black.svg")
+                    .paddingOnly(top: 15.h, bottom: 17.h, right: 18.h),
+              )),
+          getVerSpace(30.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -81,7 +102,7 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
                   getCustomFont("Total :", 16.sp, grey40, 1,
                       fontWeight: FontWeight.w400),
                   getHorSpace(6.h),
-                  getCustomFont("30.00", 20.sp, regularBlack, 1,
+                  getCustomFont("10 - 150", 20.sp, regularBlack, 1,
                       fontWeight: FontWeight.w700)
                 ],
               ),
