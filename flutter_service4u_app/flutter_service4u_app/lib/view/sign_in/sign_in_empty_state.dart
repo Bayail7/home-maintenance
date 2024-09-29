@@ -5,7 +5,6 @@ import 'package:service_hub_app/utils/constantWidget.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
-import '../../utils/pref_data.dart';
 
 class SignInEmptyState extends StatefulWidget {
   @override

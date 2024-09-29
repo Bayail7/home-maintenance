@@ -106,10 +106,9 @@ getProfileOption("major_icon.png", "My Major", () async {
   }
 }),
    getVerSpace(20.h),
-    getProfileOption("order_icon.png", "New Orders", () async {
+    getProfileOption("order_icon.svg", "New Orders", () async {
       await Get.to(() => NewOrdersScreen()); // Navigate to NewOrdersScreen
     }),
-    getVerSpace(20.h),
                   getVerSpace(20.h),
                   getProfileOption("setting_icon.svg", "Settings", () {
                     Constant.sendToNext(context, Routes.settingScreensRoute);

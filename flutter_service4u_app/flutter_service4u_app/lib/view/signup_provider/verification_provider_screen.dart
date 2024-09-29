@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/controller/controller.dart';
-import 'package:service_hub_app/routes/app_routes.dart';
-import '../../utils/color_category.dart';
 import '../../utils/constant.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../../utils/constantWidget.dart';
-import '../../utils/pref_data.dart';
 
 class VerificationProviderScreen extends StatefulWidget {
   @override

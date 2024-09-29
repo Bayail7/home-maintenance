@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:service_hub_app/view/home_tab/categories_screens/appliance_categories_screens/appliance_service_detail_screen.dart';
 import '../view/booking_tab/booking_tab_screen.dart';
 import '../view/booking_tab/histry_detail_screen.dart';
 import '../view/home_main_screen.dart';
@@ -15,7 +14,6 @@ import '../view/home_tab/categories_screens/appliance_categories_screens/order_d
 import '../view/home_tab/categories_screens/ac_repair_categories_screens/payment_screen.dart';
 import '../view/home_tab/categories_screens/ac_repair_categories_screens/phone_number_screen.dart';
 import '../view/home_tab/categories_screens/appliance_categories_screens/place_order_screen.dart';
-import '../view/home_tab/categories_screens/appliance_categories_screens/promo_code_screen.dart';
 // import '../view/home_tab/categories_screens/beauty_categories_screens/beaty_screen.dart';
 // import '../view/home_tab/categories_screens/beauty_categories_screens/beauty_service_detail.dart';
 import '../view/home_tab/categories_screens/categories_screen.dart';
@@ -60,8 +58,6 @@ import '../view/splash_screen/splash_screen.dart';
 import 'app_routes.dart';
 import '../view/provider_profile_tab/edit_profilePro_screen.dart';
 import '../view/provider_profile_tab/provider_my_profile_screen.dart';
-import '../view/provider_profile_tab/provider_profile_screen.dart';
-import '../view/provider_service_screen.dart';
 
 class AppPages {
   static const initialRoute = Routes.splashScreenRoute;

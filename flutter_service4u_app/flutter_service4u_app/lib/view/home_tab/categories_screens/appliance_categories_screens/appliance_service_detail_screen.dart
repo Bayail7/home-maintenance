@@ -1,11 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:service_hub_app/utils/color_category.dart';
-import 'package:service_hub_app/utils/constantWidget.dart';
-import 'package:service_hub_app/view/home_tab/categories_screens/ac_repair_categories_screens/service_book_now_bottom_sheet.dart';
-import '../../../../controller/controller.dart';
-import '../../../../utils/constant.dart';
 /*
 class AcRepairServiceDetailScreen extends StatefulWidget {
   @override

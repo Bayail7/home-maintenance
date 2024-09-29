@@ -1,12 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:service_hub_app/models/promocode_data_model.dart';
-import '../../../../controller/controller.dart';
-import '../../../../routes/app_routes.dart';
-import '../../../../utils/color_category.dart';
-import '../../../../utils/constant.dart';
-import '../../../../utils/constantWidget.dart';
 /*
 class PromoCodeScreen extends StatefulWidget {
   @override

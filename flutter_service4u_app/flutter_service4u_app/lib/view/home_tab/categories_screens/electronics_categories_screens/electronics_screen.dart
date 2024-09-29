@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:service_hub_app/models/appliance_categories_data_model.dart';
 import 'package:service_hub_app/models/electronics_categories_data_model.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import '../../../../controller/controller.dart';
-import '../../../../models/ac_repair_all_service_data_model.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/constantWidget.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../controller/controller.dart';
 import '../../../utils/color_category.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/constantWidget.dart';

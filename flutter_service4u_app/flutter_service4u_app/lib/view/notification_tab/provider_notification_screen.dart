@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
-import 'package:service_hub_app/view/provider_service_screen.dart';
 import '../../controller/controller.dart';
 import '../../models/notification_data_model.dart';
 

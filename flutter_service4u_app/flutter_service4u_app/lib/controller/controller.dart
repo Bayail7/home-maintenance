@@ -19,7 +19,6 @@ import '../models/cleaning_service_model.dart';
 import '../models/cleaninng_service_offer_model.dart';
 import '../models/notification_data_model.dart';
 import '../models/phone_number_data_model.dart';
-import '../models/promocode_data_model.dart';
 import '../models/recommended_data_model.dart';
 import '../models/service_offer_model.dart';
 import '../models/side_menu_data_model.dart';

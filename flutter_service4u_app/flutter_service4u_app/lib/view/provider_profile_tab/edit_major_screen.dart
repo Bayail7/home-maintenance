@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:service_hub_app/utils/constant.dart';
-import 'package:service_hub_app/utils/constantWidget.dart';
 
 class EditMajorScreen extends StatefulWidget {
   const EditMajorScreen({Key? key}) : super(key: key);
