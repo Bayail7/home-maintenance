@@ -10,7 +10,6 @@ import '../../utils/color_category.dart';
 import '../../utils/constantWidget.dart';
 import '../../utils/pref_data.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
-import 'package:service_hub_app/view/provider_profile_tab/new_orders_screen.dart';
 
 class ProviderProfileScreen extends StatefulWidget {
   @override
@@ -22,7 +21,8 @@ backClick() {
 }
 
 class _ProviderProfileScreenState extends State<ProviderProfileScreen> {
-  SideMenuProfifileScreenController sideMenuProfifileScreenController = Get.put(SideMenuProfifileScreenController());
+  SideMenuProfifileScreenController sideMenuProfifileScreenController =
+   Get.put(SideMenuProfifileScreenController());
   String major = ''; // Variable to store user's major
    final AuthController authController = Get.find<AuthController>();
 
@@ -34,7 +34,7 @@ class _ProviderProfileScreenState extends State<ProviderProfileScreen> {
   void initState() {
     super.initState();
      // Fetch user data when the screen loads
-    fetchUserData();
+    fetchProviderData();
     _loadMajor(); // Load the major when the screen initializes
   }
 
@@ -47,8 +47,8 @@ class _ProviderProfileScreenState extends State<ProviderProfileScreen> {
   }
 
    // Function to fetch user data
-  Future<void> fetchUserData() async {
-    Map<String, dynamic>? userData = await authController.getUserData();
+  Future<void> fetchProviderData() async {
+    Map<String, dynamic>? userData = await authController.getProviderData();
 
     if (userData != null) {
       setState(() {
@@ -84,7 +84,7 @@ class _ProviderProfileScreenState extends State<ProviderProfileScreen> {
                   getProfileOption("profile_icon.svg", "My Profile", () async{
                    var result = await Get.toNamed(Routes.providerMyProfileScreenRoute);
                   if (result == true) {
-                    fetchUserData(); // Re-fetch the data after returning from profile edit
+                    fetchProviderData(); // Re-fetch the data after returning from profile edit
                   }
                 }),               
                    getVerSpace(20.h),
@@ -105,15 +105,11 @@ getProfileOption("major_icon.png", "My Major", () async {
     _loadMajor(); // Reload major if it was updated
   }
 }),
+ getVerSpace(20.h),
+                getProfileOption("setting_icon.svg", "Settings", () {
+                  Constant.sendToNext(context, Routes.settingScreensRoute);
+                }),
    getVerSpace(20.h),
-    getProfileOption("order_icon.svg", "New Orders", () async {
-      await Get.to(() => NewOrdersScreen()); // Navigate to NewOrdersScreen
-    }),
-                  getVerSpace(20.h),
-                  getProfileOption("setting_icon.svg", "Settings", () {
-                    Constant.sendToNext(context, Routes.settingScreensRoute);
-                  }),
-                  getVerSpace(41.h),
                 ],
               ),
               getVerSpace(20.h),

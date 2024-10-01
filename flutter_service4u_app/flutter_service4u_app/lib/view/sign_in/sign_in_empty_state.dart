@@ -104,13 +104,20 @@ class _SignInEmptyStateState extends State<SignInEmptyState> {
                                     fontWeight: FontWeight.w400)),
                           ),
                           getVerSpace(50.h),
-                          getCustomButton("Sign In", () {
+                          getCustomButton("Sign In", () async {
                             if (loginForm.currentState!.validate()) {
                               String email = emailController.text.trim();
                               String password = passWordController.text.trim();
                               // Trigger sign-in via the controller
-                              authController.signInWithEmailAndPassword(
+                              bool isProvider = await authController.signInWithEmailAndPassword(
                                   email, password);
+                              
+                              // Navigate based on user type
+                              if (isProvider) {
+                                Get.offAllNamed(Routes.ProviderServiceScreenRoute);
+                              } else {
+                                Get.offAllNamed(Routes.homeMainScreenRoute);
+                              }
                             }
                           }),
                           getVerSpace(50.h),

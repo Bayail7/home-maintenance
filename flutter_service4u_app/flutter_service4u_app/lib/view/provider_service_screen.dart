@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/view/notification_tab/provider_notification_screen.dart';
 import 'package:service_hub_app/view/provider_profile_tab/provider_profile_screen.dart';
+import 'package:service_hub_app/view/provider_profile_tab/new_orders_screen.dart';
 import '../controller/controller.dart';
 import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
@@ -32,7 +33,7 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
   Widget build(BuildContext context) {
     initializeScreenSize(context);
     return GetBuilder<ProviderServiceScreenController>(
-       init: ProviderServiceScreenController(),
+      init: ProviderServiceScreenController(),
       builder: (controller) => WillPopScope(
         onWillPop: () async {
           closeApp();
@@ -63,6 +64,18 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
                 },
                 type: BottomNavigationBarType.fixed,
                 items: [
+                     // New Order Navigation Item
+                  BottomNavigationBarItem(
+                    activeIcon: Column(
+                      children: [
+                        getSvgImage("selected_order.svg"), // Add your SVG icon for selected
+                        getVerSpace(4.h),
+                        getSvgImage("blue_line_hor.svg"),
+                      ],
+                    ),
+                    icon: getSvgImage("order_icon.svg"), // Add your SVG icon for unselected
+                    label: '',
+                  ),
                   BottomNavigationBarItem(
                     activeIcon: Column(
                       children: [
@@ -96,6 +109,7 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
                     icon: getSvgImage("profile_icon.svg"),
                     label: '',
                   ),
+               
                 ],
               ),
             ),
@@ -108,11 +122,15 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
   Widget _body() {
     switch (providerServiceScreenController.position.value) {
       case 0:
-        return BookingScreen();
+       return NewOrdersScreen(); // Return the new Order screen
+       
       case 1:
-        return ProviderNotificationScreen();
+       return BookingScreen();
       case 2:
-        return ProviderProfileScreen();
+              return ProviderNotificationScreen();
+      case 3: // New case for Order
+               return ProviderProfileScreen();
+
       default:
         return const Center(
           child: Text("Invalid"),

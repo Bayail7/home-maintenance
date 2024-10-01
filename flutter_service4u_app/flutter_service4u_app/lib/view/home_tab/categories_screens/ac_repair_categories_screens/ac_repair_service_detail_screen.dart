@@ -5,7 +5,6 @@ import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import 'package:service_hub_app/view/home_tab/categories_screens/ac_repair_categories_screens/service_book_now_bottom_sheet.dart';
 import '../../../../controller/controller.dart';
-import '../../../../models/ac_repair_all_service_data_model.dart';
 import '../../../../utils/constant.dart';
 
 class AcRepairServiceDetailScreen extends StatefulWidget {

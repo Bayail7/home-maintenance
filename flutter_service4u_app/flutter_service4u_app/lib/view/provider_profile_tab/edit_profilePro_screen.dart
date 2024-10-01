@@ -37,12 +37,12 @@ class _EditProfileSCreenProState extends State<EditProfileProSCreen> {
   void initState() {
     super.initState();
     // Fetch and pre-fill user data
-    loadUserData();
+    loadProviderData();
   }
 
   // Function to load user data and pre-fill the form
-  Future<void> loadUserData() async {
-    Map<String, dynamic>? userData = await authController.getUserData();
+  Future<void> loadProviderData() async {
+    Map<String, dynamic>? userData = await authController.getProviderData();
 
     if (userData != null) {
       setState(() {
@@ -73,7 +73,7 @@ class _EditProfileSCreenProState extends State<EditProfileProSCreen> {
 
         // Update user data in Firestore
         await FirebaseFirestore.instance
-            .collection('users_info')
+            .collection('providers_info')
             .doc(uid)
             .update({
           'name': name,

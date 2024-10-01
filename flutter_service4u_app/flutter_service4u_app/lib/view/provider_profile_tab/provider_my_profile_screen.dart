@@ -29,13 +29,13 @@ class _providerMyProfileScreenState extends State<ProviderMyProfileScreen> {
   void initState() {
     super.initState();
     // Fetch user data when the screen initializes
-    fetchUserData();
+    fetchProviderData();
   }
 
   // This function is marked async to allow awaiting the user data
-  Future<void> fetchUserData() async {
+  Future<void> fetchProviderData() async {
     // Call the function to get user data
-    Map<String, dynamic>? userData = await authController.getUserData();
+    Map<String, dynamic>? userData = await authController.getProviderData();
     if (userData != null) {
       setState(() {
         name = userData['name'] ?? "N/A";
@@ -86,11 +86,10 @@ class _providerMyProfileScreenState extends State<ProviderMyProfileScreen> {
                 ).paddingSymmetric(horizontal: 20.h),
                  getCustomButton("Edit Profile", () async {
                   // Navigate to Edit Profile and await the result
-                  var result = await Get.toNamed(Routes. EditProfileProSCreenRoute
-);
+                  var result = await Get.toNamed(Routes. EditProfileProSCreenRoute);
                   // If the result is true, refresh the user data
                   if (result == true) {
-                    fetchUserData();
+                    fetchProviderData();
                   }
                 }).paddingSymmetric(horizontal: 20.h),
               ],

@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
-import 'package:service_hub_app/routes/app_routes.dart';
-import 'package:service_hub_app/utils/pref_data.dart';
 import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
@@ -81,27 +79,23 @@ class SinUpEmptyStateController extends GetxController {
 }
 
 class SignUpProviderEmptyStateController extends GetxController {
-  // Renamed from `cheak` to `isChecked` for clarity
-  bool isChecked = false;
+   bool cheak = false;
   bool passVisibility = false;
 
-  static var cheak;
-
-  // Method to toggle the state of `isChecked`
-  void toggleCheck() {
-    isChecked = !isChecked;
-    update(); // Notify listeners of the change
+  void setCheakPos() {
+    cheak = !cheak;
+    update();
   }
 
-  // Method to toggle the visibility of the password
-  void togglePasswordVisibility() {
+  void setPasswordVisibility() {
     passVisibility = !passVisibility;
-    update(); // Notify listeners of the change
+    update();
+  }
   }
 
   void setPasswordVisibility() {}
  
-}
+
 
 class VerificationScreenController extends GetxController {}
 
@@ -834,61 +828,29 @@ class RecommendedServiceScreenController extends GetxController {
 
 
 class AuthController extends GetxController {
-  // Create user function
-  Future<void> createUser(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
-    } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
-    }
-  }
-
-  // Create provider function
-  Future<void> createProvider(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      Get.snackbar('Success', 'Provider created: ${userCredential.user?.email}');
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
-    } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
-    }
-  }
-
   // Sign-in function using Firebase Authentication
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Check if the user is a provider
-      bool isProvider = await checkIfProvider(email);
-
-      if (isProvider) {
-        Get.snackbar('Success', 'Signed in as Provider: ${userCredential.user?.email}');
-         print("Navigating to Provider Service Screen");
-        Get.offAllNamed(Routes.ProviderServiceScreenRoute); // Navigate to Provider Service Screen
-      } else {
-        Get.snackbar('Success', 'Signed in as Customer: ${userCredential.user?.email}');
-        print("Navigating to Home Service Screen");
-        Get.offAllNamed(Routes.homeMainScreenRoute); // Navigate to Home Service Screen
+      // Fetch user data to determine if they are a provider or a regular user
+      Map<String, dynamic>? userData = await getUserData();
+      if (userData != null && userData['isProvider'] == true) {
+        return true; // User is a provider
       }
 
-      PrefData.setIsSignIn(true); // Set sign-in to true only after successful sign-in
+      // If not found in users_info, check providers_info
+      userData = await getProviderData();
+      if (userData != null) {
+        return true; // User is a provider
+      }
+
+      // If user data is not found
+      Get.snackbar('Error', 'User data not found');
+      return false; // Default to false if user data isn't found
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.snackbar('Error', 'No user found for that email.');
@@ -897,58 +859,181 @@ class AuthController extends GetxController {
       } else {
         Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
       }
+      return false; // Return false on any error
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+      return false; // Return false on any exception
+    }
+  }
+
+  // Fetch user data
+  Future<Map<String, dynamic>?> getUserData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        String uid = currentUser.uid;
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+
+        if (userDoc.exists) {
+          return userDoc.data() as Map<String, dynamic>?;
+        } else {
+          Get.snackbar('Error', 'No user data found for UID: $uid');
+          return null;
+        }
+      } else {
+        Get.snackbar('Error', 'No user is currently logged in.');
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error retrieving user data: $e');
+      return null;
+    }
+  }
+
+  // Fetch provider data
+  Future<Map<String, dynamic>?> getProviderData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        String uid = currentUser.uid;
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('providers_info').doc(uid).get();
+
+        if (userDoc.exists) {
+          return userDoc.data() as Map<String, dynamic>?;
+        } else {
+          Get.snackbar('Error', 'No provider data found for UID: $uid');
+          return null;
+        }
+      } else {
+        Get.snackbar('Error', 'No provider is currently logged in.');
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error retrieving provider data: $e');
+      return null;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/*class AuthController extends GetxController {
+  // General function to create a user (can be for both users and providers)
+  Future<void> createUser(String email, String password, {bool isProvider = false}) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
+
+      // Optionally, handle provider-specific logic here if needed
+      if (isProvider) {
+        // Additional logic for providers can be added here
+      }
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 
-  // Check if the user is a provider
-  Future<bool> checkIfProvider(String email) async {
+// Sign-in function using Firebase Authentication
+Future<bool> signInWithEmailAndPassword(String email, String password) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('providers_info')
-          .where('email', isEqualTo: email)
-          .get();
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+        );
 
-      return querySnapshot.docs.isNotEmpty; // Returns true if provider exists
+        // Check user data in both collections
+        Map<String, dynamic>? userData = await getUserData();
+        if (userData != null) {
+            return userData['isProvider'] == true;
+        }
+
+        // If not found in users_info, check providers_info
+        userData = await getProviderData();
+        if (userData != null) {
+            return true; // It's a provider
+        }
+
+        Get.snackbar('Error', 'User data not found');
+        return false; // Default to false if user data isn't found
+    } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+            Get.snackbar('Error', 'No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+            Get.snackbar('Error', 'Wrong password provided.');
+        } else {
+            Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
+        }
+        return false; // Return false on any error
     } catch (e) {
-      print('Error checking provider: $e');
-      return false; // Default to false on error
+        Get.snackbar('Error', 'An error occurred: $e');
+        return false; // Return false on any exception
     }
-  }
+}
 
-  // Get user data function (optional, if you need it)
+  // Fetch user data
   Future<Map<String, dynamic>?> getUserData() async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
-
       if (currentUser != null) {
-        String uid = currentUser.uid; // Get user ID from FirebaseAuth
-
-        // Retrieve the document from Firestore using the UID
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users_info')
-            .doc(uid)
-            .get();
+        String uid = currentUser.uid;
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
 
         if (userDoc.exists) {
-          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-          print('User Data: $userData');
-          return userData; // Return the user data
+          return userDoc.data() as Map<String, dynamic>?;
         } else {
-          print('No user data found for UID: $uid');
+          Get.snackbar('Error', 'No user data found for UID: $uid');
           return null;
         }
       } else {
-        print('No user is currently logged in.');
+        Get.snackbar('Error', 'No user is currently logged in.');
         return null;
       }
     } catch (e) {
-      print('Error retrieving user data: $e');
+      Get.snackbar('Error', 'Error retrieving user data: $e');
       return null;
     }
   }
-}
+
+  // Fetch provider data
+  Future<Map<String, dynamic>?> getProviderData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        String uid = currentUser.uid;
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('providers_info').doc(uid).get();
+
+        if (userDoc.exists) {
+          return userDoc.data() as Map<String, dynamic>?;
+        } else {
+          Get.snackbar('Error', 'No provider data found for UID: $uid');
+          return null;
+        }
+      } else {
+        Get.snackbar('Error', 'No provider is currently logged in.');
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error retrieving provider data: $e');
+      return null;
+    }
+  }
+}*/
+
+
+
 
 class MyProfileScreenController extends GetxController {}
 
