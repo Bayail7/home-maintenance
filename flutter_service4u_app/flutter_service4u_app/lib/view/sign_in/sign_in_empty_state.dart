@@ -108,15 +108,21 @@ class _SignInEmptyStateState extends State<SignInEmptyState> {
                             if (loginForm.currentState!.validate()) {
                               String email = emailController.text.trim();
                               String password = passWordController.text.trim();
-                              // Trigger sign-in via the controller
-                              bool isProvider = await authController.signInWithEmailAndPassword(
-                                  email, password);
-                              
-                              // Navigate based on user type
-                              if (isProvider) {
-                                Get.offAllNamed(Routes.ProviderServiceScreenRoute);
-                              } else {
+                              // Trigger sign-in and check if it's a provider
+                              int isProvider = await authController
+                                  .signInWithEmailAndPassword(email, password);
+
+                              // Only navigate if authentication was successful
+                              if (isProvider == 1) {
+                                Get.snackbar('Success','Successfully signed in as Provider with email: $email');
+                                Get.offAllNamed(
+                                    Routes.ProviderServiceScreenRoute);
+                              } else if (isProvider == 2) {
+                                Get.snackbar('Success','Successfully signed in as User with email: $email');
                                 Get.offAllNamed(Routes.homeMainScreenRoute);
+                              } else {
+                                // If null or any other unexpected case, show an error message
+                                Get.snackbar('Error','Sign-in failed. Please try again.');
                               }
                             }
                           }),

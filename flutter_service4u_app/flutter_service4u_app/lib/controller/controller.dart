@@ -79,7 +79,7 @@ class SinUpEmptyStateController extends GetxController {
 }
 
 class SignUpProviderEmptyStateController extends GetxController {
-   bool cheak = false;
+  bool cheak = false;
   bool passVisibility = false;
 
   void setCheakPos() {
@@ -91,11 +91,9 @@ class SignUpProviderEmptyStateController extends GetxController {
     passVisibility = !passVisibility;
     update();
   }
-  }
+}
 
-  void setPasswordVisibility() {}
- 
-
+void setPasswordVisibility() {}
 
 class VerificationScreenController extends GetxController {}
 
@@ -119,7 +117,6 @@ class HomeMainScreenController extends GetxController {
   }
 }
 
-
 class ProviderServiceScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
 
@@ -137,7 +134,6 @@ class ProviderServiceScreenController extends GetxController {
     super.onInit();
   }
 }
-
 
 class HomeScreenController extends GetxController {
   List<CleaningServiceOffer> cleaningOffer = DataFile.getCleaningOfferData();
@@ -600,23 +596,23 @@ class PhoneNumberScreenController extends GetxController {
 
 //class PromoCodeScreenController extends GetxController {
 //  List<PromoCode> promocode = DataFile.getPromocodeData();
- // int? promoId;
- // int? selectPromoCodeIndex;
+// int? promoId;
+// int? selectPromoCodeIndex;
 
- // void setPromoCode(id) {
- //   promoId = id;
- //   update();
- // }
+// void setPromoCode(id) {
+//   promoId = id;
+//   update();
+// }
 
- // void setPromocodeIndex(int index) {
- //   selectPromoCodeIndex = index;
- //   update();
- // }
+// void setPromocodeIndex(int index) {
+//   selectPromoCodeIndex = index;
+//   update();
+// }
 
- // void removePromoCode() {
- //   selectPromoCodeIndex = null;
- //   update();
- // }
+// void removePromoCode() {
+//   selectPromoCodeIndex = null;
+//   update();
+// }
 //}
 
 class PayMentScreenController extends GetxController {
@@ -673,7 +669,6 @@ class ServiceBookBottomSheetController extends GetxController {
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
 
-
   String? provider;
 
   Future<void> selectProvider(BuildContext context) async {
@@ -687,7 +682,8 @@ class ServiceBookBottomSheetController extends GetxController {
           child: Container(
             padding: EdgeInsets.all(16),
             child: Column(
-              mainAxisSize: MainAxisSize.min,  // To make the dialog box fit the content
+              mainAxisSize:
+                  MainAxisSize.min, // To make the dialog box fit the content
               children: <Widget>[
                 Text(
                   'Select Provider',
@@ -718,9 +714,8 @@ class ServiceBookBottomSheetController extends GetxController {
     );
   }
 
-  void setProvider()
-  {
-    provider='empty';
+  void setProvider() {
+    provider = 'empty';
     update();
   }
 
@@ -826,31 +821,40 @@ class RecommendedServiceScreenController extends GetxController {
   }
 }
 
-
 class AuthController extends GetxController {
   // Sign-in function using Firebase Authentication
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+  Future<int> signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      String uid = userCredential.user!.uid;
 
-      // Fetch user data to determine if they are a provider or a regular user
-      Map<String, dynamic>? userData = await getUserData();
-      if (userData != null && userData['isProvider'] == true) {
-        return true; // User is a provider
+      // Check if user exists in the 'providers_info' collection
+      DocumentSnapshot providerDoc = await FirebaseFirestore.instance
+          .collection('providers_info')
+          .doc(uid)
+          .get();
+
+      if (providerDoc.exists) {
+        return 1; // User is a provider
       }
 
-      // If not found in users_info, check providers_info
-      userData = await getProviderData();
-      if (userData != null) {
-        return true; // User is a provider
+      // If not a provider, check the 'users_info' collection
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users_info')
+          .doc(uid)
+          .get();
+
+      if (userDoc.exists) {
+        return 2; // User is a regular user
       }
 
-      // If user data is not found
+      // If neither collection contains the user, show an error
       Get.snackbar('Error', 'User data not found');
-      return false; // Default to false if user data isn't found
+      return 0;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.snackbar('Error', 'No user found for that email.');
@@ -859,10 +863,10 @@ class AuthController extends GetxController {
       } else {
         Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
       }
-      return false; // Return false on any error
+      return -1; // Return false on any error
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
-      return false; // Return false on any exception
+      return -1; // Return false on any exception
     }
   }
 
@@ -872,7 +876,10 @@ class AuthController extends GetxController {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         String uid = currentUser.uid;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users_info')
+            .doc(uid)
+            .get();
 
         if (userDoc.exists) {
           return userDoc.data() as Map<String, dynamic>?;
@@ -896,7 +903,10 @@ class AuthController extends GetxController {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         String uid = currentUser.uid;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('providers_info').doc(uid).get();
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('providers_info')
+            .doc(uid)
+            .get();
 
         if (userDoc.exists) {
           return userDoc.data() as Map<String, dynamic>?;
@@ -914,126 +924,6 @@ class AuthController extends GetxController {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-/*class AuthController extends GetxController {
-  // General function to create a user (can be for both users and providers)
-  Future<void> createUser(String email, String password, {bool isProvider = false}) async {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      Get.snackbar('Success', 'User created: ${userCredential.user?.email}');
-
-      // Optionally, handle provider-specific logic here if needed
-      if (isProvider) {
-        // Additional logic for providers can be added here
-      }
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
-    } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
-    }
-  }
-
-// Sign-in function using Firebase Authentication
-Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email,
-            password: password,
-        );
-
-        // Check user data in both collections
-        Map<String, dynamic>? userData = await getUserData();
-        if (userData != null) {
-            return userData['isProvider'] == true;
-        }
-
-        // If not found in users_info, check providers_info
-        userData = await getProviderData();
-        if (userData != null) {
-            return true; // It's a provider
-        }
-
-        Get.snackbar('Error', 'User data not found');
-        return false; // Default to false if user data isn't found
-    } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-            Get.snackbar('Error', 'No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-            Get.snackbar('Error', 'Wrong password provided.');
-        } else {
-            Get.snackbar('Error', e.message ?? 'An unknown error occurred.');
-        }
-        return false; // Return false on any error
-    } catch (e) {
-        Get.snackbar('Error', 'An error occurred: $e');
-        return false; // Return false on any exception
-    }
-}
-
-  // Fetch user data
-  Future<Map<String, dynamic>?> getUserData() async {
-    try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        String uid = currentUser.uid;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
-
-        if (userDoc.exists) {
-          return userDoc.data() as Map<String, dynamic>?;
-        } else {
-          Get.snackbar('Error', 'No user data found for UID: $uid');
-          return null;
-        }
-      } else {
-        Get.snackbar('Error', 'No user is currently logged in.');
-        return null;
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Error retrieving user data: $e');
-      return null;
-    }
-  }
-
-  // Fetch provider data
-  Future<Map<String, dynamic>?> getProviderData() async {
-    try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        String uid = currentUser.uid;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('providers_info').doc(uid).get();
-
-        if (userDoc.exists) {
-          return userDoc.data() as Map<String, dynamic>?;
-        } else {
-          Get.snackbar('Error', 'No provider data found for UID: $uid');
-          return null;
-        }
-      } else {
-        Get.snackbar('Error', 'No provider is currently logged in.');
-        return null;
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Error retrieving provider data: $e');
-      return null;
-    }
-  }
-}*/
-
-
-
 
 class MyProfileScreenController extends GetxController {}
 
@@ -1042,6 +932,5 @@ class ProviderMyProfileScreenController extends GetxController {}
 class EditProfileSCreenController extends GetxController {}
 
 class EditProfileProSCreenController extends GetxController {}
-
 
 class SettingScreensController extends GetxController {}
