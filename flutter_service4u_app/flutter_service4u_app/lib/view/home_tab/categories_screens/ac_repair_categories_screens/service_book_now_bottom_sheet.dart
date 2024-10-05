@@ -20,13 +20,11 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
-
-
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
     return GetBuilder<ServiceBookBottomSheetController>(
-      init: ServiceBookBottomSheetController(),
+      // init: ServiceBookBottomSheetController(),
       builder: (serviceBookBottomSheetController) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -73,7 +71,7 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
                     .paddingOnly(top: 15.h, bottom: 17.h, right: 18.h),
               )),
           getVerSpace(30.h),
-    getTextField(
+          getTextField(
               color: serviceBookBottomSheetController.provider == null
                   ? grey40
                   : regularBlack, function: () {
@@ -118,23 +116,26 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
           ),
           getVerSpace(30.h),
           getCustomButton(
-              serviceBookBottomSheetController.selectedDate !=null &&
-                      serviceBookBottomSheetController.selectedTime !=null
+              serviceBookBottomSheetController.selectedDate != null &&
+                      serviceBookBottomSheetController.selectedTime != null
                   ? "Continue"
-                  : "Book Now", serviceBookBottomSheetController.selectedDate !=null &&
-              serviceBookBottomSheetController.selectedTime !=null?() {
-            Constant.sendToNext(context, Routes.cheakOutScreenRoute);
-          }:() {
-            Fluttertoast.showToast(
-              msg: "Please Select Date and Time",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: buttonColor,
-              textColor: regularBlack,
-              fontSize: 16.0,
-            );
-          }),
+                  : "Book Now",
+              serviceBookBottomSheetController.selectedDate != null &&
+                      serviceBookBottomSheetController.selectedTime != null
+                  ? () {
+                      Constant.sendToNext(context, Routes.cheakOutScreenRoute);
+                    }
+                  : () {
+                      Fluttertoast.showToast(
+                        msg: "Please Select Date and Time",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: buttonColor,
+                        textColor: regularBlack,
+                        fontSize: 16.0,
+                      );
+                    }),
         ],
       ).paddingOnly(top: 32.h, bottom: 30.h, left: 20.h, right: 20.h),
     );

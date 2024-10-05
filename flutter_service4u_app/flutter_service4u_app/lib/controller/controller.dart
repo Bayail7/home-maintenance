@@ -670,6 +670,28 @@ class ServiceBookBottomSheetController extends GetxController {
   TimeOfDay time = TimeOfDay.now();
 
   String? provider;
+  List<String> providers = [];
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchProviders(); // Fetch providers on initialization
+  }
+
+  Future<void> fetchProviders() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('providers_info').get();
+      if (snapshot.docs.isNotEmpty) {
+        providers = snapshot.docs.map((doc) => doc['name'] as String).toList();
+      } else {
+        print("No providers found.");
+      }
+      update(); // Update the controller with the fetched providers
+    } catch (e) {
+      print('Error fetching providers: $e');
+    }
+  }
 
   Future<void> selectProvider(BuildContext context) async {
     await showDialog(
@@ -691,16 +713,32 @@ class ServiceBookBottomSheetController extends GetxController {
                 ),
                 SizedBox(height: 16),
                 // Empty space where you can add the provider selection logic
-                Text(
-                  'No providers available yet.',
-                  style: TextStyle(fontSize: 16),
-                ),
+                providers.isNotEmpty
+                    ? Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: providers.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(providers[index]),
+                              onTap: () {
+                                setProvider(providers[index]);
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    : Text(
+                        'No providers available yet.',
+                        style: TextStyle(fontSize: 16),
+                      ),
                 SizedBox(height: 20),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
                     onPressed: () {
-                      setProvider();
+                      // setProvider();
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     child: Text('CLOSE'),
@@ -714,8 +752,8 @@ class ServiceBookBottomSheetController extends GetxController {
     );
   }
 
-  void setProvider() {
-    provider = 'empty';
+  void setProvider(String selectedProvider) {
+    provider = selectedProvider;
     update();
   }
 

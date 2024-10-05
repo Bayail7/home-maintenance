@@ -68,12 +68,12 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
                   BottomNavigationBarItem(
                     activeIcon: Column(
                       children: [
-                        getSvgImage("selected_order.svg"), // Add your SVG icon for selected
+                        getSvgImage("selected_order.svg", width:24, height:24, color: Colors.blue[900]), // Add your SVG icon for selected
                         getVerSpace(4.h),
                         getSvgImage("blue_line_hor.svg"),
                       ],
                     ),
-                    icon: getSvgImage("order_icon.svg"), // Add your SVG icon for unselected
+                    icon: getSvgImage("unselected_order.svg", width:24, height:24), // Add your SVG icon for unselected
                     label: '',
                   ),
                   BottomNavigationBarItem(
