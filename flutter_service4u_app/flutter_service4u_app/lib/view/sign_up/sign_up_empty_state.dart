@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:service_hub_app/current_location_screen.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import 'package:service_hub_app/utils/pref_data.dart';
@@ -82,18 +84,49 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                           }, decoration: InputDecoration(labelText: 'email')),
                           getVerSpace(28.h),
                           phone_number_field(mobileNumberController),
-                          getVerSpace(28.h),
-                          getTextField("Location", "location_icon.svg",
-                              controller: locationController,
-                              validator: (location) {
-                            if (location == null || location.isEmpty) {
-                              return 'Please select location';
-                            }
-                            return null;
-                          },
-                              decoration:
-                                  InputDecoration(labelText: 'location')),
-                          getVerSpace(28.h),
+                          getVerSpace(20.h),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return const CurrentLocationScreen();
+                                },
+                              ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/location_icon.svg', // Replace with your desired icon
+                                  color: const Color.fromARGB(255, 0, 0,
+                                      0), // Change the icon color here
+                                ),
+                                const SizedBox(
+                                    width: 8), // Space between icon and text
+                                const Expanded(
+                                  // Use Expanded to take remaining space
+                                  child: Text(
+                                    "Location",
+                                    style: TextStyle(
+                                      fontSize: 14, // Set the desired font size
+                                      fontFamily: Constant
+                                          .fontsFamily, // Set your desired font family
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: grey40,
+                              backgroundColor: Colors.grey[100],
+                               minimumSize: Size(50, 45),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.h),
+                              ),
+                            ),
+                          ),
+                          getVerSpace(20.h),
                           getTextField(
                               function: () {},
                               obsequrePermition:
@@ -123,7 +156,7 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                               decoration:
                                   InputDecoration(labelText: 'password')),
                           SizedBox(height: 20),
-                          getVerSpace(28.h),
+                          getVerSpace(10.h),
                           Row(
                             children: [
                               GestureDetector(
@@ -179,7 +212,8 @@ class _SinUpEmptyStateState extends State<SinUpEmptyState> {
                                 if (e.code == 'weak-password') {
                                   print('The password provided is too weak.');
                                 } else if (e.code == 'email-already-in-use') {
-                                  print('The account already exists for that email.');
+                                  print(
+                                      'The account already exists for that email.');
                                 } else {
                                   print('Error: $e');
                                 }
