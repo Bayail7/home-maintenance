@@ -9,21 +9,26 @@ import '../../utils/constant.dart';
 import '../../utils/constantWidget.dart';
 
 class ProviderMyProfileScreen extends StatefulWidget {
-const ProviderMyProfileScreen({Key? key}) :super(key: key);
+  const ProviderMyProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProviderMyProfileScreen> createState() => _providerMyProfileScreenState();
+  State<ProviderMyProfileScreen> createState() =>
+      _providerMyProfileScreenState();
 }
 
 class _providerMyProfileScreenState extends State<ProviderMyProfileScreen> {
   ProviderMyProfileScreenController providermyProfileScreenController =
       Get.put(ProviderMyProfileScreenController());
 
- final AuthController authController = Get.find<AuthController>();
+  final AuthController authController = Get.find<AuthController>();
   // Variables to store user data
   String name = "";
   String email = "";
   String mobile = "";
+  String nationality = "";
+  String major = "";
+  String haveCar = "";
+  String workingHour = "";
 
   @override
   void initState() {
@@ -41,6 +46,10 @@ class _providerMyProfileScreenState extends State<ProviderMyProfileScreen> {
         name = userData['name'] ?? "N/A";
         email = userData['email'] ?? "N/A";
         mobile = userData['mobile'] ?? "N/A";
+        nationality = userData['nationality'] ?? "N/A";
+        major = userData['major'] ?? "N/A";
+        haveCar = userData['have a car?'] ?? "N/A";
+        workingHour = userData['preferred working hours'] ?? "N/A";
       });
     }
   }
@@ -64,29 +73,52 @@ class _providerMyProfileScreenState extends State<ProviderMyProfileScreen> {
                   children: [
                     getVerSpace(24.h),
                     getCustomAppBar("My Profile", () {
-                      Get.back(result:true); // This should trigger the refresh in MyProfileScreen
+                      Get.back(
+                          result:
+                              true); // This should trigger the refresh in MyProfileScreen
                     }),
-                    getVerSpace(30.h),
+                    getVerSpace(20.h),
                     getAssetImage("app_icon_user.png",
                         height: 100.h, width: 100.h),
                     getVerSpace(20.h),
-                    getVerSpace(40.h),
-                     getMyprofileDetailFormate("profile_icon.svg", "Name", name),
-                    getVerSpace(20.h),
+                    getVerSpace(25.h),
+                    getMyprofileDetailFormate("profile_icon.svg", "Name", name),
+                    getVerSpace(10.h),
                     getDivider(),
-                    getVerSpace(20.h),
+                    getVerSpace(10.h),
                     getMyprofileDetailFormate("email_icon.svg", "Email", email),
-                    getVerSpace(20.h),
+                    getVerSpace(10.h),
                     getDivider(),
-                    getVerSpace(20.h),
+                    getVerSpace(10.h),
                     getMyprofileDetailFormate(
                         "call_icon.svg", "Phone Number", mobile),
-                    getVerSpace(30.h),
+                    getVerSpace(10.h),
+                    getDivider(),
+                    getVerSpace(10.h),
+                    getMyprofileDetailFormate(
+                        "nationality_icon.svg", "Nationality", nationality),
+                    getVerSpace(10.h),
+                    getDivider(),
+                    getVerSpace(10.h),
+                    getMyprofileDetailFormate(
+                        "major_icon.svg", "Major", major),
+                    getVerSpace(10.h),
+                    getDivider(),
+                    getVerSpace(10.h),
+                    getMyprofileDetailFormate(
+                        "haveCar_icon.svg", "Have a Car?", haveCar),
+                    getVerSpace(10.h),
+                    getDivider(),
+                    getVerSpace(10.h),
+                    getMyprofileDetailFormate(
+                        "workingHour_icon.svg", "Preferred Working Hours", workingHour),
+                    getVerSpace(20.h),
                   ],
                 ).paddingSymmetric(horizontal: 20.h),
-                 getCustomButton("Edit Profile", () async {
+                getCustomButton("Edit Profile", () async {
                   // Navigate to Edit Profile and await the result
-                  var result = await Get.toNamed(Routes. EditProfileProSCreenRoute);
+                  var result =
+                      await Get.toNamed(Routes.EditProfileProSCreenRoute);
                   // If the result is true, refresh the user data
                   if (result == true) {
                     fetchProviderData();

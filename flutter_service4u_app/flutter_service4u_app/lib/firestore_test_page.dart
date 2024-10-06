@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class FirestoreTestPage extends StatefulWidget {
   @override
@@ -29,10 +31,17 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
     }
   }
 
-
-
- static Future<void> addProviderData(String uid, String name, String email,
-      String mobile, String location, String password) async {
+  static Future<void> addProviderData(
+      String uid,
+      String name,
+      String email,
+      String mobile,
+      String nationality,
+      String? major,
+      String location,
+      String haveCar,
+      String? workingHour,
+      String password) async {
     CollectionReference users =
         FirebaseFirestore.instance.collection('providers_info');
 
@@ -42,18 +51,18 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
         'name': name,
         'email': email,
         'mobile': mobile,
+        'nationality': nationality,
+        'major': major,
         'location': location,
+        'have a car?': haveCar,
+        'preferred working hours': workingHour,
         'password': password,
       });
-      print("User added successfully with UID: $uid");
+      Get.snackbar('Success','Provider added successfully with UID: $uid');
     } catch (e) {
       print("Error adding user: $e");
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
