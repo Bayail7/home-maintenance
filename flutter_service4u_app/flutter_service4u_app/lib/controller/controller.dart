@@ -694,6 +694,9 @@ class ServiceBookBottomSheetController extends GetxController {
   }
 
   Future<void> selectProvider(BuildContext context) async {
+    // Variable to hold the selected provider
+    String? selectedProvider;
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -701,51 +704,63 @@ class ServiceBookBottomSheetController extends GetxController {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize:
-                  MainAxisSize.min, // To make the dialog box fit the content
-              children: <Widget>[
-                Text(
-                  'Select Provider',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16),
-                // Empty space where you can add the provider selection logic
-                providers.isNotEmpty
-                    ? Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: providers.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(providers[index]),
-                              onTap: () {
-                                setProvider(providers[index]);
-                                Navigator.of(context).pop(); // Close the dialog
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize
+                      .min, // To make the dialog box fit the content
+                  children: <Widget>[
+                    Text(
+                      'Select Provider',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 16),
+                    providers.isNotEmpty
+                        ? SizedBox(
+                          height: 300, // Set max height for the list
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: providers.length,
+                              itemBuilder: (context, index) {
+                                return RadioListTile<String>(
+                                  title: Text(providers[index]),
+                                  value: providers[index],
+                                  groupValue: selectedProvider,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedProvider =
+                                          value; // Update the selected provider
+                                    });
+                                  },
+                                );
                               },
-                            );
-                          },
-                        ),
-                      )
-                    : Text(
-                        'No providers available yet.',
-                        style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        : Text(
+                            'No providers available yet.',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                    SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          if (selectedProvider != null) {
+                            setProvider(
+                                selectedProvider!); // Set the selected provider
+                          }
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text('CLOSE'),
                       ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // setProvider();
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                    child: Text('CLOSE'),
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         );
       },
