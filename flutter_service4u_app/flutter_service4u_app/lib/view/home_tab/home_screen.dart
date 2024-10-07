@@ -7,6 +7,8 @@ import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
+import 'package:image_picker/image_picker.dart'; 
+import 'dart:io'; 
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController serchController = TextEditingController();
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
 
- // Variables to hold user data
+  // Variables to hold user data
   String userLocation = "";
-  
+
   // Fetch the auth controller
   final AuthController authController = Get.find<AuthController>();
 
@@ -38,6 +40,30 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         // Pre-fill the fields with the user data
         userLocation = userData['location'] ?? '';
+      });
+    }
+  }
+
+
+  final ImagePicker _picker = ImagePicker(); // Initialize ImagePicker
+  File? _image;
+
+  // Function to open the camera and take a picture
+  Future<void> _takePicture() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      setState(() {
+        _image = File(photo.path); // Update state with the captured image
+      });
+    }
+  }
+
+  // Function to pick an image from the gallery
+  Future<void> _chooseFromGallery() async {
+    final XFile? galleryImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (galleryImage != null) {
+      setState(() {
+        _image = File(galleryImage.path); // Update state with the selected image
       });
     }
   }
@@ -115,7 +141,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                 regularWhite, 1,
                                 fontWeight: FontWeight.w700),
                             getVerSpace(12.h),
-                            getCustomButton("Try it", () {},
+                            getCustomButton("Try it", () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: 150,
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                            // Option for taking a photo
+                                            leading: Icon(Icons.camera_alt),
+                                            title: Text('Take a photo'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              _takePicture();
+                                            }
+                                            ),
+                                        ListTile(
+                                            // Option for taking a photo
+                                            leading: Icon(Icons.photo_library),
+                                            title: Text('Choose from gallery'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              _chooseFromGallery();
+                                            }
+                                            ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                                 buttonheight: 34.h,
                                 fontSize: 16.sp,
                                 weight: FontWeight.w500,
@@ -171,8 +228,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   getHorSpace(20.h),
                                   service_formate(
                                       "appliance_icon.png", "Appliance", () {
-                                    Constant.sendToNext(
-                                        context, Routes.applianceCategoriesScreenRoute);
+                                    Constant.sendToNext(context,
+                                        Routes.applianceCategoriesScreenRoute);
                                   }),
                                   getHorSpace(20.h),
                                   service_formate(
