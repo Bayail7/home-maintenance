@@ -66,7 +66,7 @@ class _ACRepairScreenState extends State<ACRepairScreen> {
                                     Constant.sendToNext(
                                       context,
                                       Routes.acRepairServiceDetailScreenRoute,
-                                      arguments: service,
+                                      arguments: service.title,
                                     );
                                   },
                                   child: Container(
@@ -164,12 +164,14 @@ class _ACRepairScreenState extends State<ACRepairScreen> {
                                 index,
                                 GestureDetector(
                                   onTap: () {
-                                    Constant.sendToNext(
-                                        context,
-                                        Routes
-                                            .acRepairServiceDetailScreenRoute,
-                                            arguments: service );
-
+                                    Constant.sendToNext(context,
+                                        Routes.acRepairServiceDetailScreenRoute,
+                                        arguments: {
+                                          // service.title,
+                                          'title': service.title,
+                                          'price': service.price,
+                                          'rating': service.rating,
+                                        });
                                   },
                                   child: Column(
                                     crossAxisAlignment:

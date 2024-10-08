@@ -10,6 +10,11 @@ import '../../../../utils/color_category.dart';
 import '../../../../utils/constantWidget.dart';
 
 class ServiceBookBottomSheet extends StatefulWidget {
+  final String serviceName; // Add this to accept the service name
+
+  // Constructor to pass the service name
+  ServiceBookBottomSheet({required this.serviceName});
+
   @override
   State<ServiceBookBottomSheet> createState() => _ServiceBookBottomSheetState();
 }
@@ -117,17 +122,21 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
           getVerSpace(30.h),
           getCustomButton(
               serviceBookBottomSheetController.selectedDate != null &&
-                      serviceBookBottomSheetController.selectedTime != null
+                      serviceBookBottomSheetController.selectedTime != null &&
+                      serviceBookBottomSheetController.provider != null
                   ? "Continue"
                   : "Book Now",
               serviceBookBottomSheetController.selectedDate != null &&
-                      serviceBookBottomSheetController.selectedTime != null
+                      serviceBookBottomSheetController.selectedTime != null &&
+                      serviceBookBottomSheetController.provider != null
                   ? () {
-                      Constant.sendToNext(context, Routes.cheakOutScreenRoute);
+                      // Passing the service name to the checkout screen
+                      Constant.sendToNext(context, Routes.cheakOutScreenRoute,
+                          arguments: {'serviceName': widget.serviceName});
                     }
                   : () {
                       Fluttertoast.showToast(
-                        msg: "Please Select Date and Time",
+                        msg: "Please Select Date, Time, and Provider",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,

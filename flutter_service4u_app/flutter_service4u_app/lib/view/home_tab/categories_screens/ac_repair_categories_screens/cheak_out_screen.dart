@@ -27,11 +27,14 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
   PhoneNumberScreenController phoneNumberScreenController =
       Get.put(PhoneNumberScreenController());
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
- // PayMentScreenController payMentScreenController =
- //     Get.put(PayMentScreenController());
+  // PayMentScreenController payMentScreenController =
+  //     Get.put(PayMentScreenController());
 
   @override
   Widget build(BuildContext context) {
+        // Get the service name from the passed arguments
+    final String serviceName = Get.arguments['serviceName'] ?? 'Service Name Not Found';
+
     initializeScreenSize(context);
     return GetBuilder<PayMentScreenController>(
         init: PayMentScreenController(),
@@ -70,7 +73,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                     borderRadius: BorderRadius.circular(16.h),
                                     border: Border.all(color: grey20)),
                                 child: Row(
-                                  /*children: [
+                                        children: [
                                     Container(
                                       height: 60.h,
                                       width: 60.h,
@@ -78,28 +81,29 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                           borderRadius:
                                               BorderRadius.circular(16.h),
                                           color: grey10),
-                                      child: getAssetImage("ac_repair_icon.png")
+                                      child: getSvgImage("bag_icon.svg")
                                           .paddingAll(10.h),
                                     ),
                                     getHorSpace(14.h),
-                                    /*Column(
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         getCustomFont(
-                                            "AC Repair Service",
+                                            serviceName,
                                             16.sp,
                                             context.theme.primaryColor,
                                             1,
                                             fontWeight: FontWeight.w400),
                                         getVerSpace(6.h),
-                                        getCustomFont("1 Ton-1.5 Ton X2", 13.sp,
-                                            grey40, 1,
-                                            fontWeight: FontWeight.w400)
+                                        // getCustomFont("1 Ton-1.5 Ton X2", 13.sp,
+                                        //     grey40, 1,
+                                        //     fontWeight: FontWeight.w400)
                                       ],
-                                    ),*/
-                                  ],*/
-                                ).paddingAll(14.h), 
+                                    ),
+                                  ],
+                                        )
+                                    .paddingAll(14.h),
                               ).paddingSymmetric(horizontal: 20.h),
                               getVerSpace(24.h),
                               GetBuilder<ServiceBookBottomSheetController>(
@@ -111,7 +115,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       getCustomFont(
-                                          "Date & Time", 16.sp, regularBlack, 1,
+                                          "Date & Time & Provider", 16.sp, regularBlack, 1,
                                           fontWeight: FontWeight.w700),
                                       getVerSpace(20.h),
                                       getTextField(
@@ -175,6 +179,37 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                                     bottom: 17.h,
                                                     right: 18.h),
                                           )),
+                                          getVerSpace(16.h),
+                                      getTextField(
+                                          color:
+                                              serviceBookBottomSheetController
+                                                          .provider ==
+                                                      null
+                                                  ? grey40
+                                                  : regularBlack, function: () {
+                                        serviceBookBottomSheetController
+                                            .selectProvider(context);
+                                      },
+                                          type: TextInputType.none,
+                                          serviceBookBottomSheetController
+                                                      .selectedTime ==
+                                                  null
+                                              ? "Select Provider"
+                                              : "${serviceBookBottomSheetController.provider!}",
+                                          "profile_icon.svg",
+                                          suffixiconpermition: true,
+                                          fillColor: grey10,
+                                          widget: GestureDetector(
+                                            onTap: () {
+                                              serviceBookBottomSheetController
+                                                  .selectProvider(context);
+                                            },
+                                            child: getSvgImage("edit_icon.svg")
+                                                .paddingOnly(
+                                                    top: 15.h,
+                                                    bottom: 17.h,
+                                                    right: 18.h),
+                                          )),
                                     ],
                                   ).paddingSymmetric(horizontal: 20.h),
                                 ),
@@ -183,7 +218,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                               CheakOutScreenCommonWidget()
                             ],
                           )),
-                         Container(
+                          Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(16.h),
@@ -212,8 +247,8 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                             "30.00", 20.sp, regularBlack, 1,
                                             fontWeight: FontWeight.w700)
                                       ],
-                                    ), */ 
-                                   /* Row(
+                                    ), */
+                                    /* Row(
                                       children: [
                                         getCustomFont("Bill Details", 16.sp,
                                             darkYellow, 1,
@@ -229,25 +264,23 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                 (SideDrawerController.selectAddressIndex ==
                                             null ||
                                         phoneNumberScreenController
-                                                .selectNumberIndex ==
-                                            null ||
-                                        payMentScreenController
-                                                .selectPaymentIndex ==
-                                            null)
-                                    ? getCustomButton(
-                                        "Place Order",
-                                        newbuttonColor: grey10,
-                                        () {
-                                          Fluttertoast.showToast(
-                                            msg: "Please Select Address, Phone number and Payment method",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: buttonColor,
-                                            textColor: regularBlack,
-                                            fontSize: 16.0,
-                                          );
-                                        })
+                                                .selectNumberIndex == null)
+                                        // || payMentScreenController
+                                        //         .selectPaymentIndex ==
+                                        //     null)
+                                    ? getCustomButton("Place Order",
+                                        newbuttonColor: grey10, () {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              "Please Select Address and Phone number",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: buttonColor,
+                                          textColor: regularBlack,
+                                          fontSize: 16.0,
+                                        );
+                                      })
                                     : getCustomButton("Place Booking", () {
                                         Constant.sendToNext(context,
                                             Routes.orderConfirmScreenRoute);
