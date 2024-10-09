@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:service_hub_app/current_location_screen.dart';
 import 'package:service_hub_app/firestore_test_page.dart';
 import 'package:service_hub_app/utils/color_category.dart';
@@ -55,6 +56,11 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
 
   backClick() {
     Constant.backToFinish();
+  }
+   void _setLocation(String location) {
+    setState(() {
+      locationController.text = location;
+    });
   }
 
   void showMajorSelection() {
@@ -334,45 +340,49 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                           getVerSpace(28.h),
 
                           ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return const CurrentLocationScreen();
-                                },
-                              ));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/location_icon.svg', // Replace with your desired icon
-                                  color: const Color.fromARGB(255, 0, 0, 0), // Change the icon color here
-                                ),
-                                const SizedBox(
-                                    width: 8), // Space between icon and text
-                                const Expanded(
-                                  // Use Expanded to take remaining space
-                                  child: Text(
-                                    "Location",
-                                    style: TextStyle(
-                                      fontSize: 14, // Set the desired font size
-                                      fontFamily: Constant
-                                          .fontsFamily, // Set your desired font family
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                              ],
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return CurrentLocationScreen(
+                            onLocationSelected: _setLocation,
+                          );
+                        },
+                      ));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/location_icon.svg',
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                        ),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Text(
+                            "Location",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: Constant.fontsFamily,
                             ),
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: grey40,
-                              backgroundColor: Colors.grey[100],
-                              minimumSize: Size(50, 45),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.h),
-                              ),
-                            ),
+                            textAlign: TextAlign.left,
                           ),
+                        ),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: grey40,
+                      backgroundColor: Colors.grey[100],
+                      minimumSize: Size(50, 45),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.h),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: locationController,
+                    decoration: InputDecoration(labelText: 'Location'),
+                    readOnly: true, // User cannot manually input location
+                  ),
 
                           getVerSpace(28.h),
                           Container(
