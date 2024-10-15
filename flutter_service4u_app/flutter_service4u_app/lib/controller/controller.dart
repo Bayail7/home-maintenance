@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
+import 'package:service_hub_app/models/provider_details_model';
+import 'package:service_hub_app/utils/constantWidget.dart';
 import '../models/ac_repair_all_service_data_model.dart';
 import '../models/added_card_data_maodel.dart';
 import '../models/address_data_model.dart';
@@ -670,7 +673,10 @@ class ServiceBookBottomSheetController extends GetxController {
   TimeOfDay time = TimeOfDay.now();
 
   String? provider;
-  List<String> providers = [];
+  List<Provider> providers = [];
+
+  // Declare the scroll controller
+  ScrollController _scrollController = ScrollController();
 
   @override
   void onInit() {
@@ -683,7 +689,18 @@ class ServiceBookBottomSheetController extends GetxController {
       final snapshot =
           await FirebaseFirestore.instance.collection('providers_info').get();
       if (snapshot.docs.isNotEmpty) {
-        providers = snapshot.docs.map((doc) => doc['name'] as String).toList();
+        providers = snapshot.docs.map((doc) {
+          return Provider(
+            name: doc['name'] as String,
+            email: doc['email'] as String,
+            mobile: doc['mobile'] as String,
+            nationality: doc['nationality'] as String,
+            major: doc['major'] as String,
+            location: doc['location'] as String,
+            hasCar: (doc['have a car?'] == 'true'),
+            workingHours: doc['preferred working hours'] as String,
+          );
+        }).toList();
       } else {
         print("No providers found.");
       }
@@ -695,7 +712,7 @@ class ServiceBookBottomSheetController extends GetxController {
 
   Future<void> selectProvider(BuildContext context) async {
     // Variable to hold the selected provider
-    String? selectedProvider;
+    Provider? selectedProvider;
 
     await showDialog(
       context: context,
@@ -720,25 +737,50 @@ class ServiceBookBottomSheetController extends GetxController {
                     SizedBox(height: 16),
                     providers.isNotEmpty
                         ? SizedBox(
-                          height: 300, // Set max height for the list
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: providers.length,
-                              itemBuilder: (context, index) {
-                                return RadioListTile<String>(
-                                  title: Text(providers[index]),
-                                  value: providers[index],
-                                  groupValue: selectedProvider,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedProvider =
-                                          value; // Update the selected provider
-                                    });
-                                  },
-                                );
-                              },
-                            ),
-                          )
+                            height: 350, // Set max height for the list
+                            child: Scrollbar(
+                              thumbVisibility:
+                                  true, // Show scroll bar when scrolling
+                              thickness:
+                                  4.0, // Reduced thickness for a slimmer scrollbar
+                              radius: Radius.circular(8),
+                              controller:
+                                  _scrollController, // Rounded edges for the scrollbar
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                itemCount: providers.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: RadioListTile<Provider>(
+                                          title: Text(providers[index].name),
+                                          value: providers[index],
+                                          groupValue: selectedProvider,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedProvider =
+                                                  value; // Update the selected provider
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      // More Details Button
+                                      TextButton(
+                                        onPressed: () {
+                                          _showProviderDetails(
+                                              context, providers[index]);
+                                        },
+                                        child: Text('more details'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ))
                         : Text(
                             'No providers available yet.',
                             style: TextStyle(fontSize: 16),
@@ -767,8 +809,61 @@ class ServiceBookBottomSheetController extends GetxController {
     );
   }
 
-  void setProvider(String selectedProvider) {
-    provider = selectedProvider;
+  void _showProviderDetails(BuildContext context, Provider provider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Provider Details',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              getVerSpace(30.h),
+              getMyprofileDetailFormate(
+                  "profile_icon.svg", "Name", provider.name),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate(
+                  "email_icon.svg", "Email", provider.email),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate(
+                  "call_icon.svg", "Phone Number", provider.mobile),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate(
+                  "nationality_icon.svg", "Nationality", provider.nationality),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate(
+                  "major_icon.svg", "Major", provider.major),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate(
+                  "location_icon.svg", "Location", provider.location),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate("haveCar_icon.svg", "Has a Car",
+                  provider.hasCar ? "Yes" : "No"),
+              getVerSpace(20.h),
+              getMyprofileDetailFormate("workingHour_icon.svg",
+                  "Preferred Working Hours", provider.workingHours),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void setProvider(Provider selectedProvider) {
+    provider = selectedProvider
+        .name; // Assuming you're only storing the provider's name
     update();
   }
 

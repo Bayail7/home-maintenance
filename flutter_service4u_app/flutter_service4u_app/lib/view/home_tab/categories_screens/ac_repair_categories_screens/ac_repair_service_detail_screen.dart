@@ -201,7 +201,7 @@ class _AcRepairServiceDetailScreenState
                               topRight: Radius.circular(16.h),
                               topLeft: Radius.circular(16.h))),
                       builder: (context) =>
-                          ServiceBookBottomSheet(serviceName: title!),
+                          ServiceBookBottomSheet(serviceName: title),
                     );
                   })
                 ],
