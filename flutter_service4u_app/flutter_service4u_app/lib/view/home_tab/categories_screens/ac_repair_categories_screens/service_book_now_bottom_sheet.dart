@@ -25,6 +25,13 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
+    @override
+  void initState() {
+    super.initState();
+    // Set the service name in the controller
+    serviceBookBottomSheetController.setServiceName(widget.serviceName);
+  }
+
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -132,7 +139,7 @@ class _ServiceBookBottomSheetState extends State<ServiceBookBottomSheet> {
                   ? () {
                       // Passing the service name to the checkout screen
                       Constant.sendToNext(context, Routes.cheakOutScreenRoute,
-                          arguments: {'serviceName': widget.serviceName});
+                          arguments: {'serviceName': serviceBookBottomSheetController.serviceName});
                     }
                   : () {
                       Fluttertoast.showToast(

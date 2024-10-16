@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
 import 'package:service_hub_app/models/provider_details_model';
 import 'package:service_hub_app/utils/constantWidget.dart';
@@ -674,20 +676,113 @@ class ServiceBookBottomSheetController extends GetxController {
 
   String? provider;
   List<Provider> providers = [];
+  String? serviceName;
+  String? selectedCategory;
+  String? selectedService; // For specific service name
 
   // Declare the scroll controller
   ScrollController _scrollController = ScrollController();
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchProviders(); // Fetch providers on initialization
+  // Define a mapping between categories and their respective services
+  Map<String, List<String>> categoryToServices = {
+    'Ac Repair': [
+      'AC Repair Service',
+      'AC Installation',
+      'AC leak dotection',
+      'AC cleaning',
+      'AC compressor repairing'
+    ],
+    'Plumbing Repair': [
+      'Bidet Repair',
+      'Shower Repair',
+      'Blocked Water Pipe Repair',
+      'Pipe Repair',
+      'Leaking Pipe Repair'
+    ],
+    'Electricity Repair': [
+      'Installing Lamps & Lights',
+      'Changing electric outlet',
+      'Cable tost termination',
+      'Laying cables'
+    ],
+    'Appliance Repair': [
+      'Refrigerator Repair',
+      'Dishwasher Repair',
+      'Washing Machine Repair',
+      'TV Repair',
+      'Oven Repair'
+    ],
+  };
+
+  Future<void> selectService(String serviceName, BuildContext context) async {
+    selectedService = serviceName; // Set the specific service name
+
+    // Loop through the category-to-services map to find the matching category
+    categoryToServices.forEach((category, services) {
+      if (services
+          .map((s) => s.toLowerCase())
+          .contains(serviceName.toLowerCase())) {
+        selectedCategory =
+            category; // Assign the category if the service matches
+      }
+    });
+
+    // Check if a valid category was found
+    if (selectedCategory != null) {
+      print('Selected Category: $selectedCategory');
+      print('Selected Service: $selectedService');
+
+      // Call fetchProviders with the selected category
+      await fetchProviders(context);
+    } else {
+      // If no matching category was found
+      print('Invalid service selected: $serviceName');
+      return;
+    }
   }
 
-  Future<void> fetchProviders() async {
+  // Method to set the service name
+  void setServiceName(String name) {
+    serviceName = name;
+    update(); // Notify listeners of the change
+  }
+
+  Future<void> fetchProviders(BuildContext context) async {
     try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('providers_info').get();
+      selectService(serviceName!, context);
+      // Clear the current list of providers before fetching new ones
+      providers.clear();
+      update(); // Notify listeners to update the UI
+
+      String major;
+      String preferredWorkingHours;
+
+      // Determine the major based on the selected service
+      if (selectedCategory == 'Ac Repair') {
+        major = 'HVAC Technician';
+      } else if (selectedCategory == 'Plumbing Repair') {
+        major = 'Plumber';
+      } else if (selectedCategory == 'Electricity Repair' ||
+          selectedCategory == 'Appliance Repair') {
+        major = 'Electrician';
+      } else {
+        print('Invalid service selected');
+        return;
+      }
+      // Determine working hours based on selected time
+      if (getTimePeriod(selectedTime!.format(context)) == 'Morning') {
+        preferredWorkingHours = 'From 8 AM until 12 PM';
+      } else {
+        preferredWorkingHours = 'From 4 PM until 9 PM';
+      }
+
+      // Firestore query to filter providers by major and working hours
+      final snapshot = await FirebaseFirestore.instance
+          .collection('providers_info')
+          .where('major', isEqualTo: major)
+          .where('preferred working hours', isEqualTo: preferredWorkingHours)
+          .get();
+
       if (snapshot.docs.isNotEmpty) {
         providers = snapshot.docs.map((doc) {
           return Provider(
@@ -704,13 +799,85 @@ class ServiceBookBottomSheetController extends GetxController {
       } else {
         print("No providers found.");
       }
-      update(); // Update the controller with the fetched providers
+      update();
     } catch (e) {
       print('Error fetching providers: $e');
     }
+    update();
+  }
+
+  String getTimePeriod(String formattedTime) {
+    // Parse the time string to DateTime object
+    final DateFormat format = DateFormat.jm(); // Format like '11:30 AM'
+    final DateTime parsedTime = format.parse(formattedTime);
+    final TimeOfDay selectedTime = TimeOfDay.fromDateTime(parsedTime);
+
+    // Define morning and evening time ranges
+    final TimeOfDay morningStart = TimeOfDay(hour: 8, minute: 0);
+    final TimeOfDay morningEnd = TimeOfDay(hour: 12, minute: 0);
+    final TimeOfDay eveningStart = TimeOfDay(hour: 16, minute: 0);
+    final TimeOfDay eveningEnd = TimeOfDay(hour: 21, minute: 0);
+
+    // Check if the selected time is in the morning range
+    if (_isTimeInRange(selectedTime, morningStart, morningEnd)) {
+      return 'Morning';
+    }
+    // Check if the selected time is in the evening range
+    else if (_isTimeInRange(selectedTime, eveningStart, eveningEnd)) {
+      return 'Evening';
+    } else {
+      return 'Invalid';
+    }
+  }
+
+// Helper function to compare time ranges
+  bool _isTimeInRange(TimeOfDay time, TimeOfDay start, TimeOfDay end) {
+    final int timeInMinutes = time.hour * 60 + time.minute;
+    final int startInMinutes = start.hour * 60 + start.minute;
+    final int endInMinutes = end.hour * 60 + end.minute;
+
+    return timeInMinutes >= startInMinutes && timeInMinutes <= endInMinutes;
   }
 
   Future<void> selectProvider(BuildContext context) async {
+    // Print debug information
+    print("Selected Date: $selectedDate");
+    print("Selected Time: $selectedTime");
+    print("Service Name: $serviceName");
+    print("Category: $selectedCategory");
+
+    // Ensure date and time are selected
+    if (selectedDate == null ||
+        selectedTime == null ||
+        (serviceName?.isEmpty ?? true)) {
+      Fluttertoast.showToast(
+        msg: "Please select a Date, and Time before selecting a Provider.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: buttonColor,
+        textColor: regularBlack,
+        fontSize: 16.0,
+      );
+      return; // Exit early if conditions are not met
+    }
+
+    // Show loading indicator while fetching providers
+    Fluttertoast.showToast(
+      msg: "Fetching providers...",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: buttonColor,
+      textColor: regularBlack,
+      fontSize: 16.0,
+    );
+
+    // Fetch providers based on selected date, time, and service
+    await fetchProviders(context);
+
+    // Check if providers are fetched successfully
+    print(
+        "Providers: ${providers.length}"); // This should print the number of providers fetched
+
     // Variable to hold the selected provider
     Provider? selectedProvider;
 
