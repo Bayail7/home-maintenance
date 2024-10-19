@@ -1,160 +1,112 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:service_hub_app/models/address_data_model.dart';
-import '../../../controller/controller.dart';
-import '../../../utils/color_category.dart';
-import '../../../utils/constant.dart';
-import '../../../utils/constantWidget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:service_hub_app/current_location_screen.dart';
 
 class SideMenuAddressScreen extends StatefulWidget {
   @override
-  State<SideMenuAddressScreen> createState() => _SideMenuAddressScreenState();
+  _SideMenuAddressScreenState createState() => _SideMenuAddressScreenState();
 }
 
 class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
-  backclick() {
-    Constant.backToFinish();
+  String? userLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserLocation(); // Fetch location when the screen initializes
   }
 
-  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  // Function to fetch user's location from Firestore
+  Future<void> _fetchUserLocation() async {
+    final User? user = FirebaseAuth.instance.currentUser; // Get current user
+    if (user == null) {
+      setState(() {
+        userLocation = 'User not authenticated';
+      });
+      return;
+    }
+
+    String uid = user.uid; // Get the authenticated user's UID
+
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+
+    if (snapshot.exists) {
+      setState(() {
+        userLocation = snapshot['location']; // Get the location field
+      });
+    } else {
+      setState(() {
+        userLocation = 'Location not found';
+      });
+    }
+  }
+
+  // Function to handle location modification
+  void _modifyLocation() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CurrentLocationScreen(
+          onLocationSelected: (String placeName) {
+            _updateLocationInFirebase(placeName);
+            setState(() {
+              userLocation = placeName; // Update the displayed location
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  // Function to update location in Firestore
+  Future<void> _updateLocationInFirebase(String placeName) async {
+    final User? user = FirebaseAuth.instance.currentUser; // Get current user
+    if (user == null) {
+      print("User not authenticated");
+      return; // Exit if the user is not authenticated
+    }
+
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('users_info');
+    String uid = user.uid; // Use the authenticated user's UID
+
+    await users.doc(uid).set({
+      'location': placeName,
+    }, SetOptions(merge: true));
+  }
 
   @override
   Widget build(BuildContext context) {
-    initializeScreenSize(context);
-    return GetBuilder<SideDrawerController>(
-      init: SideDrawerController(),
-      builder: (sideDrawerController) => WillPopScope(
-          onWillPop: () async {
-            backclick();
-            return false;
-          },
-          child: Scaffold(
-            backgroundColor: context.theme.scaffoldBackgroundColor,
-            body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  getVerSpace(24.h),
-                  getCustomAppBar("Address", () {
-                    backclick();
-                  }).paddingSymmetric(horizontal: 20.h),
-                  getVerSpace(32.h),
-                  Expanded(
-                      child: Container(
-                    child: Column(
-                      children: [
-                        sideDrawerController.addAddress
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.h),
-                                  border: Border.all(color: grey20),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    getCustomFont("At my current location",
-                                        16.sp, regularBlack, 1,
-                                        fontWeight: FontWeight.w500),
-                                    getSvgImage("current_location_icon.svg")
-                                  ],
-                                ).paddingSymmetric(
-                                    horizontal: 16.h, vertical: 17.h),
-                              ).paddingOnly(
-                                left: 16.h, right: 16.h, top: 16.87.h)
-                            : SizedBox(),
-                        getVerSpace(16.h),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.h),
-                              border: Border.all(color: grey20)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              getCustomFont("Address", 16.sp, regularBlack, 1,
-                                  fontWeight: FontWeight.w500),
-                              getVerSpace(8.h),
-                              ListView.builder(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemCount:
-                                    sideDrawerController.addressData.length,
-                                itemBuilder: (context, index) {
-                                  Address address =
-                                      sideDrawerController.addressData[index];
-                                  return address_formate(
-                                      address.icon!,
-                                      address.addressType!,
-                                      address.address!,
-                                      sideDrawerController.addAddress
-                                          ? () {
-                                              sideDrawerController
-                                                  .setAddress(address.id);
-                                              sideDrawerController
-                                                  .setAddressIndex(index);
-                                            }
-                                          : () {
-                                              SizedBox();
-                                            },
-                                      radioWidget: sideDrawerController
-                                              .addAddress
-                                          ? getSvgImage(
-                                              sideDrawerController.addressID ==
-                                                      address.id
-                                                  ? "select_radio_icon.svg"
-                                                  : "unselect_radio_icon.svg")
-                                          : SizedBox(),
-                                      radioButtonpermition: true);
-                                },
-                              ),
-                            ],
-                          ).paddingAll(16.h),
-                        ).paddingSymmetric(horizontal: 20.h),
-                        getVerSpace(32.h),
-                        sideDrawerController.addAddress
-                            ? GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.h),
-                                      color: grey10),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        getCustomFont("Add Address", 13.sp,
-                                            regularBlack, 1,
-                                            fontWeight: FontWeight.w400),
-                                        getSvgImage("add_icon_black.svg")
-                                      ],
-                                    ).paddingOnly(top: 8.h, bottom: 8.h),
-                                  ),
-                                ).paddingSymmetric(horizontal: 143.h),
-                              )
-                            : SizedBox()
-                      ],
-                    ),
-                  )),
-                  sideDrawerController.addAddress
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            color: context.theme.focusColor,
-                            child: getCustomButton("Done", () {
-                              sideDrawerController.setFinalAddressIndex(
-                                  sideDrawerController.addressIndex);
-                              backclick();
-                            }).paddingOnly(
-                                left: 20.h, right: 20.h, bottom: 30.h),
-                          ),
-                        )
-                      : SizedBox()
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Your Location"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              userLocation ?? 'Loading location...',
+              style: TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
             ),
-          )),
+            const SizedBox(height: 20),
+       ElevatedButton(
+  onPressed: _modifyLocation,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color.fromARGB(255, 115, 177, 228), // Set the background color to blue
+  ),
+  child: const Text(
+    "Modify Location",
+    style: TextStyle(color: Colors.black), // Set the text color to black
+  ),
+),
+          ],
+        ),
+      ),
     );
   }
 }

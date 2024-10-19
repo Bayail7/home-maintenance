@@ -11,7 +11,6 @@ import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
 import '/firestore_test_page.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class SinUpEmptyState extends StatefulWidget {
