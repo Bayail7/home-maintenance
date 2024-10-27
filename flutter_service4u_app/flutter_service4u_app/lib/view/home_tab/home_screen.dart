@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pytorch/flutter_pytorch.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service_hub_app/utils/color_category.dart';
@@ -6,8 +7,10 @@ import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
-import 'package:image_picker/image_picker.dart'; 
-import 'dart:io'; 
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+import 'detectionResult_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -29,6 +32,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // Fetch and pre-fill user data
     loadUserData();
+    loadModel();
+  }
+
+  ModelObjectDetection? objectModel;
+  void loadModel() {
+    FlutterPytorch.loadObjectDetectionModel(
+            "assets/best.torchscript", 7, 640, 640,
+            labelPath: "assets/labels.txt")
+        .then((value) {
+      objectModel = value;
+      print('model loaded success ??????');
+    }).catchError((error) {
+      print('error????????? when loading model ${error}');
+    });
   }
 
   // Function to load user data and pre-fill the form
@@ -43,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   final ImagePicker _picker = ImagePicker(); // Initialize ImagePicker
   File? _image;
 
@@ -54,18 +70,91 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _image = File(photo.path); // Update state with the captured image
       });
+      await startAnalyzing();
     }
   }
 
   // Function to pick an image from the gallery
-  Future<void> _chooseFromGallery() async {
-    final XFile? galleryImage = await _picker.pickImage(source: ImageSource.gallery);
+  void _chooseFromGallery() async {
+    final XFile? galleryImage =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (galleryImage != null) {
       setState(() {
-        _image = File(galleryImage.path); // Update state with the selected image
+        _image =
+            File(galleryImage.path); // Update state with the selected image
+      });
+      await startAnalyzing();
+    }
+  }
+
+  Future<void> startAnalyzing() async {
+    if (_image != null) {
+      objectModel
+          ?.getImagePrediction(
+        _image!.readAsBytesSync(),
+        minimumScore: 0.2,
+      )
+          .then((results) {
+        print('Starting analysis...');
+
+        if (results.isNotEmpty) {
+          // Find the result with the highest score
+          var topResult = results.reduce((curr, next) => curr!.score > next!.score ? curr : next);
+
+          if (topResult != null) {
+            // Print only the top result's class name and score
+            print('Top result - class: ${topResult.className}, score: ${topResult.score}');
+
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ModelPage(_image, topResult.score, topResult.className!.trim().toString()),
+              ),
+            );
+          }
+        } else {
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                title: Text(
+                    "No Results Found",
+                  style:  TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: Constant.fontsFamily,
+                    color: regularBlack,
+                  ),
+                ),
+                content: Text(
+                    "No results were found. Please try a different image.",
+                  style:  TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: Constant.fontsFamily,
+                    color: regularBlack,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }).catchError((error) {
+        print('Error when applying model: $error');
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               _takePicture();
-                                            }
-                                            ),
+                                            }),
                                         ListTile(
                                             // Option for taking a photo
                                             leading: Icon(Icons.photo_library),
@@ -164,8 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               _chooseFromGallery();
-                                            }
-                                            ),
+                                            }),
                                       ],
                                     ),
                                   );

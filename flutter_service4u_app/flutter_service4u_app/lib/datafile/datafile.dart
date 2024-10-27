@@ -214,7 +214,7 @@ String? image,   String? rate,   String? ratting,   String? serviceName,   Strin
         image: "electronics_service_2nd.jpg",
         price: "10 - 150",
         rating: "4.5",
-        title: "Changing electric outlet",
+        title: "Changing electric outlet (plug)",
         discount: "87",
         // id: 2,
       ),
