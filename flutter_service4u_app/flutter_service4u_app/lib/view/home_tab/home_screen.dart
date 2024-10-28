@@ -99,38 +99,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (results.isNotEmpty) {
           // Find the result with the highest score
-          var topResult = results.reduce((curr, next) => curr!.score > next!.score ? curr : next);
+          var topResult = results
+              .reduce((curr, next) => curr!.score > next!.score ? curr : next);
 
           if (topResult != null) {
             // Print only the top result's class name and score
-            print('Top result - class: ${topResult.className}, score: ${topResult.score}');
-
+            print(
+                'Top result - class: ${topResult.className}, score: ${topResult.score}');
 
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ModelPage(_image, topResult.score, topResult.className!.trim().toString()),
+                builder: (context) => ModelPage(_image, topResult.score,
+                    topResult.className!.trim().toString()),
               ),
             );
           }
         } else {
-
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 backgroundColor: Colors.white,
                 title: Text(
-                    "No Results Found",
-                  style:  TextStyle(
+                  "No Results Found",
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: Constant.fontsFamily,
                     color: regularBlack,
                   ),
                 ),
                 content: Text(
-                    "No results were found. Please try a different image.",
-                  style:  TextStyle(
+                  "No results were found. Please try a different image.",
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: Constant.fontsFamily,
                     color: regularBlack,
@@ -153,8 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -187,15 +186,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .openDrawer();
                                     },
                                     child: getSvgImage("drawer_icon.svg")),
-                                Row(
-                                  children: [
-                                    getSvgImage("location_icon.svg"),
-                                    getHorSpace(12.h),
-                                    getCustomFont(userLocation, 14.sp,
-                                        context.theme.primaryColor, 1,
-                                        fontWeight: FontWeight.w400),
-                                    SizedBox(width: 150),
-                                  ],
+                                Expanded(
+                                  child: Center(
+                                    // Center the column within the available space
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .center, // Center content within the column
+                                      children: [
+                                        getSvgImage("location_icon.svg"),
+                                        SizedBox(
+                                            height: 5.h), // Space between the icon and text
+                                        getCustomFont(userLocation, 14.sp,
+                                            context.theme.primaryColor, 1,
+                                            fontWeight: FontWeight.w400),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 //getSvgImage("unselected_notification_icon.svg",
                                 //color: regularBlack),
@@ -221,11 +229,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             getVerSpace(20.h),
-                            getCustomFont("Not sure what's wrong?", 20.sp,
+                            getCustomFont("Not sure what's wrong?", 18.sp,
                                 regularWhite, 1,
                                 fontWeight: FontWeight.w500),
                             getVerSpace(15.h),
-                            getCustomFont("Let Ejadah AI figure it out!", 20.sp,
+                            getCustomFont("Let Ejadah AI figure it out!", 18.sp,
                                 regularWhite, 1,
                                 fontWeight: FontWeight.w700),
                             getVerSpace(12.h),

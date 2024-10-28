@@ -192,7 +192,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                       },
                                           type: TextInputType.none,
                                           serviceBookBottomSheetController
-                                                      .selectedTime ==
+                                                      .provider ==
                                                   null
                                               ? "Select Provider"
                                               : "${serviceBookBottomSheetController.provider!}",
