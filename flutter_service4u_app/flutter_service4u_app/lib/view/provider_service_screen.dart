@@ -122,7 +122,7 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
   Widget _body() {
     switch (providerServiceScreenController.position.value) {
       case 0:
-       return NewOrdersScreen(); // Return the new Order screen
+       return NewOrdersScreen(providerId: '',); // Return the new Order screen
        
       case 1:
        return BookingScreen();

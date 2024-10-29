@@ -1,34 +1,73 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:service_hub_app/firestore_test_page.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import '../../../../controller/controller.dart';
 import '../../../../routes/app_routes.dart';
-import '../../../../utils/cheak_out_screen_common_widget.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/constantWidget.dart';
+import '../../../../current_location_screen.dart';
+import '../ac_repair_categories_screens/phone_number_screen.dart';
+
+
+
 
 class CheakOutScreen extends StatefulWidget {
   @override
   State<CheakOutScreen> createState() => _CheakOutScreenState();
 }
 
-backclick() {
-  Constant.backToFinish();
-}
-
-class _CheakOutScreenState extends State<CheakOutScreen> {
+  class _CheakOutScreenState extends State<CheakOutScreen> {
   CheakOutScreenController cheakOutScreenController =
       Get.put(CheakOutScreenController());
-  //PromoCodeScreenController promoCodeScreenController =
-  //    Get.put(PromoCodeScreenController());
-  PhoneNumberScreenController phoneNumberScreenController =
+       
+
+ final PhoneNumberScreenController phoneNumberScreenController =
       Get.put(PhoneNumberScreenController());
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
-  // PayMentScreenController payMentScreenController =
-  //     Get.put(PayMentScreenController());
+ 
+
+ final AuthController authController = Get.find<AuthController>();
+  String defaultPhoneNumber = " ";
+  String userAddress = "";
+  @override
+  void initState() {
+    super.initState();
+  fetchUserData() ;// Call this when screen loads
+  }
+     Future<void> fetchUserData() async {
+    // Call the function to get user data
+    Map<String, dynamic>? userData = await authController.getUserData();
+    if (userData != null) {
+      setState(() {
+          defaultPhoneNumber = userData['mobile'] ?? "N/A";
+        userAddress = userData['location'] ?? "N/A";
+       phoneNumberScreenController.defaultPhoneNumber = defaultPhoneNumber; // Update controller's phone number
+       cheakOutScreenController.userAddress = userAddress;
+          });
+    }
+  }
+  
+   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if the user has updated their phone number in the PhoneNumberScreen
+    String updatedPhoneNumber = phoneNumberScreenController.defaultPhoneNumber ?? defaultPhoneNumber;
+    setState(() {
+      defaultPhoneNumber = updatedPhoneNumber;
+    });
+  }
+
+  backclick() {
+    Constant.backToFinish();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +254,125 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                 ),
                               ),
                               getVerSpace(10.h),
-                              CheakOutScreenCommonWidget()
+                              getVerSpace(16.h),
+      
+Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getCustomFont("Phone Number", 16.sp, regularBlack, 1, fontWeight: FontWeight.w700),
+                                getVerSpace(10.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: getTextField(
+                                        "Enter your phone number",
+                                        "call_icon.svg",
+                                        color: regularBlack,
+                                        type: TextInputType.none,
+                                         controller: TextEditingController(text: defaultPhoneNumber), // Reflect the phone number
+                                        suffixiconpermition: true,
+                                        fillColor: grey10,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                       onTap: () async {
+                                      // Navigate to the Phone Number editing screen
+                                      final newPhoneNumber = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => PhoneNumberScreen()),
+                                      );
+
+                                      // If a new phone number is returned, update the state
+                                      if (newPhoneNumber != null && newPhoneNumber.isNotEmpty) {
+                                        setState(() {
+                                          defaultPhoneNumber = newPhoneNumber; // Update the displayed phone number
+                                          phoneNumberScreenController.updatePhoneNumber(newPhoneNumber); // Update the controller
+                                        });
+                                      }
+                                    },
+                                      child: Container(
+                                        height: 60.h, // Match the height of the text field
+                                        width: 60.h, // Match the width of the text field
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: buttonColor,
+                                        ),
+                                        child: Center(
+                                          child: getSvgImage("edit_icon.svg"),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ).paddingAll(16.h),
+                          ),
+
+// Address Section
+ getVerSpace(10.h),
+ getVerSpace(16.h),
+ Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            getCustomFont("Address", 16.sp, regularBlack, 1, fontWeight: FontWeight.w700),
+            getVerSpace(10.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: getTextField(
+                    "Enter your address",
+                    "unselected_address_icon_lt.svg",
+                    color: regularBlack,
+                    type: TextInputType.none,
+                    controller: TextEditingController(
+                      text: cheakOutScreenController.userAddress, // Bind the user address
+                    ),
+                    suffixiconpermition: true,
+                    fillColor: grey10,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    String? selectedLocation = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CurrentLocationScreen(
+                          onLocationSelected: (selectedAddress) {
+                            // Update the address in the controller
+                            cheakOutScreenController.userAddress = selectedAddress;
+                          },
+                        ),
+                      ),
+                    );
+                    if (selectedLocation != null) {
+                      setState(() {
+                        cheakOutScreenController.userAddress = selectedLocation; // Update state
+                      });
+                    }
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: buttonColor,
+                    ),
+                    child: Center(
+                      child: getSvgImage("edit_icon.svg"),
+                    ),
+                  ),
+                ),
+              ],
+            ).paddingAll(16.h),
+          ],
+        ).paddingSymmetric(horizontal: 20.h),
+      ),
+
+                 //  CheakOutScreenCommonWidget()
                             ],
                           )),
                           Container(
@@ -261,7 +418,7 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                   ],
                                 ),
                                 getVerSpace(30.h),
-                                (SideDrawerController.selectAddressIndex ==
+                              /*  (SideDrawerController.selectAddressIndex ==
                                             null ||
                                         phoneNumberScreenController
                                                 .selectNumberIndex == null)
@@ -281,10 +438,49 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                           fontSize: 16.0,
                                         );
                                       })
-                                    : getCustomButton("Place Booking", () {
-                                        Constant.sendToNext(context,
-                                            Routes.orderConfirmScreenRoute);
-                                      }),
+                                    :*/
+                                 // Place Booking Button
+   ElevatedButton(
+  onPressed: () async {
+    // Fetch user name from authController
+    final customerName = await authController.getUserData();
+    final userName = customerName != null ? customerName['name'] ?? "Unknown User" : "Unknown User";
+
+    // Get the service name from arguments
+    final serviceName = Get.arguments['serviceName'] ?? 'Service Name Not Found';
+
+    // Access the ServiceBookBottomSheetController instance
+    final serviceController = Get.find<ServiceBookBottomSheetController>();
+
+    // Prepare the date and time
+    final date = serviceController.selectedDate != null
+        ? DateFormat("dd-MMM-yyyy").format(serviceController.selectedDate!)
+        : "Date Not Selected";
+
+    final time = serviceController.selectedTime != null
+        ? serviceController.selectedTime!.format(context)
+        : "Time Not Selected";
+
+    // Get user location and phone number
+    final location = cheakOutScreenController.userAddress ?? "Location Not Provided"; // Ensure non-null
+    final phoneNumber = defaultPhoneNumber ?? "Phone Not Provided"; // Ensure non-null
+
+    // Place the order (make sure to define the addOrder method in your controller)
+    await cheakOutScreenController.addOrder(
+      customerName: userName,
+      serviceName: serviceName,
+      date: date,
+      time: time,
+      location: location, // Now guaranteed to be non-null
+      phoneNumber: phoneNumber, // Now guaranteed to be non-null
+      providerId: serviceController.provider ?? "No Provider Selected", // Ensure provider is selected
+    );
+
+    // Navigate to order confirmation screen
+    Navigator.pushNamed(context, Routes.orderConfirmScreenRoute);
+  },
+  child: Text("Place Booking"),
+),
                               ],
                             ).paddingOnly(
                                 left: 20.h,

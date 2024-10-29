@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
+import 'package:service_hub_app/firestore_test_page.dart';
 import 'package:service_hub_app/models/provider_details_model';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import '../models/ac_repair_all_service_data_model.dart';
@@ -575,18 +576,108 @@ class BookNowBottomSheetController extends GetxController {
 }
 
 class CheakOutScreenController extends GetxController {
+    final AuthController authController = Get.find<AuthController>(); // Get the AuthController instance
   bool cheakOut = false;
+  String? userAddress;
 
   void setChkoutScreenPosition(bool val) {
     cheakOut = val;
     update();
   }
+  // Function to load the user's address from Firestore
+  Future<void> loadUserAddress(String uid) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users_info');
+
+    try {
+      // Fetch the user document by uid
+      DocumentSnapshot userDoc = await users.doc(uid).get();
+
+      // Check if the document exists and retrieve the location field
+      if (userDoc.exists && userDoc.data() != null) {
+        userAddress = userDoc.get('location') ; // Use a default if location is null
+      } else {
+        print("User document not found or data is null.");
+        userAddress = "No address available";
+      }
+    } catch (e) {
+      print("Error loading user address: $e");
+      userAddress = "Error loading address";
+    } finally {
+      update(); // Update the UI state if needed after loading the address
+    }
+  }
+
+// Define the addOrder method for placing a new order in the Firestore
+  Future<void> addOrder({
+    required String customerName,
+    required String serviceName,
+    required String date,
+    required String time,
+    required String location,
+    required String phoneNumber,
+    required String providerId, // Provider's ID from providers_info
+  }) async {
+    CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
+
+    try {
+      await orders.add({
+        'provider_id': providerId,
+        'user_name': customerName,
+        'service_name': serviceName,
+        'date': date,
+        'time': time,
+        'location': location,
+        'phone_number': phoneNumber,
+        'status': 'new',
+      });
+      Get.snackbar('Success', 'Order placed successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to place order');
+      print("Error adding order: $e");
+    }
+  }
 }
 
+
+
+
+
+
+
 class PhoneNumberScreenController extends GetxController {
-  List<PhoneNumbers> phone = DataFile.getPhoneNumberData();
+  List<PhoneNumbers> phone = DataFile.getPhoneNumberData(); // Keep this if you need default data
+  String? defaultPhoneNumber; // To store the default phone number fetched from Firebase
   int? id;
   int? selectNumberIndex;
+
+  // Constructor
+  PhoneNumberScreenController() : super(); // Call to super in the constructor
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDefaultPhoneNumber(); // Fetch the default phone number on initialization
+  }
+
+  Future<void> fetchDefaultPhoneNumber() async {
+    String uid = "currentUserUid"; // Replace with actual user ID fetching logic
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+
+   if (userDoc.exists) {
+  // Cast userDoc.data() to Map<String, dynamic> before accessing fields
+  final data = userDoc.data() as Map<String, dynamic>?;
+  // Use the null-aware operator to safely access the 'mobile' field
+  defaultPhoneNumber = data?['mobile'] ?? "No Phone Number";
+  update(); // Update UI after fetching the phone number
+} else {
+  defaultPhoneNumber = "No Phone Number"; // Handle case where document does not exist
+  update();
+}
+  }
+  void updatePhoneNumber(String newPhoneNumber) {
+    defaultPhoneNumber = newPhoneNumber;
+    update(); // Update UI after changing the phone number
+  }
 
   void setNumber(numberid) {
     id = numberid;

@@ -79,6 +79,7 @@ abstract class Routes {
   static const securityScreenRoute = Paths.securityScreenPath;
   static const recommendedServiceScreenRoute =
       Paths.recommendedServiceScreenPath;
+
 }
 
 abstract class Paths {

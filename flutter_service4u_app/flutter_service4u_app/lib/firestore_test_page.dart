@@ -63,6 +63,38 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
     }
   }
 
+
+  // New method for adding an order to the `new_orders` collection
+  static Future<void> addOrderData(
+    String customerName,
+    String serviceName,
+    String date,
+    String time,
+    String location,
+    String phoneNumber,
+ String providerId, // New parameter for provider ID
+) async {
+  CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
+
+  try {
+    await orders.add({
+      'user_name': customerName,
+      'service_name': serviceName,
+      'date': date,
+      'time': time,
+      'location': location,
+      'phone_number': phoneNumber,
+      'provider_id': providerId, // Store provider ID with order
+      'status': 'new'
+      });
+      Get.snackbar('Order Success', 'New order added successfully');
+      print("Order added successfully for: $customerName");
+    } catch (e) {
+      print("Error adding order: $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
