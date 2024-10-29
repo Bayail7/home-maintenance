@@ -621,7 +621,7 @@ class CheakOutScreenController extends GetxController {
 
     try {
       await orders.add({
-        'provider_id': providerId,
+        'providerid': providerId,
         'user_name': customerName,
         'service_name': serviceName,
         'date': date,

@@ -84,7 +84,7 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
       'time': time,
       'location': location,
       'phone_number': phoneNumber,
-      'provider_id': providerId, // Store provider ID with order
+      'providerId': providerId, // Store provider ID with order
       'status': 'new'
       });
       Get.snackbar('Order Success', 'New order added successfully');

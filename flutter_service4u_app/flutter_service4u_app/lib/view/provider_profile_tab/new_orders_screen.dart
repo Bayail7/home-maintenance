@@ -21,7 +21,7 @@ class NewOrdersScreen extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('new_orders')
-            .where('provider_id', isEqualTo: providerIdStr)
+           // .where('provider_id', isEqualTo: providerIdStr)
             .snapshots(),
         builder: (context, snapshot) {
           // Check if the stream is still loading

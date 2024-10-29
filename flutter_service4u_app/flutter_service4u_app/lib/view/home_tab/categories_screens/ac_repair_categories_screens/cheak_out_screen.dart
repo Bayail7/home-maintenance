@@ -394,51 +394,11 @@ Container(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    /*Row(
-                                      children: [
-                                        getCustomFont(
-                                            "Total :", 16.sp, grey40, 1,
-                                            fontWeight: FontWeight.w400),
-                                        getHorSpace(6.h),
-                                        getCustomFont(
-                                            "30.00", 20.sp, regularBlack, 1,
-                                            fontWeight: FontWeight.w700)
-                                      ],
-                                    ), */
-                                    /* Row(
-                                      children: [
-                                        getCustomFont("Bill Details", 16.sp,
-                                            darkYellow, 1,
-                                            fontWeight: FontWeight.w400,
-                                            letterSpace: 0.01),
-                                        getHorSpace(8.h),
-                                        getSvgImage("down_arrow_icon.svg")
-                                      ],
-                                    )*/
+                                   
                                   ],
                                 ),
                                 getVerSpace(30.h),
-                              /*  (SideDrawerController.selectAddressIndex ==
-                                            null ||
-                                        phoneNumberScreenController
-                                                .selectNumberIndex == null)
-                                        // || payMentScreenController
-                                        //         .selectPaymentIndex ==
-                                        //     null)
-                                    ? getCustomButton("Place Order",
-                                        newbuttonColor: grey10, () {
-                                        Fluttertoast.showToast(
-                                          msg:
-                                              "Please Select Address and Phone number",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.CENTER,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: buttonColor,
-                                          textColor: regularBlack,
-                                          fontSize: 16.0,
-                                        );
-                                      })
-                                    :*/
+                         
                                  // Place Booking Button
    ElevatedButton(
   onPressed: () async {
