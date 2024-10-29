@@ -50,6 +50,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   intl: ^0.17.0
   image_picker: ^0.8.5
+  flutter_pytorch: ^1.0.1
 
 
 dev_dependencies:

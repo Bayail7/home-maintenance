@@ -231,7 +231,7 @@ class CheakOutScreen extends StatefulWidget {
                                       },
                                           type: TextInputType.none,
                                           serviceBookBottomSheetController
-                                                      .selectedTime ==
+                                                      .provider ==
                                                   null
                                               ? "Select Provider"
                                               : "${serviceBookBottomSheetController.provider!}",

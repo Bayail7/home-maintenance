@@ -107,17 +107,22 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  // Function to get the place name from the selected location
-  Future<String> _getPlaceName(LatLng latLng) async {
-    try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
-      Placemark place = placemarks.first; // Take the first placemark
-      return "${place.locality}, ${place.country}"; // Format as needed
-    } catch (e) {
-      print("Error getting place name: $e");
-      return "Unknown Location"; // Default value if error occurs
-    }
+Future<String> _getPlaceName(LatLng latLng) async {
+  try {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    Placemark place = placemarks.first; // Take the first placemark
+    
+    // Extract and format the desired details: country, city, street name
+    String country = place.country ?? "Unknown Country";
+    String city = place.locality ?? "Unknown City";
+    String street = place.street ?? "Unknown Street";
+
+    return "$street, $city, $country";
+  } catch (e) {
+    print("Error getting place name: $e");
+    return "Unknown Location"; // Default value if error occurs
   }
+}
 
   // Function to save location to Firestore
   Future<void> _saveLocationToFirebase(String placeName) async {

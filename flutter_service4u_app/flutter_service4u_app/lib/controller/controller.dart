@@ -792,7 +792,7 @@ class ServiceBookBottomSheetController extends GetxController {
     ],
     'Electricity Repair': [
       'Installing Lamps & Lights',
-      'Changing electric outlet',
+      'Changing electric outlet (plug)',
       'Cable tost termination',
       'Laying cables'
     ],

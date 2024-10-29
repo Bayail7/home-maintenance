@@ -52,13 +52,14 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
   bool showMajorError = false; // Flag to show major error
   bool showWorkingHourError = false; // Flag to show working hour error
   bool showPasswordError = false; // Flag to show password error
-
+  String location = 'Location';
   backClick() {
     Constant.backToFinish();
   }
-   void _setLocation(String location) {
+
+  void _setLocation(String newLocation) {
     setState(() {
-      locationController.text = location;
+      location = newLocation; // Update the location text
     });
   }
 
@@ -339,50 +340,44 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
                           getVerSpace(28.h),
 
                           ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return CurrentLocationScreen(
-                            onLocationSelected: _setLocation,
-                          );
-                        },
-                      ));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/location_icon.svg',
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            "Location",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: Constant.fontsFamily,
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return CurrentLocationScreen(
+                                    onLocationSelected: _setLocation,
+                                  );
+                                },
+                              ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/location_icon.svg',
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    location, // Display selected location or default text
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: Constant.fontsFamily,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.left,
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: grey40,
+                              backgroundColor: Colors.grey[100],
+                              minimumSize: Size(50, 45),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.h),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: grey40,
-                      backgroundColor: Colors.grey[100],
-                      minimumSize: Size(50, 45),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.h),
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    controller: locationController,
-                    decoration: InputDecoration(labelText: 'Location'),
-                    readOnly: true, // User cannot manually input location
-                  ),
-
                           getVerSpace(28.h),
                           Container(
                             padding: EdgeInsets.symmetric(

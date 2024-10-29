@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,48 +12,52 @@ import '../../routes/app_routes.dart';
 import '../../utils/constant.dart';
 import '/firestore_test_page.dart';
 
-
 class SinUpEmptyState extends StatefulWidget {
   @override
   State<SinUpEmptyState> createState() => _SinUpEmptyStateState();
 }
 
 class _SinUpEmptyStateState extends State<SinUpEmptyState> {
-  SinUpEmptyStateController sinUpEmptyStateController =
-      Get.put(SinUpEmptyStateController());
+  SinUpEmptyStateController sinUpEmptyStateController = Get.put(SinUpEmptyStateController());
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
   final AuthController authControllerSignUp = Get.put(AuthController());
-final GlobalKey<ScaffoldState> signUpScaffoldKey = GlobalKey<ScaffoldState>();
-  backClick() {
+  final GlobalKey<ScaffoldState> signUpScaffoldKey = GlobalKey<ScaffoldState>();
+
+  String locationName = "Location"; // Default text for the button
+
+  // Method to handle back click
+  void backClick() {
     Constant.backToFinish();
   }
-void _setLocation(String location) {
+
+  // Method to set the location name
+  void _setLocation(String location) {
     setState(() {
-      locationController.text = location;
+      locationName = location; // Update the button text with the selected location
     });
   }
+
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
     return GetBuilder<SinUpEmptyStateController>(
       init: SinUpEmptyStateController(),
       builder: (sinUpEmptyStateController) => WillPopScope(
-          onWillPop: () async {
-            backClick();
-            return false;
-          },
-          child: Scaffold(
-              key: signUpScaffoldKey, 
-            backgroundColor: context.theme.scaffoldBackgroundColor,
-            resizeToAvoidBottomInset: false,
-            body: SafeArea(
-                child: Form(
+        onWillPop: () async {
+          backClick();
+          return false;
+        },
+        child: Scaffold(
+          key: signUpScaffoldKey, 
+          backgroundColor: context.theme.scaffoldBackgroundColor,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Form(
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,51 +95,48 @@ void _setLocation(String location) {
                           getVerSpace(28.h),
                           phone_number_field(mobileNumberController),
                           getVerSpace(20.h),
-                          
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return CurrentLocationScreen(
-                            onLocationSelected: _setLocation,
-                          );
-                        },
-                      ));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/location_icon.svg',
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            "Location",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: Constant.fontsFamily,
+
+                          // Location button with dynamic text
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return CurrentLocationScreen(
+                                    onLocationSelected: _setLocation,
+                                  );
+                                },
+                              ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/location_icon.svg',
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    locationName, // Display selected location
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: Constant.fontsFamily,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.left,
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: grey40,
+                              backgroundColor: Colors.grey[100],
+                              minimumSize: const Size(50, 45),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.h),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: grey40,
-                      backgroundColor: Colors.grey[100],
-                      minimumSize: Size(50, 45),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.h),
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    controller: locationController,
-                    decoration: InputDecoration(labelText: 'Location'),
-                    readOnly: true, // User cannot manually input location
-                  ),
+
                           getVerSpace(20.h),
                           getTextField(
                               function: () {},
@@ -201,9 +202,8 @@ void _setLocation(String location) {
                               final email = emailController.text;
                               final mobile = mobileNumberController.text;
                               final password = passwordController.text;
-                              final location = locationController.text;
+                              final location = locationName; // Use location name
                               try {
-                                // Create user with Firebase Authentication
                                 UserCredential userCredential =
                                     await FirebaseAuth.instance
                                         .createUserWithEmailAndPassword(
@@ -211,10 +211,8 @@ void _setLocation(String location) {
                                   password: password,
                                 );
                                 String uid = userCredential.user!.uid;
-                                // Save user data to Firestore
                                 await FirestoreTestPageState.addUserData(uid,
                                     name, email, mobile, location, password);
-                                // Set user sign-in state and navigate
                                 PrefData.setIsSignIn(true);
                                 Constant.sendToNext(
                                     context, Routes.homeMainScreenRoute);
@@ -266,7 +264,9 @@ void _setLocation(String location) {
                 ],
               ).paddingOnly(left: 20.h, right: 20.h),
             )),
-          )),
-    );
+          ),
+        ),
+      );
+    
   }
 }
