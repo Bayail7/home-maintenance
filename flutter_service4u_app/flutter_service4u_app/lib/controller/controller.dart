@@ -106,7 +106,7 @@ class VerificationScreenController extends GetxController {}
 class VerificationProviderScreenController extends GetxController {}
 
 class HomeMainScreenController extends GetxController {
-  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
+  // static GlobalKey<ScaffoldState> drawerKeyHome = GlobalKey(debugLabel: "homeMainScreenDrawerKey");
 
   // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
   // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
@@ -124,7 +124,7 @@ class HomeMainScreenController extends GetxController {
 }
 
 class ProviderServiceScreenController extends GetxController {
-  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "dsds");
+  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
 
   // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
   // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
@@ -576,7 +576,8 @@ class BookNowBottomSheetController extends GetxController {
 }
 
 class CheakOutScreenController extends GetxController {
-    final AuthController authController = Get.find<AuthController>(); // Get the AuthController instance
+  final AuthController authController =
+      Get.find<AuthController>(); // Get the AuthController instance
   bool cheakOut = false;
   String? userAddress;
 
@@ -584,9 +585,11 @@ class CheakOutScreenController extends GetxController {
     cheakOut = val;
     update();
   }
+
   // Function to load the user's address from Firestore
   Future<void> loadUserAddress(String uid) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users_info');
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('users_info');
 
     try {
       // Fetch the user document by uid
@@ -594,7 +597,8 @@ class CheakOutScreenController extends GetxController {
 
       // Check if the document exists and retrieve the location field
       if (userDoc.exists && userDoc.data() != null) {
-        userAddress = userDoc.get('location') ; // Use a default if location is null
+        userAddress =
+            userDoc.get('location'); // Use a default if location is null
       } else {
         print("User document not found or data is null.");
         userAddress = "No address available";
@@ -617,7 +621,8 @@ class CheakOutScreenController extends GetxController {
     required String phoneNumber,
     required String providerId, // Provider's ID from providers_info
   }) async {
-    CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
+    CollectionReference orders =
+        FirebaseFirestore.instance.collection('new_orders');
 
     try {
       await orders.add({
@@ -638,15 +643,11 @@ class CheakOutScreenController extends GetxController {
   }
 }
 
-
-
-
-
-
-
 class PhoneNumberScreenController extends GetxController {
-  List<PhoneNumbers> phone = DataFile.getPhoneNumberData(); // Keep this if you need default data
-  String? defaultPhoneNumber; // To store the default phone number fetched from Firebase
+  List<PhoneNumbers> phone =
+      DataFile.getPhoneNumberData(); // Keep this if you need default data
+  String?
+      defaultPhoneNumber; // To store the default phone number fetched from Firebase
   int? id;
   int? selectNumberIndex;
 
@@ -660,20 +661,26 @@ class PhoneNumberScreenController extends GetxController {
   }
 
   Future<void> fetchDefaultPhoneNumber() async {
-    String uid = "currentUserUid"; // Replace with actual user ID fetching logic
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    String uid = currentUser!.uid;
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users_info')
+        .doc(uid)
+        .get();
 
-   if (userDoc.exists) {
-  // Cast userDoc.data() to Map<String, dynamic> before accessing fields
-  final data = userDoc.data() as Map<String, dynamic>?;
-  // Use the null-aware operator to safely access the 'mobile' field
-  defaultPhoneNumber = data?['mobile'] ?? "No Phone Number";
-  update(); // Update UI after fetching the phone number
-} else {
-  defaultPhoneNumber = "No Phone Number"; // Handle case where document does not exist
-  update();
-}
+    if (userDoc.exists) {
+      // Cast userDoc.data() to Map<String, dynamic> before accessing fields
+      final data = userDoc.data() as Map<String, dynamic>?;
+      // Use the null-aware operator to safely access the 'mobile' field
+      defaultPhoneNumber = data?['mobile'] ?? "No Phone Number";
+      update(); // Update UI after fetching the phone number
+    } else {
+      defaultPhoneNumber =
+          "No Phone Number"; // Handle case where document does not exist
+      update();
+    }
   }
+
   void updatePhoneNumber(String newPhoneNumber) {
     defaultPhoneNumber = newPhoneNumber;
     update(); // Update UI after changing the phone number
@@ -779,7 +786,7 @@ class ServiceBookBottomSheetController extends GetxController {
     'Ac Repair': [
       'AC Repair Service',
       'AC Installation',
-      'AC leak dotection',
+      'AC leak detection',
       'AC cleaning',
       'AC compressor repairing'
     ],
@@ -791,9 +798,9 @@ class ServiceBookBottomSheetController extends GetxController {
       'Leaking Pipe Repair'
     ],
     'Electricity Repair': [
-      'Installing Lamps & Lights',
+      'Installing Lamps & Lights ',
       'Changing electric outlet (plug)',
-      'Cable tost termination',
+      'Cable test termination',
       'Laying cables'
     ],
     'Appliance Repair': [
@@ -1327,6 +1334,25 @@ class AuthController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Error retrieving provider data: $e');
       return null;
+    }
+  }
+
+  // Update user data (mobile, location) when updated in check_out screen.
+  Future<void> updateUserData({String? phoneNumber, String? address}) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('users_info')
+            .doc(userId)
+            .update({
+          if (phoneNumber != null) 'mobile': phoneNumber,
+          if (address != null) 'location': address,
+        });
+        print("Firestore update successful: $address");
+      } catch (e) {
+        print("Error updating Firestore: $e");
+      }
     }
   }
 }

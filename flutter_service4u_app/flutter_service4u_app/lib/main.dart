@@ -14,6 +14,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Get.put(AuthController());
+  Get.put(HomeMainScreenController(), permanent: true); // Singleton controller
+  Get.lazyPut(() => HomeScreenController(), fenix: true); // Lazy initialization
   GetStorage.init();
   runApp(const MyApp());
 }

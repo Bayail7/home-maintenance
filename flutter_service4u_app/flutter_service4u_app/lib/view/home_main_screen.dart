@@ -23,13 +23,13 @@ class HomeMainScreen extends StatefulWidget {
 }
 
 class _HomeMainScreenState extends State<HomeMainScreen> {
+  final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>(); // Unique key for this instance
   closeApp() {
     Future.delayed(const Duration(milliseconds: 1000), () {
       SystemNavigator.pop();
     });
   }
-  HomeMainScreenController homeMainScreenController =
-  Get.put(HomeMainScreenController());
+HomeMainScreenController homeMainScreenController = Get.find<HomeMainScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         },
         child: Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
-          key:HomeMainScreenController.drawerKey,
+          key: drawerKey,
           drawer: Drawer(
             child: DrawerData()
           ),

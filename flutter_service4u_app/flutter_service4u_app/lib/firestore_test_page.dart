@@ -57,12 +57,11 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
         'preferred working hours': workingHour,
         'password': password,
       });
-      Get.snackbar('Success','Provider added successfully with UID: $uid');
+      Get.snackbar('Success', 'Provider added successfully with UID: $uid');
     } catch (e) {
       print("Error adding user: $e");
     }
   }
-
 
   // New method for adding an order to the `new_orders` collection
   static Future<void> addOrderData(
@@ -72,20 +71,21 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
     String time,
     String location,
     String phoneNumber,
- String providerId, // New parameter for provider ID
-) async {
-  CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
+    String providerId,
+  ) async {
+    CollectionReference orders =
+        FirebaseFirestore.instance.collection('new_orders');
 
-  try {
-    await orders.add({
-      'user_name': customerName,
-      'service_name': serviceName,
-      'date': date,
-      'time': time,
-      'location': location,
-      'phone_number': phoneNumber,
-      'providerId': providerId, // Store provider ID with order
-      'status': 'new'
+    try {
+      await orders.add({
+        'user_name': customerName,
+        'service_name': serviceName,
+        'date': date,
+        'time': time,
+        'location': location,
+        'phone_number': phoneNumber,
+        'provider_Id': providerId, // Store provider ID with order
+        'status': 'new'
       });
       Get.snackbar('Order Success', 'New order added successfully');
       print("Order added successfully for: $customerName");
@@ -93,7 +93,6 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
       print("Error adding order: $e");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

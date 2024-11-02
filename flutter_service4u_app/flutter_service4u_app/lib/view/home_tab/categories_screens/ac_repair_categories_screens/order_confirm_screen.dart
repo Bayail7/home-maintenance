@@ -47,7 +47,7 @@ class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
               ),
               getVerSpace(30.h),
               getCustomButton("Ok", () {
-                Get.off(HomeMainScreen());
+                Get.offAll(() => HomeMainScreen()); 
               }).paddingSymmetric(horizontal: 50.h)
             ],
           ),

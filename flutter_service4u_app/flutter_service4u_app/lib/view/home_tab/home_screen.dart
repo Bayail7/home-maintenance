@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
+import 'package:service_hub_app/utils/drawe_data.dart';
 import '../../controller/controller.dart';
 import '../../routes/app_routes.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,8 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   TextEditingController serchController = TextEditingController();
-  HomeScreenController homeScreenController = Get.put(HomeScreenController());
+  final HomeScreenController homeScreenController = Get.find<HomeScreenController>();
+  final HomeMainScreenController homeMainScreenController = Get.find<HomeMainScreenController>();
 
   // Variables to hold user data
   String userLocation = "";
@@ -162,7 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
       init: HomeMainScreenController(),
       builder: (homeMainScreenController) => GetBuilder<HomeScreenController>(
           init: HomeScreenController(),
-          builder: (homeScreenController) => Column(
+          builder: (homeScreenController) => Scaffold(
+                key: drawerKey, // Use the unique key here
+                drawer: Drawer(
+                  child: DrawerData(),
+                ),
+                body: Column(
                 children: [
                   Stack(
                     children: [
@@ -181,8 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 GestureDetector(
                                     onTap: () {
-                                      HomeMainScreenController
-                                          .drawerKey.currentState!
+                                      drawerKey.currentState!
                                           .openDrawer();
                                     },
                                     child: getSvgImage("drawer_icon.svg")),
@@ -490,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ))
                 ],
               )),
-    );
+    ));
   }
 
   Widget service_formate(icon, title, function) {
