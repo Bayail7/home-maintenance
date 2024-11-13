@@ -40,13 +40,16 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
       String location,
       String haveCar,
       String? workingHour,
-      String password) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('providers_info');
+      String password,
+      double latitude,
+      double longitude
+      ) async {
+    CollectionReference providers =
+        FirebaseFirestore.instance.collection('providers_info_test');
 
     try {
       // Use uid as the document ID
-      await users.doc(uid).set({
+      await providers.doc(uid).set({
         'name': name,
         'email': email,
         'mobile': mobile,
@@ -56,6 +59,8 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
         'have a car?': haveCar,
         'preferred working hours': workingHour,
         'password': password,
+        'latitude': latitude,
+        'longitude': longitude,
       });
       Get.snackbar('Success', 'Provider added successfully with UID: $uid');
     } catch (e) {

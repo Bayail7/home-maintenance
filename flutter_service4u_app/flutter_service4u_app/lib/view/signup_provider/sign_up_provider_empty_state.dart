@@ -34,6 +34,9 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
   final formKey = GlobalKey<FormState>();
   final AuthController authControllerSignUp = Get.put(AuthController());
 
+  double? latitude;
+  double? longitude;
+
   // List of specializations
   final List<String> specializations = [
     'Plumber',
@@ -57,9 +60,11 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
     Constant.backToFinish();
   }
 
-  void _setLocation(String newLocation) {
+  void _setLocation(String newLocation, double lat, double lon) {
     setState(() {
-      location = newLocation; // Update the location text
+      location = newLocation; // Update the location name
+      latitude = lat; // Store latitude
+      longitude = lon; // Store longitude
     });
   }
 
@@ -141,52 +146,55 @@ class _SignUpProviderEmptyStateState extends State<SignUpProviderEmptyState> {
         });
         return; // Exit early if password is empty
       }
+      // Ensure all required fields are filled
+      if (latitude != null && longitude != null) {
+        try {
+          // Create user with Firebase Authentication
+          UserCredential userCredential =
+              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+          String uid = userCredential.user!.uid;
 
-      try {
-        // Create user with Firebase Authentication
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        String uid = userCredential.user!.uid;
+          // Save user data to Firestore
+          await FirestoreTestPageState.addProviderData(
+              uid,
+              name,
+              email,
+              mobile,
+              nationality,
+              selectedMajor!,
+              location,
+              haveCar,
+              selectedWorkingHour!,
+              password,
+              latitude!,
+              longitude!);
 
-        // Save user data to Firestore
-        await FirestoreTestPageState.addProviderData(
-          uid,
-          name,
-          email,
-          mobile,
-          nationality,
-          selectedMajor!,
-          location,
-          haveCar,
-          selectedWorkingHour!,
-          password,
-        );
-
-        // Set user sign-in state and navigate
-        PrefData.setIsSignIn(true);
-        Constant.sendToNext(context, Routes.ProviderServiceScreenRoute);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
+          // Set user sign-in state and navigate
+          PrefData.setIsSignIn(true);
+          Constant.sendToNext(context, Routes.ProviderServiceScreenRoute);
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            print('The password provided is too weak.');
+          } else if (e.code == 'email-already-in-use') {
+            print('The account already exists for that email.');
+          }
+        } catch (e) {
+          print('An error occurred: $e');
         }
-      } catch (e) {
-        print('An error occurred: $e');
+      } else {
+        // Show errors if major or working hour are not selected
+        setState(() {
+          if (selectedMajor == null) {
+            showMajorError = true;
+          }
+          if (selectedWorkingHour == null) {
+            showWorkingHourError = true;
+          }
+        });
       }
-    } else {
-      // Show errors if major or working hour are not selected
-      setState(() {
-        if (selectedMajor == null) {
-          showMajorError = true;
-        }
-        if (selectedWorkingHour == null) {
-          showWorkingHourError = true;
-        }
-      });
     }
   }
 

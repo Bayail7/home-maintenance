@@ -48,7 +48,8 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
       setState(() {
         defaultPhoneNumber = userData['mobile'] ?? "N/A";
         userAddress = userData['location'] ?? "N/A";
-        phoneNumberScreenController.defaultPhoneNumber = defaultPhoneNumber; // Update controller's phone number
+        phoneNumberScreenController.defaultPhoneNumber =
+            defaultPhoneNumber; // Update controller's phone number
         cheakOutScreenController.userAddress = userAddress;
       });
     }
@@ -308,7 +309,10 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                                           color: regularBlack,
                                                           type: TextInputType
                                                               .none,
-                                                          controller: TextEditingController(text: defaultPhoneNumber), // Reflect the phone number
+                                                          controller:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      defaultPhoneNumber), // Reflect the phone number
                                                           // controller:
                                                           //     phoneNumberController,
                                                           suffixiconpermition:
@@ -395,12 +399,26 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                                                   builder:
                                                                       (context) =>
                                                                           CurrentLocationScreen(
-                                                                    onLocationSelected:
-                                                                        (newselectedLocation) {
+                                                                    onLocationSelected: (String
+                                                                            placeName,
+                                                                        double
+                                                                            latitude,
+                                                                        double
+                                                                            longitude) {
                                                                       // Update the address in the controller
                                                                       cheakOutScreenController
                                                                               .userAddress =
-                                                                          newselectedLocation;
+                                                                          placeName;
+                                                                      // Store latitude and longitude in the controller if needed
+                                                                      cheakOutScreenController
+                                                                              .latitude =
+                                                                          latitude;
+                                                                      cheakOutScreenController
+                                                                              .longitude =
+                                                                          longitude;
+                                                                      setState(() {
+                                                                        userAddress = placeName; // Update the local state variable
+                                                                      });
                                                                     },
                                                                   ),
                                                                 ),

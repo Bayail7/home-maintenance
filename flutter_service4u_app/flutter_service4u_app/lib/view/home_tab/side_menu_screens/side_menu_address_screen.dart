@@ -10,6 +10,8 @@ class SideMenuAddressScreen extends StatefulWidget {
 
 class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
   String? userLocation;
+  double? latitude;
+  double? longitude;
 
   @override
   void initState() {
@@ -29,8 +31,10 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
 
     String uid = user.uid; // Get the authenticated user's UID
 
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('users_info').doc(uid).get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users_info')
+        .doc(uid)
+        .get();
 
     if (snapshot.exists) {
       setState(() {
@@ -49,10 +53,12 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => CurrentLocationScreen(
-          onLocationSelected: (String placeName) {
-            _updateLocationInFirebase(placeName);
+          onLocationSelected: (String placeName, double latitude, double longitude) {
+            _updateLocationInFirebase(placeName, latitude, longitude);
             setState(() {
               userLocation = placeName; // Update the displayed location
+              this.latitude = latitude;
+              this.longitude = longitude;
             });
           },
         ),
@@ -61,7 +67,7 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
   }
 
   // Function to update location in Firestore
-  Future<void> _updateLocationInFirebase(String placeName) async {
+  Future<void> _updateLocationInFirebase(String placeName, double latitude, double longitude) async {
     final User? user = FirebaseAuth.instance.currentUser; // Get current user
     if (user == null) {
       print("User not authenticated");
@@ -74,6 +80,8 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
 
     await users.doc(uid).set({
       'location': placeName,
+      'latitude': latitude,
+      'longitude': longitude,
     }, SetOptions(merge: true));
   }
 
@@ -94,16 +102,18 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-       ElevatedButton(
-  onPressed: _modifyLocation,
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color.fromARGB(255, 115, 177, 228), // Set the background color to blue
-  ),
-  child: const Text(
-    "Modify Location",
-    style: TextStyle(color: Colors.black), // Set the text color to black
-  ),
-),
+            ElevatedButton(
+              onPressed: _modifyLocation,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(
+                    255, 115, 177, 228), // Set the background color to blue
+              ),
+              child: const Text(
+                "Modify Location",
+                style: TextStyle(
+                    color: Colors.black), // Set the text color to black
+              ),
+            ),
           ],
         ),
       ),

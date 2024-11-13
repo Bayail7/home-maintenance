@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:service_hub_app/datafile/datafile.dart';
@@ -124,7 +125,8 @@ class HomeMainScreenController extends GetxController {
 }
 
 class ProviderServiceScreenController extends GetxController {
-  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
+  static GlobalKey<ScaffoldState> drawerKey =
+      GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
 
   // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
   // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
@@ -580,6 +582,8 @@ class CheakOutScreenController extends GetxController {
       Get.find<AuthController>(); // Get the AuthController instance
   bool cheakOut = false;
   String? userAddress;
+  double? latitude;
+  double? longitude;
 
   void setChkoutScreenPosition(bool val) {
     cheakOut = val;
@@ -783,27 +787,27 @@ class ServiceBookBottomSheetController extends GetxController {
 
   // Define a mapping between categories and their respective services
   Map<String, List<String>> categoryToServices = {
-    'Ac Repair': [
+    'AC Repair': [
       'AC Repair Service',
       'AC Installation',
       'AC leak detection',
       'AC cleaning',
       'AC compressor repairing'
     ],
-    'Plumbing Repair': [
+    'Plumbing': [
       'Bidet Repair',
       'Shower Repair',
       'Blocked Water Pipe Repair',
       'Pipe Repair',
       'Leaking Pipe Repair'
     ],
-    'Electricity Repair': [
+    'Electronics': [
       'Installing Lamps & Lights ',
       'Changing electric outlet (plug)',
       'Cable test termination',
       'Laying cables'
     ],
-    'Appliance Repair': [
+    'Appliance': [
       'Refrigerator Repair',
       'Dishwasher Repair',
       'Washing Machine Repair',
@@ -856,12 +860,12 @@ class ServiceBookBottomSheetController extends GetxController {
       String preferredWorkingHours;
 
       // Determine the major based on the selected service
-      if (selectedCategory == 'Ac Repair') {
+      if (selectedCategory == 'AC Repair') {
         major = 'HVAC Technician';
-      } else if (selectedCategory == 'Plumbing Repair') {
+      } else if (selectedCategory == 'Plumbing') {
         major = 'Plumber';
-      } else if (selectedCategory == 'Electricity Repair' ||
-          selectedCategory == 'Appliance Repair') {
+      } else if (selectedCategory == 'Electronics' ||
+          selectedCategory == 'Appliance') {
         major = 'Electrician';
       } else {
         print('Invalid service selected');
@@ -876,13 +880,21 @@ class ServiceBookBottomSheetController extends GetxController {
 
       // Firestore query to filter providers by major and working hours
       final snapshot = await FirebaseFirestore.instance
-          .collection('providers_info')
+          .collection('providers_info_test')
           .where('major', isEqualTo: major)
           .where('preferred working hours', isEqualTo: preferredWorkingHours)
           .get();
 
       if (snapshot.docs.isNotEmpty) {
         providers = snapshot.docs.map((doc) {
+          // Check if latitude and longitude fields exist, otherwise use default values
+          double latitude = doc.data().containsKey('latitude')
+              ? doc['latitude'] as double
+              : 0.0;
+          double longitude = doc.data().containsKey('longitude')
+              ? doc['longitude'] as double
+              : 0.0;
+
           return Provider(
             name: doc['name'] as String,
             email: doc['email'] as String,
@@ -892,6 +904,8 @@ class ServiceBookBottomSheetController extends GetxController {
             location: doc['location'] as String,
             hasCar: (doc['have a car?'] == 'true'),
             workingHours: doc['preferred working hours'] as String,
+            latitude: doc['latitude'],
+            longitude: doc['longitude'],
           );
         }).toList();
       } else {
@@ -902,6 +916,14 @@ class ServiceBookBottomSheetController extends GetxController {
       print('Error fetching providers: $e');
     }
     update();
+  }
+
+  // Function to calculate distance in kilometers
+  double calculateDistance(double startLatitude, double startLongitude,
+      double endLatitude, double endLongitude) {
+    return Geolocator.distanceBetween(
+            startLatitude, startLongitude, endLatitude, endLongitude) /
+        1000; // in km
   }
 
   String getTimePeriod(String formattedTime) {
@@ -978,6 +1000,10 @@ class ServiceBookBottomSheetController extends GetxController {
 
     // Variable to hold the selected provider
     Provider? selectedProvider;
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double userLatitude = position.latitude;
+    double userLongitude = position.longitude;
 
     await showDialog(
       context: context,
@@ -1002,7 +1028,7 @@ class ServiceBookBottomSheetController extends GetxController {
                     SizedBox(height: 16),
                     providers.isNotEmpty
                         ? SizedBox(
-                            height: 350, // Set max height for the list
+                            height: 350, // max height for the list
                             child: Scrollbar(
                               thumbVisibility:
                                   true, // Show scroll bar when scrolling
@@ -1016,13 +1042,51 @@ class ServiceBookBottomSheetController extends GetxController {
                                 shrinkWrap: true,
                                 itemCount: providers.length,
                                 itemBuilder: (context, index) {
+                                  // Calculate distance between user and provider
+                                  final distance = calculateDistance(
+                                    userLatitude,
+                                    userLongitude,
+                                    providers[index].latitude,
+                                    providers[index].longitude,
+                                  );
+
                                   return Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: RadioListTile<Provider>(
-                                          title: Text(providers[index].name),
+                                          title: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(providers[index]
+                                                  .name), // Provider name on the first line
+                                              SizedBox(
+                                                  height:
+                                                      4), // space between lines
+                                              Row(
+                                                children: [
+                                                  Flexible(
+                                                   child: Text(
+                                                    "${distance.toStringAsFixed(2)} km away.",
+                                                    style: TextStyle(
+                                                        color: Colors.grey[750],
+                                                        fontSize: 14.sp),
+                                                  ),
+                                                  ),
+                                                  SizedBox(width: 4), // Spacing between text and icon
+                                                  getSvgImage(
+                                                    "star_icon.svg", // SVG star icon
+                                                    width:
+                                                        16, // icon width
+                                                    height:
+                                                        16, // icon height
+                                                  ), // Distance on the second line
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                           value: providers[index],
                                           groupValue: selectedProvider,
                                           onChanged: (value) {
@@ -1317,7 +1381,7 @@ class AuthController extends GetxController {
       if (currentUser != null) {
         String uid = currentUser.uid;
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('providers_info')
+            .collection('providers_info_test')
             .doc(uid)
             .get();
 

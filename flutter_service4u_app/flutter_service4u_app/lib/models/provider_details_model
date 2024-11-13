@@ -1,8 +1,4 @@
 // Provider model to hold provider details
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Provider {
   String name;
   String email;
@@ -12,6 +8,8 @@ class Provider {
   String location;
   bool hasCar;
   String workingHours;
+  double latitude;
+  double longitude;
 
   Provider({
     required this.name,
@@ -22,5 +20,7 @@ class Provider {
     required this.location,
     required this.hasCar,
     required this.workingHours,
+    required this.latitude,
+    required this.longitude,
   });
 }
