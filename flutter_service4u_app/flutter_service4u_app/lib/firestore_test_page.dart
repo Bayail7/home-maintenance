@@ -45,7 +45,7 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
       double longitude
       ) async {
     CollectionReference providers =
-        FirebaseFirestore.instance.collection('providers_info_test');
+        FirebaseFirestore.instance.collection('providers_info');
 
     try {
       // Use uid as the document ID

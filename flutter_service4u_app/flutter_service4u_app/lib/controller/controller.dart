@@ -880,7 +880,7 @@ class ServiceBookBottomSheetController extends GetxController {
 
       // Firestore query to filter providers by major and working hours
       final snapshot = await FirebaseFirestore.instance
-          .collection('providers_info_test')
+          .collection('providers_info')
           .where('major', isEqualTo: major)
           .where('preferred working hours', isEqualTo: preferredWorkingHours)
           .get();
@@ -1067,21 +1067,22 @@ class ServiceBookBottomSheetController extends GetxController {
                                                       4), // space between lines
                                               Row(
                                                 children: [
-                                                  Flexible(
-                                                   child: Text(
-                                                    "${distance.toStringAsFixed(2)} km away.",
-                                                    style: TextStyle(
-                                                        color: Colors.grey[750],
-                                                        fontSize: 14.sp),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "It's ${distance.toStringAsFixed(2)} km away.",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.grey[750],
+                                                          fontSize: 14.sp),
+                                                    ),
                                                   ),
-                                                  ),
-                                                  SizedBox(width: 4), // Spacing between text and icon
+                                                  SizedBox(
+                                                      width:
+                                                          8), // Spacing between text and icon
                                                   getSvgImage(
                                                     "star_icon.svg", // SVG star icon
-                                                    width:
-                                                        16, // icon width
-                                                    height:
-                                                        16, // icon height
+                                                    width: 16, // icon width
+                                                    height: 16, // icon height
                                                   ), // Distance on the second line
                                                 ],
                                               )
@@ -1381,7 +1382,7 @@ class AuthController extends GetxController {
       if (currentUser != null) {
         String uid = currentUser.uid;
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('providers_info_test')
+            .collection('providers_info')
             .doc(uid)
             .get();
 
