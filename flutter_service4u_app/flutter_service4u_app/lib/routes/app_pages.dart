@@ -58,6 +58,7 @@ import '../view/splash_screen/splash_screen.dart';
 import 'app_routes.dart';
 import '../view/provider_profile_tab/edit_profilePro_screen.dart';
 import '../view/provider_profile_tab/provider_my_profile_screen.dart';
+import '../view/provider_profile_tab/provider_Booking.dart';
 
 class AppPages {
   static const initialRoute = Routes.splashScreenRoute;
@@ -77,6 +78,7 @@ class AppPages {
     Routes.ProviderServiceScreenRoute: (context) => ProviderServiceScreen(),
     Routes.homeScreenRoute: (context) => HomeScreen(),
     Routes.bookingScreenRoute: (context) => BookingScreen(),
+     Routes.ProviderBookingScreenRoute: (context) => ProviderBookingScreen(providerId: '',),
     Routes.notificationScreenRoute: (context) => NotificationScreen(),
     Routes.profileScreenRoute: (context) => ProfileScreen(),
     // Routes.cleaningServiceScreenRoute: (context) => CleaningServiceScreen(),

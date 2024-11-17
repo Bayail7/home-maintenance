@@ -127,6 +127,7 @@ class HomeMainScreenController extends GetxController {
 class ProviderServiceScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey =
       GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
+          var providerId = ''.obs; // Observable string to store provider ID
 
   // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
   // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
@@ -615,36 +616,42 @@ class CheakOutScreenController extends GetxController {
     }
   }
 
-// Define the addOrder method for placing a new order in the Firestore
-  Future<void> addOrder({
-    required String customerName,
-    required String serviceName,
-    required String date,
-    required String time,
-    required String location,
-    required String phoneNumber,
-    required String providerId, // Provider's ID from providers_info
-  }) async {
-    CollectionReference orders =
-        FirebaseFirestore.instance.collection('new_orders');
+// In your CheakOutScreenController
+Future<void> addOrder({
+  required String userName,          // Match the function call
+  required String serviceName,
+  required String date,
+  required String time,
+  required String location,
+  required String phoneNumber,
+  required String providerId,
+  required String providerName,
+}) async {
+  CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
+  String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
 
-    try {
-      await orders.add({
-        'providerid': providerId,
-        'user_name': customerName,
-        'service_name': serviceName,
-        'date': date,
-        'time': time,
-        'location': location,
-        'phone_number': phoneNumber,
-        'status': 'new',
-      });
-      Get.snackbar('Success', 'Order placed successfully');
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to place order');
-      print("Error adding order: $e");
-    }
+  try {
+    await orders.add({
+      'order_number': orderNumber,
+      'user_name': userName,          // Use correct parameter name
+      'service_name': serviceName,
+      'date': date,
+      'time': time,
+      'location': location,
+      'phone_number': phoneNumber,
+      'provider_id': providerId,
+      'provider_name': providerName,
+      'status': 'new',
+    });
+    Get.snackbar('Order Success', 'New order added successfully');
+    print("Order added successfully for: $userName");
+  } catch (e) {
+    print("Error adding order: $e");
+    Get.snackbar('Error', 'Failed to add the order');
   }
+}
+
+
 }
 
 class PhoneNumberScreenController extends GetxController {
@@ -1421,6 +1428,11 @@ class AuthController extends GetxController {
     }
   }
 }
+
+class ProviderBookingController extends GetxController {
+  // Your existing logic here
+}
+
 
 class MyProfileScreenController extends GetxController {}
 
