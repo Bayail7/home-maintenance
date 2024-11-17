@@ -1016,8 +1016,14 @@ class ServiceBookBottomSheetController extends GetxController {
       builder: (BuildContext context) {
         final ACRepairScreenController controller =
             Get.find<ACRepairScreenController>();
-        List<Provider> filteredProviders =
-            providers; // Initialize with all providers
+        List<Provider> filteredProviders = List.from(providers)
+          ..sort((a, b) {
+            final distanceA = calculateDistance(
+                userLatitude, userLongitude, a.latitude, a.longitude);
+            final distanceB = calculateDistance(
+                userLatitude, userLongitude, b.latitude, b.longitude);
+            return distanceA.compareTo(distanceB); // Sort by distance ascending
+          });
         bool showOnlyWithCar = false; // Filter toggle
 
         return Dialog(
@@ -1053,14 +1059,22 @@ class ServiceBookBottomSheetController extends GetxController {
                             filteredProviders =
                                 providers; // Reset to all providers
                           }
-                          // Sort filteredProviders based on service.rating
+                          // Sort filteredProviders based on distance to the user
                           filteredProviders.sort((a, b) {
-                            final serviceA =
-                                controller.allacservice[providers.indexOf(a)];
-                            final serviceB =
-                                controller.allacservice[providers.indexOf(b)];
-                            return serviceB.rating!.compareTo(
-                                serviceA.rating!); // Sort by rating descending
+                            final distanceA = calculateDistance(
+                              userLatitude,
+                              userLongitude,
+                              a.latitude,
+                              a.longitude,
+                            );
+                            final distanceB = calculateDistance(
+                              userLatitude,
+                              userLongitude,
+                              b.latitude,
+                              b.longitude,
+                            );
+                            return distanceA.compareTo(
+                                distanceB); // Sort by distance ascending
                           });
                         });
                       },
