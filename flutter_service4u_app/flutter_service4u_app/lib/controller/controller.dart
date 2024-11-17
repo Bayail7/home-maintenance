@@ -127,7 +127,7 @@ class HomeMainScreenController extends GetxController {
 class ProviderServiceScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey =
       GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
-          var providerId = ''.obs; // Observable string to store provider ID
+  var providerId = ''.obs; // Observable string to store provider ID
 
   // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
   // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
@@ -617,41 +617,40 @@ class CheakOutScreenController extends GetxController {
   }
 
 // In your CheakOutScreenController
-Future<void> addOrder({
-  required String userName,          // Match the function call
-  required String serviceName,
-  required String date,
-  required String time,
-  required String location,
-  required String phoneNumber,
-  required String providerId,
-  required String providerName,
-}) async {
-  CollectionReference orders = FirebaseFirestore.instance.collection('new_orders');
-  String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
+  Future<void> addOrder({
+    required String userName, // Match the function call
+    required String serviceName,
+    required String date,
+    required String time,
+    required String location,
+    required String phoneNumber,
+    required String providerId,
+    required String providerName,
+  }) async {
+    CollectionReference orders =
+        FirebaseFirestore.instance.collection('new_orders');
+    String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
 
-  try {
-    await orders.add({
-      'order_number': orderNumber,
-      'user_name': userName,          // Use correct parameter name
-      'service_name': serviceName,
-      'date': date,
-      'time': time,
-      'location': location,
-      'phone_number': phoneNumber,
-      'provider_id': providerId,
-      'provider_name': providerName,
-      'status': 'new',
-    });
-    Get.snackbar('Order Success', 'New order added successfully');
-    print("Order added successfully for: $userName");
-  } catch (e) {
-    print("Error adding order: $e");
-    Get.snackbar('Error', 'Failed to add the order');
+    try {
+      await orders.add({
+        'order_number': orderNumber,
+        'user_name': userName, // Use correct parameter name
+        'service_name': serviceName,
+        'date': date,
+        'time': time,
+        'location': location,
+        'phone_number': phoneNumber,
+        'provider_id': providerId,
+        'provider_name': providerName,
+        'status': 'new',
+      });
+      Get.snackbar('Order Success', 'New order added successfully');
+      print("Order added successfully for: $userName");
+    } catch (e) {
+      print("Error adding order: $e");
+      Get.snackbar('Error', 'Failed to add the order');
+    }
   }
-}
-
-
 }
 
 class PhoneNumberScreenController extends GetxController {
@@ -909,7 +908,7 @@ class ServiceBookBottomSheetController extends GetxController {
             nationality: doc['nationality'] as String,
             major: doc['major'] as String,
             location: doc['location'] as String,
-            hasCar: (doc['have a car?'] == 'true'),
+            hasCar: (doc['have a car?'] == 'Yes'),
             workingHours: doc['preferred working hours'] as String,
             latitude: doc['latitude'],
             longitude: doc['longitude'],
@@ -1015,6 +1014,12 @@ class ServiceBookBottomSheetController extends GetxController {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
+        final ACRepairScreenController controller =
+            Get.find<ACRepairScreenController>();
+        List<Provider> filteredProviders =
+            providers; // Initialize with all providers
+        bool showOnlyWithCar = false; // Filter toggle
+
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -1033,91 +1038,168 @@ class ServiceBookBottomSheetController extends GetxController {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 16),
-                    providers.isNotEmpty
+                    // Filter Button
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showOnlyWithCar = !showOnlyWithCar; // Toggle filter
+                          // Update filtered providers based on the condition
+                          if (showOnlyWithCar) {
+                            filteredProviders = providers
+                                .where((provider) =>
+                                    provider.hasCar) // filter providers
+                                .toList();
+                          } else {
+                            filteredProviders =
+                                providers; // Reset to all providers
+                          }
+                          // Sort filteredProviders based on service.rating
+                          filteredProviders.sort((a, b) {
+                            final serviceA =
+                                controller.allacservice[providers.indexOf(a)];
+                            final serviceB =
+                                controller.allacservice[providers.indexOf(b)];
+                            return serviceB.rating!.compareTo(
+                                serviceA.rating!); // Sort by rating descending
+                          });
+                        });
+                      },
+                      child: Text(
+                        showOnlyWithCar
+                            ? "Show All Providers"
+                            : "Show Providers that have a Car",
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Provider List
+                    filteredProviders.isNotEmpty
                         ? SizedBox(
-                            height: 350, // max height for the list
+                            height: 400, // Max height for the list
                             child: Scrollbar(
                               thumbVisibility:
                                   true, // Show scroll bar when scrolling
                               thickness:
                                   4.0, // Reduced thickness for a slimmer scrollbar
-                              radius: Radius.circular(8),
-                              controller:
-                                  _scrollController, // Rounded edges for the scrollbar
+                              radius: const Radius.circular(8),
+                              controller: _scrollController,
                               child: ListView.builder(
                                 controller: _scrollController,
                                 shrinkWrap: true,
-                                itemCount: providers.length,
+                                itemCount: filteredProviders
+                                    .length, // Use filteredProviders length
                                 itemBuilder: (context, index) {
+                                  final provider = filteredProviders[index];
+                                  final service =
+                                      controller.allacservice[index];
                                   // Calculate distance between user and provider
                                   final distance = calculateDistance(
                                     userLatitude,
                                     userLongitude,
-                                    providers[index].latitude,
-                                    providers[index].longitude,
+                                    provider.latitude,
+                                    provider.longitude,
                                   );
 
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: RadioListTile<Provider>(
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(providers[index]
-                                                  .name), // Provider name on the first line
-                                              SizedBox(
-                                                  height:
-                                                      4), // space between lines
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      "It's ${distance.toStringAsFixed(2)} km away.",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.grey[750],
-                                                          fontSize: 14.sp),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                      width:
-                                                          8), // Spacing between text and icon
-                                                  getSvgImage(
-                                                    "star_icon.svg", // SVG star icon
-                                                    width: 16, // icon width
-                                                    height: 16, // icon height
-                                                  ), // Distance on the second line
-                                                ],
-                                              )
-                                            ],
+                                  return Card(
+                                    margin: const EdgeInsets.all(10),
+                                    child: RadioListTile<Provider>(
+                                      value: provider,
+                                      groupValue: selectedProvider,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedProvider =
+                                              value; // Update the selected provider
+                                        });
+                                      },
+                                      title: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Provider Icon
+                                          getSvgImage(
+                                            "person-img.svg",
+                                            width: 43,
+                                            height: 43,
                                           ),
-                                          value: providers[index],
-                                          groupValue: selectedProvider,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedProvider =
-                                                  value; // Update the selected provider
-                                            });
-                                          },
-                                        ),
+                                          const SizedBox(
+                                              width:
+                                                  13), // Spacing between icon and name
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // Provider Name and Star Icon in the Same Row
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        provider.name,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 11),
+                                                    getSvgImage(
+                                                      "star_icon.svg", // Star icon
+                                                      width: 13,
+                                                      height: 13,
+                                                    ),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      "${service.rating}",
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: Colors.grey[550],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 7),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "It's ${distance.toStringAsFixed(2)} km away.",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[550],
+                                                          fontSize: 13,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 5.6),
+                                                Text(
+                                                  "Nationality: ${provider.nationality}",
+                                                  style: TextStyle(
+                                                    color: Colors.grey[550],
+                                                    fontSize: 13,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      // More Details Button
-                                      TextButton(
+                                      subtitle: TextButton(
                                         onPressed: () {
                                           _showProviderDetails(
-                                              context, providers[index]);
+                                              context, provider);
                                         },
-                                        child: Text('more details'),
+                                        child: const Text('more details'),
                                       ),
-                                    ],
+                                    ),
                                   );
                                 },
                               ),
-                            ))
+                            ),
+                          )
                         : Text(
                             'No providers available yet.',
                             style: TextStyle(fontSize: 16),
@@ -1179,7 +1261,7 @@ class ServiceBookBottomSheetController extends GetxController {
                   "location_icon.svg", "Location", provider.location),
               getVerSpace(20.h),
               getMyprofileDetailFormate("haveCar_icon.svg", "Has a Car",
-                  provider.hasCar ? "Yes" : "No"),
+                  provider.hasCar ? 'Yes' : 'No'),
               getVerSpace(20.h),
               getMyprofileDetailFormate("workingHour_icon.svg",
                   "Preferred Working Hours", provider.workingHours),
@@ -1432,7 +1514,6 @@ class AuthController extends GetxController {
 class ProviderBookingController extends GetxController {
   // Your existing logic here
 }
-
 
 class MyProfileScreenController extends GetxController {}
 
