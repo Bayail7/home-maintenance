@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:get/get.dart';
+import '../provider_profile_tab/provider_Booking.dart';
 class NewOrdersScreen extends StatelessWidget {
   final String providerId;
 
@@ -8,74 +9,61 @@ class NewOrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Convert providerId to a string to ensure consistent data type for Firebase queries
-    final String providerIdStr = providerId.toString();
-
-    // Debugging: Print the providerId to confirm it's set correctly
-    print("Provider ID passed to NewOrdersScreen: $providerIdStr");
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Orders'),
+        title: const Text('New Orders'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('new_orders')
-           // .where('provider_id', isEqualTo: providerIdStr)
+        //    .where('provider_id', isEqualTo: providerId)
+            .where('status', isEqualTo: 'new')
             .snapshots(),
         builder: (context, snapshot) {
-          // Check if the stream is still loading
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
-          // Debugging: Check if documents were retrieved
-          if (snapshot.hasData) {
-            print("Documents found for providerId $providerIdStr: ${snapshot.data!.docs.length}");
+          if (snapshot.hasError) {
+            return Center(child: Text('Error fetching orders: ${snapshot.error}'));
           }
 
-          // Verify if there's any data for the selected provider
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No new orders available for this provider.'));
+            return const Center(child: Text('No new orders available.'));
           }
 
-          // Get the list of orders for the provider
           final orders = snapshot.data!.docs;
 
-          // Display orders in a list format
           return ListView.builder(
             itemCount: orders.length,
             itemBuilder: (context, index) {
               var order = orders[index];
+              var data = order.data() as Map<String, dynamic>;
 
               return Card(
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                margin: const EdgeInsets.all(10),
                 child: ListTile(
-                  title: Text(order['service_name']),
+                  title: Text(data['service_name'] ?? 'No Service Name'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Requested by: ${order['user_name']}'),
-                      Text('Date: ${order['date']}'),
-                      Text('Time: ${order['time']}'),
-                      Text('Location: ${order['location']}'),
-                      Text('Phone: ${order['phone_number']}'),
+                      Text('Order Number : ${data['order_number'] ?? 'N/A'}'),
+                      Text('User: ${data['user_name'] ?? 'No User'}'),
+                      Text('Location: ${data['location'] ?? 'No Location'}'),
+                      Text('Date: ${data['date'] ?? 'No Date'}'),
+                      Text('Time: ${data['time'] ?? 'No Time'}'),
                     ],
                   ),
-                  trailing: Row(
+                  trailing: ButtonBar(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          acceptOrder(order.id);
-                        },
-                        child: Text('Accept', style: TextStyle(color: Colors.green)),
+                        onPressed: () => _updateOrderStatus(order.id, 'accepted'),
+                        child: const Text('Accept', style: TextStyle(color: Colors.green)),
                       ),
                       TextButton(
-                        onPressed: () {
-                          cancelOrder(order.id);
-                        },
-                        child: Text('Cancel', style: TextStyle(color: Colors.red)),
+                        onPressed: () => _updateOrderStatus(order.id, 'canceled'),
+                        child: const Text('Reject', style: TextStyle(color: Colors.red)),
                       ),
                     ],
                   ),
@@ -88,27 +76,13 @@ class NewOrdersScreen extends StatelessWidget {
     );
   }
 
-  // Function to mark an order as 'accepted'
-  void acceptOrder(String orderId) {
+  void _updateOrderStatus(String orderId, String newStatus) {
     FirebaseFirestore.instance.collection('new_orders').doc(orderId).update({
-      'status': 'accepted',
-      'updated_at': FieldValue.serverTimestamp(),
+      'status': newStatus,
     }).then((_) {
-      print('Order accepted with ID: $orderId');
+      Get.snackbar('Success', 'Order has been $newStatus.');
     }).catchError((error) {
-      print('Failed to accept order: $error');
-    });
-  }
-
-  // Function to mark an order as 'canceled'
-  void cancelOrder(String orderId) {
-    FirebaseFirestore.instance.collection('new_orders').doc(orderId).update({
-      'status': 'canceled',
-      'updated_at': FieldValue.serverTimestamp(),
-    }).then((_) {
-      print('Order canceled with ID: $orderId');
-    }).catchError((error) {
-      print('Failed to cancel order: $error');
+      Get.snackbar('Error', 'Failed to update order status: $error');
     });
   }
 }

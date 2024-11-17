@@ -51,6 +51,8 @@ dependencies:
   intl: ^0.17.0
   image_picker: ^0.8.5
   flutter_pytorch: ^1.0.1
+  url_launcher: ^6.1.7 # Use the latest version from pub.dev
+
 
 
 dev_dependencies:

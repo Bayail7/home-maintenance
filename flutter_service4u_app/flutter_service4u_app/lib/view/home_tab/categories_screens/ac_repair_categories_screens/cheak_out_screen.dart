@@ -511,18 +511,17 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
                                               defaultPhoneNumber;
 
                                           // Place the order
-                                          await cheakOutScreenController
-                                              .addOrder(
-                                            customerName: userName,
-                                            serviceName: serviceName,
-                                            date: date,
-                                            time: time,
-                                            location: location,
-                                            phoneNumber: phoneNumber,
-                                            providerId:
-                                                serviceController.provider ??
-                                                    "No Provider Selected",
-                                          );
+await cheakOutScreenController.addOrder(
+  userName: userName,
+  serviceName: serviceName,
+  date: date,
+  time: time,
+  location: location,
+  phoneNumber: phoneNumber ?? "No phone number",
+  providerId: serviceController.provider ?? "No Provider Selected",
+  providerName: "Provider Name",  // Replace or fetch dynamically
+);
+
 
                                           // Navigate to order confirmation screen
                                           Navigator.pushNamed(context,

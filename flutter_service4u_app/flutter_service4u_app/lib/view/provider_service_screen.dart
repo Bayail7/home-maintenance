@@ -6,11 +6,12 @@ import 'package:service_hub_app/utils/color_category.dart';
 import 'package:service_hub_app/view/notification_tab/provider_notification_screen.dart';
 import 'package:service_hub_app/view/provider_profile_tab/provider_profile_screen.dart';
 import 'package:service_hub_app/view/provider_profile_tab/new_orders_screen.dart';
-import '../controller/controller.dart';
+import '../controller/controller.dart'; 
 import 'package:service_hub_app/utils/constant.dart';
 import 'package:service_hub_app/utils/constantWidget.dart';
 import '../utils/drawe_data.dart';
-import 'booking_tab/booking_tab_screen.dart';
+//import 'booking_tab/booking_tab_screen.dart';
+import '../view/provider_profile_tab/provider_Booking.dart';
 
 class ProviderServiceScreen extends StatefulWidget {
   const ProviderServiceScreen({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class ProviderServiceScreen extends StatefulWidget {
 class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
   final ProviderServiceScreenController providerServiceScreenController =
       Get.put(ProviderServiceScreenController());
+
 
   void closeApp() {
     Future.delayed(const Duration(milliseconds: 1000), () {
@@ -118,23 +120,28 @@ class _ProviderServiceScreenState extends State<ProviderServiceScreen> {
       ),
     );
   }
+Widget _body() {
+  switch (providerServiceScreenController.position.value) {
+    case 0:
+      return NewOrdersScreen(providerId: providerServiceScreenController.providerId.value);
 
-  Widget _body() {
-    switch (providerServiceScreenController.position.value) {
-      case 0:
-       return NewOrdersScreen(providerId: '',); // Return the new Order screen
-       
-      case 1:
-       return BookingScreen();
-      case 2:
-              return ProviderNotificationScreen();
-      case 3: // New case for Order
-               return ProviderProfileScreen();
+    case 1:
+      return ProviderBookingScreen(providerId: providerServiceScreenController.providerId.value); // Uses ProviderBookingScreen from provider_Booking.dart
 
-      default:
-        return const Center(
-          child: Text("Invalid"),
-        );
-    }
+    case 2:
+      return ProviderNotificationScreen();
+
+    case 3:
+      return ProviderProfileScreen();
+
+    default:
+      return const Center(
+        child: Text("Invalid"),
+      );
   }
+}
+
+
+
+
 }

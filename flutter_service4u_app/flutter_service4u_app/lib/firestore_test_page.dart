@@ -45,7 +45,7 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
       double longitude
       ) async {
     CollectionReference providers =
-        FirebaseFirestore.instance.collection('providers_info_test');
+        FirebaseFirestore.instance.collection('providers_info');
 
     try {
       // Use uid as the document ID
@@ -77,21 +77,26 @@ class FirestoreTestPageState extends State<FirestoreTestPage> {
     String location,
     String phoneNumber,
     String providerId,
+    String providerName,
   ) async {
     CollectionReference orders =
         FirebaseFirestore.instance.collection('new_orders');
+  // Generate a unique order number using timestamp
+  String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
 
-    try {
-      await orders.add({
-        'user_name': customerName,
-        'service_name': serviceName,
-        'date': date,
-        'time': time,
-        'location': location,
-        'phone_number': phoneNumber,
-        'provider_Id': providerId, // Store provider ID with order
-        'status': 'new'
-      });
+  try {
+    await orders.add({
+      'order_number': orderNumber, // Add generated order number
+      'user_name': customerName,
+      'service_name': serviceName,
+      'date': date,
+      'time': time,
+      'location': location,
+      'phone_number': phoneNumber,
+      'provider_id': providerId,
+      'provider_name': providerName,
+      'status': 'new',
+    });
       Get.snackbar('Order Success', 'New order added successfully');
       print("Order added successfully for: $customerName");
     } catch (e) {

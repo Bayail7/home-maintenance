@@ -14,6 +14,7 @@ abstract class Routes {
   static const ProviderServiceScreenRoute = Paths.ProviderServiceScreenPath;
   static const homeScreenRoute = Paths.homeScreenPath;
   static const bookingScreenRoute = Paths.bookingScreenPath;
+   static const ProviderBookingScreenRoute = Paths.ProviderbookingScreenPath;
   static const notificationScreenRoute = Paths.notificationScreenPath;
   static const profileScreenRoute = Paths.profileScreenPath;
   static const cleaningServiceScreenRoute = Paths.cleaningServiceScreenPath;
@@ -82,6 +83,7 @@ abstract class Routes {
 
 }
 
+
 abstract class Paths {
   static const splashScreenPath = "/";
   static const onBoardingScreenPath = "/OnBoardingScreen";
@@ -95,6 +97,7 @@ abstract class Paths {
   static const homeMainScreenPath = "/HomeMainScreen";
   static const homeScreenPath = "/HomeScreen";
   static const bookingScreenPath = "/BookingScreen";
+  static const ProviderbookingScreenPath = "/ProviderBookingScreen";
   static const notificationScreenPath = "/NotificationScreen";
   static const profileScreenPath = "/ProfileScreen";
   static const cleaningServiceScreenPath = "/CleaningServiceScreen";
