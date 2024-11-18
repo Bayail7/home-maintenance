@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +31,51 @@ class _DrawerDataState extends State<DrawerData> {
     SideMenuNotificationScreen(),
     SideMenuSupportScreen(),
   ];
+
+  String userName = "Loading...";
+  String userEmail = "Loading...";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      Map<String, dynamic>? userData =
+          await fetchUserData(currentUser.uid); // Fetch user data from Firestore
+
+      if (userData != null) {
+        setState(() {
+          userName = userData['name'] ?? "User Name"; // Set user name
+          userEmail = userData['email'] ?? "Email not available"; // Set email
+        });
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchUserData(String uid) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users_info')
+          .doc(uid)
+          .get();
+
+      if (snapshot.exists) {
+        return snapshot.data() as Map<String, dynamic>; // Return user data
+      } else {
+        print("User not found in Firestore");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return null;
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -45,14 +92,15 @@ class _DrawerDataState extends State<DrawerData> {
                   Container(
                       height: 42.h,
                       width: 42.h,
-                      child: getAssetImage("user_image.png")),
+                      child: getAssetImage("user-icon.png")),
                   getHorSpace(12.h),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getCustomFont("Jacob Jones", 16.sp, regularBlack, 1,
+                      getCustomFont(userName, 16.sp, regularBlack, 1,
                           fontWeight: FontWeight.w400),
-                      getCustomFont("jacobjones@gmail.com", 12.sp, grey40, 1,
+                      SizedBox(height: 8.h),
+                      getCustomFont(userEmail, 12.sp, grey40, 1,
                           fontWeight: FontWeight.w400),
                     ],
                   )
