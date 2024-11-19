@@ -125,14 +125,6 @@ class HomeMainScreenController extends GetxController {
   }
 }
 
-<<<<<<< Updated upstream
-class ProviderServiceScreenController extends GetxController {
-  static GlobalKey<ScaffoldState> drawerKey =
-      GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
-  var providerId = ''.obs; // Observable string to store provider ID
-=======
->>>>>>> Stashed changes
-
 class ProviderServiceScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
 
@@ -652,7 +644,7 @@ class CheakOutScreenController extends GetxController {
         FirebaseFirestore.instance.collection('new_orders');
     String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
 
-<<<<<<< Updated upstream
+
     try {
       await orders.add({
         'order_number': orderNumber,
@@ -673,34 +665,12 @@ class CheakOutScreenController extends GetxController {
       Get.snackbar('Error', 'Failed to add the order');
     }
   }
-}
-=======
-  try {
-    await orders.add({
-      'order_number': orderNumber,
-      'user_name': userName,          // Use correct parameter name
-      'service_name': serviceName,
-      'date': date,
-      'time': time,
-      'location': location,
-      'phone_number': phoneNumber,
-      'provider_id': providerId,     // This should be the provider's UID
-      'provider_name': providerName,
-      'status': 'new',               // Mark order as 'new'
-    });
-    Get.snackbar('Order Success', 'New order added successfully');
-    print("Order added successfully for: $userName");
-  } catch (e) {
-    print("Error adding order: $e");
-    Get.snackbar('Error', 'Failed to add the order');
-  }
-}
+
 void navigateToNewOrdersScreen(String providerId) {
   Get.to(() => NewOrdersScreen(providerId: providerId));
 }
-
 }
->>>>>>> Stashed changes
+
 
 class PhoneNumberScreenController extends GetxController {
   List<PhoneNumbers> phone =
@@ -756,26 +726,6 @@ class PhoneNumberScreenController extends GetxController {
   }
 }
 
-//class PromoCodeScreenController extends GetxController {
-//  List<PromoCode> promocode = DataFile.getPromocodeData();
-// int? promoId;
-// int? selectPromoCodeIndex;
-
-// void setPromoCode(id) {
-//   promoId = id;
-//   update();
-// }
-
-// void setPromocodeIndex(int index) {
-//   selectPromoCodeIndex = index;
-//   update();
-// }
-
-// void removePromoCode() {
-//   selectPromoCodeIndex = null;
-//   update();
-// }
-//}
 
 class PayMentScreenController extends GetxController {
   List<PaymentCard> card = DataFile.getPaymentCardData();
