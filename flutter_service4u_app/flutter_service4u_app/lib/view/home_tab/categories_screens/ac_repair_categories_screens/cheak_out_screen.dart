@@ -54,6 +54,18 @@ class _CheakOutScreenState extends State<CheakOutScreen> {
       });
     }
   }
+// 1. Get the instance of ServiceBookBottomSheetController using Get.find()
+ServiceBookBottomSheetController serviceBookBottomSheetController = Get.find();
+
+
+  Future<void> handleCheckout() async {
+ // 2. Now, check the provider UID from the instance
+if (serviceBookBottomSheetController.selectedProviderUid == null) {
+  print("No provider selected.");
+  return; // Handle this case as per your application's logic
+}
+  }
+
 
   @override
   void didChangeDependencies() {
@@ -518,8 +530,8 @@ await cheakOutScreenController.addOrder(
   time: time,
   location: location,
   phoneNumber: phoneNumber ?? "No phone number",
-  providerId: serviceController.provider ?? "No Provider Selected",
-  providerName: "Provider Name",  // Replace or fetch dynamically
+  providerId: Get.find<ServiceBookBottomSheetController>().selectedProviderUid!, // Access through the existing instance
+  providerName:  serviceController.provider ?? "No Provider Selected",  // Replace or fetch dynamically
 );
 
 

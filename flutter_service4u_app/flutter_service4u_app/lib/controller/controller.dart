@@ -28,6 +28,7 @@ import '../models/recommended_data_model.dart';
 import '../models/service_offer_model.dart';
 import '../models/side_menu_data_model.dart';
 import '../utils/color_category.dart';
+import '../view/provider_profile_tab/new_orders_screen.dart';
 
 class SplashScreenController extends GetxController {}
 
@@ -124,14 +125,20 @@ class HomeMainScreenController extends GetxController {
   }
 }
 
+<<<<<<< Updated upstream
 class ProviderServiceScreenController extends GetxController {
   static GlobalKey<ScaffoldState> drawerKey =
       GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
   var providerId = ''.obs; // Observable string to store provider ID
+=======
+>>>>>>> Stashed changes
 
-  // static final GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
-  // GlobalKey<FormState> drawerKey = GlobalKey<FormState>();
-  RxInt position = 0.obs;
+class ProviderServiceScreenController extends GetxController {
+  static GlobalKey<ScaffoldState> drawerKey = GlobalKey(debugLabel: "providerServiceScreenDrawerKey");
+
+  var providerId = ''.obs; // Observable to store the provider ID
+  RxInt position = 0.obs; // Tracks the active navigation tab
+  RxBool hasNewNotifications = false.obs; // Tracks if there are new notifications
 
   onChange(int value) {
     position.value = value;
@@ -141,8 +148,22 @@ class ProviderServiceScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _listenForNotifications();
+  }
+
+  // Listen for new notifications or updates in the Firestore collection
+  void _listenForNotifications() {
+    FirebaseFirestore.instance
+        .collection('new_orders')
+        .where('provider_id', isEqualTo: providerId.value) // Filter by provider
+        .snapshots()
+        .listen((snapshot) {
+      // Update hasNewNotifications based on the Firestore data
+      hasNewNotifications.value = snapshot.docs.any((doc) => doc['status'] == 'new');
+    });
   }
 }
+
 
 class HomeScreenController extends GetxController {
   List<CleaningServiceOffer> cleaningOffer = DataFile.getCleaningOfferData();
@@ -631,6 +652,7 @@ class CheakOutScreenController extends GetxController {
         FirebaseFirestore.instance.collection('new_orders');
     String orderNumber = 'D-${DateTime.now().millisecondsSinceEpoch}';
 
+<<<<<<< Updated upstream
     try {
       await orders.add({
         'order_number': orderNumber,
@@ -652,6 +674,33 @@ class CheakOutScreenController extends GetxController {
     }
   }
 }
+=======
+  try {
+    await orders.add({
+      'order_number': orderNumber,
+      'user_name': userName,          // Use correct parameter name
+      'service_name': serviceName,
+      'date': date,
+      'time': time,
+      'location': location,
+      'phone_number': phoneNumber,
+      'provider_id': providerId,     // This should be the provider's UID
+      'provider_name': providerName,
+      'status': 'new',               // Mark order as 'new'
+    });
+    Get.snackbar('Order Success', 'New order added successfully');
+    print("Order added successfully for: $userName");
+  } catch (e) {
+    print("Error adding order: $e");
+    Get.snackbar('Error', 'Failed to add the order');
+  }
+}
+void navigateToNewOrdersScreen(String providerId) {
+  Get.to(() => NewOrdersScreen(providerId: providerId));
+}
+
+}
+>>>>>>> Stashed changes
 
 class PhoneNumberScreenController extends GetxController {
   List<PhoneNumbers> phone =
@@ -787,6 +836,8 @@ class ServiceBookBottomSheetController extends GetxController {
   String? serviceName;
   String? selectedCategory;
   String? selectedService; // For specific service name
+   String? selectedProviderUid;
+
 
   // Declare the scroll controller
   ScrollController _scrollController = ScrollController();
@@ -865,6 +916,7 @@ class ServiceBookBottomSheetController extends GetxController {
       String major;
       String preferredWorkingHours;
 
+
       // Determine the major based on the selected service
       if (selectedCategory == 'AC Repair') {
         major = 'HVAC Technician';
@@ -893,6 +945,15 @@ class ServiceBookBottomSheetController extends GetxController {
 
       if (snapshot.docs.isNotEmpty) {
         providers = snapshot.docs.map((doc) {
+
+  // Extract the UID from the document ID
+        String uid = doc.id;
+
+        // Set the selectedProviderUid to the first provider's UID (or based on some logic)
+        if (selectedProviderUid == null) {
+          selectedProviderUid = uid;
+        }
+
           // Check if latitude and longitude fields exist, otherwise use default values
           double latitude = doc.data().containsKey('latitude')
               ? doc['latitude'] as double
@@ -912,6 +973,7 @@ class ServiceBookBottomSheetController extends GetxController {
             workingHours: doc['preferred working hours'] as String,
             latitude: doc['latitude'],
             longitude: doc['longitude'],
+
           );
         }).toList();
       } else {
@@ -1538,3 +1600,4 @@ class EditProfileSCreenController extends GetxController {}
 class EditProfileProSCreenController extends GetxController {}
 
 class SettingScreensController extends GetxController {}
+class NewOrdersScreenController extends GetxController{}

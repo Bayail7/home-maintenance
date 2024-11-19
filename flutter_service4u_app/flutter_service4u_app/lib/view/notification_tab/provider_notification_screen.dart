@@ -1,98 +1,87 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:service_hub_app/utils/color_category.dart';
-import 'package:service_hub_app/utils/constant.dart';
-import 'package:service_hub_app/utils/constantWidget.dart';
-import '../../controller/controller.dart';
-import '../../models/notification_data_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProviderNotificationScreen extends StatefulWidget {
-  @override
-  _ProviderNotificationScreenState createState() => _ProviderNotificationScreenState();
-}
+class ProviderNotificationScreen extends StatelessWidget {
+  final String providerId;
 
-void backClick() {
-  Constant.closeApp();
-}
+  const ProviderNotificationScreen({required this.providerId, Key? key}) : super(key: key);
 
-class _ProviderNotificationScreenState extends State<ProviderNotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SideMenuNotificationScreenController>(
-      init: SideMenuNotificationScreenController(),
-      builder: (sideMenuNotificationScreenController) => SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getVerSpace(24.h),
-            getCustomAppBar("Notification", () {
-              backClick();
-            }).paddingSymmetric(horizontal: 20.h),
-            getVerSpace(20.h),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.h),
-                color: context.theme.focusColor,
-              ),
-              child: ListView.builder(
-                shrinkWrap: true,
-                primary: false,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                itemCount: sideMenuNotificationScreenController.notification.length,
-                itemBuilder: (context, index) {
-                  NotificationData notification = sideMenuNotificationScreenController.notification[index];
-                  return Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.h),
-                          border: Border.all(color: grey20),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: 56.h,
-                              width: 56.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.h),
-                                color: Color(0XFFFFE9D1),
-                              ),
-                              child: getSvgImage(notification.icon!).paddingAll(15.h),
-                            ),
-                            getHorSpace(16.h),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  getNotificationtext(
-                                    notification.firstText!,
-                                    " ${notification.secondText!}",
-                                    " ${notification.thirdText!}",
-                                    secondtextcolor: Color(0XFF9A9FA5),
-                                    firsttextcolor: context.theme.primaryColor,
-                                  ),
-                                  getVerSpace(2.h),
-                                  getCustomFont(notification.time!, 12.sp, Color(0XFF535763), 1,
-                                      fontWeight: FontWeight.w600),
-                                ],
-                              ).paddingOnly(right: 40.h),
-                            ),
-                            SizedBox(),
-                          ],
-                        ).paddingAll(16.h),
-                      ),
-                      getVerSpace(index == sideMenuNotificationScreenController.notification.length - 1 ? 0.h : 12.h),
-                    ],
-                  );
-                },
-              ).paddingOnly(bottom: 61.26.h, left: 20.h, right: 20.h),
-            )
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notifications'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('new_orders')
+          //  .where('provider_id', isEqualTo: providerId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No notifications found.'));
+          }
+
+          final notifications = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: notifications.length,
+            itemBuilder: (context, index) {
+              var notification = notifications[index];
+              var data = notification.data() as Map<String, dynamic>;
+
+              // Determine the message based on the status
+              String message;
+              if (data['status'] == 'new') {
+                message = "You have a new order!\nOrder Number: ${data['order_number']}";
+              } else if (data['status'] == 'accepted') {
+                message = "You accepted the order '${data['order_number']}'!";
+              } else if (data['status'] == 'canceled') {
+                message = "You rejected the order '${data['order_number']}'!";
+              } else {
+                message = "Order '${data['order_number']}' has an unknown status.";
+              }
+
+              return Card(
+                margin: const EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    message,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: _getMessageColor(data['status']),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
+  }
+
+  /// Get color for the message box based on status
+  Color _getMessageColor(String? status) {
+    switch (status) {
+      case 'new':
+        return Colors.blue;
+      case 'accepted':
+        return Colors.green;
+      case 'canceled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 }
