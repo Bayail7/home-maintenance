@@ -11,12 +11,12 @@ class ProviderBookingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookings'),
+        title: Text('Bookings  test '),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('new_orders')
-          //  .where('provider_id', isEqualTo: providerId)
+            //.where('provider_id', isEqualTo: providerId) // Uncomment if filtering by provider is needed
             .where('status', whereIn: ['accepted', 'canceled'])
             .snapshots(),
         builder: (context, snapshot) {
@@ -37,23 +37,73 @@ class ProviderBookingScreen extends StatelessWidget {
               var data = booking.data() as Map<String, dynamic>;
 
               return Card(
-                margin: EdgeInsets.all(10),
-                child: ListTile(
-                  title: Text(data['service_name'] ?? 'No Service Name'),
-                  subtitle: Column(
+                elevation: 4,
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Order #: ${data['order_number'] ?? 'N/A'}'),
-                      Text('User: ${data['user_name'] ?? 'No User'}'),
-                      Text('Location: ${data['location'] ?? 'No Location'}'),
-                      Text('Date: ${data['date'] ?? 'No Date'}'),
-                      Text('Time: ${data['time'] ?? 'No Time'}'),
-                      Text('Status: ${data['status'] ?? 'Unknown'}'),
+                      Text(
+                        data['service_name'] ?? 'No Service Name',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Order #: ${data['order_number'] ?? 'N/A'}',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      Text(
+                        'User: ${data['user_name'] ?? 'No User'}',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      Text(
+                        'Location: ${data['location'] ?? 'No Location'}',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      Text(
+                        'Date: ${data['date'] ?? 'No Date'}',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      Text(
+                        'Time: ${data['time'] ?? 'No Time'}',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      Text(
+                        'Status: ${data['status'] ?? 'Unknown'}',
+                        style: TextStyle(
+                          color: data['status'] == 'accepted'
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () => _makePhoneCall(data['phone_number']),
+                            icon: Icon(Icons.phone),
+                            label: Text('Call'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              textStyle: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text('More Details'),
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.phone),
-                    onPressed: () => _makePhoneCall(data['phone_number']),
                   ),
                 ),
               );
