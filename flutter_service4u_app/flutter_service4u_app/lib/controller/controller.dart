@@ -1314,67 +1314,91 @@ class ServiceBookBottomSheetController extends GetxController {
 
   // DateTime _dateTime = DateTime.now();
 
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: date,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: darkYellow, // <-- SEE HERE
-              onPrimary: regularBlack, // <-- SEE HERE
-              onSurface: regularBlack, // <-- SEE HERE
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red, // button text color
-              ),
+ Future<void> selectDate(BuildContext context) async {
+  final DateTime? picked = await showDatePicker(
+    context: context,
+    initialDate: date,
+    firstDate: DateTime.now(), // Prevent selecting dates in the past
+    lastDate: DateTime(2101),
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: darkYellow,
+            onPrimary: regularBlack,
+            onSurface: regularBlack,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red, // Button text color
             ),
           ),
-          child: child!,
-        );
-      },
-    );
+        ),
+        child: child!,
+      );
+    },
+  );
 
-    if (picked != null && picked != date) {
-      date = picked;
-      setDate(picked);
-      update();
-    }
+  if (picked != null) {
+    date = picked; // Temporarily set the date; time validation will happen in `selectTime`
+    setDate(picked);
+    update();
   }
-
-  Future<void> selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: time,
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: darkYellow, // <-- SEE HERE
-              onPrimary: regularBlack, // <-- SEE HERE
-              onSurface: regularBlack, // <-- SEE HERE
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red, // button text color
-              ),
+}
+Future<void> selectTime(BuildContext context) async {
+  final TimeOfDay? picked = await showTimePicker(
+    context: context,
+    initialTime: time,
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: darkYellow,
+            onPrimary: regularBlack,
+            onSurface: regularBlack,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red, // Button text color
             ),
           ),
-          child: child!,
-        );
-      },
+        ),
+        child: child!,
+      );
+    },
+  );
+
+  if (picked != null) {
+    final DateTime selectedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      picked.hour,
+      picked.minute,
     );
 
-    if (picked != null && picked != time) {
-      setTime(picked);
-      time = picked;
-      update();
+    // Get the current date and time
+    final DateTime now = DateTime.now();
+
+    // Ensure the selected time is at least 15 minutes in the future
+    if (selectedDateTime.isBefore(now.add(const Duration(minutes: 15)))) {
+      Fluttertoast.showToast(
+        msg: "Please select a time at least 15 minutes from now.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return; // Exit if the selected time is invalid
     }
+
+    // Set the selected time if valid
+    time = picked;
+    setTime(picked);
+    update();
   }
+}
+
 
   void setDate(DateTime date) {
     selectedDate = date;
@@ -1415,6 +1439,11 @@ class RecommendedServiceScreenController extends GetxController {
 }
 
 class AuthController extends GetxController {
+// Fetch the current user's email
+  String? getCurrentUserEmail() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    return currentUser?.email;
+  }
   // Sign-in function using Firebase Authentication
   Future<int> signInWithEmailAndPassword(String email, String password) async {
     try {

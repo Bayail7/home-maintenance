@@ -1,116 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:service_hub_app/view/booking_tab/histry_page.dart';
-import 'package:service_hub_app/view/booking_tab/upcoming_page.dart';
-
-import '../../controller/controller.dart';
-import '../../utils/color_category.dart';
-import '../../utils/constant.dart';
-import '../../utils/constantWidget.dart';
-// import 'draft_page.dart';
+import 'package:service_hub_app/controller/controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingScreen extends StatefulWidget {
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  _BookingScreenState createState() => _BookingScreenState();
 }
 
 class _BookingScreenState extends State<BookingScreen> {
-  BookingScreenController bookingScreenController =
-      Get.put(BookingScreenController());
-  PageController pageController = PageController();
-  List bookingPage = [UpcomingPage(), HistryPage()]; //,DraftPage()];
-  backclick() {
-    Constant.closeApp();
+  final AuthController authController = Get.find<AuthController>();
+
+  // Variables to hold user data
+  String userName = "";
+  String userEmail = "";
+  bool isLoading = true; // Loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      Map<String, dynamic>? userData = await authController.getUserData();
+
+      if (userData != null) {
+        setState(() {
+          userName = userData['name'] ?? "N/A";
+          userEmail = userData['email'] ?? "N/A";
+          isLoading = false; // Mark loading as complete
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Prevent infinite loading in case of error
+      });
+      print('Error fetching user data: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    initializeScreenSize(context);
-    return GetBuilder<BookingScreenController>(
-        init: BookingScreenController(),
-        builder: (bookingScreenController) => SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  getVerSpace(24.h),
-                  getCustomAppBar("Bookings", () {
-                    backclick();
-                  }).paddingSymmetric(horizontal: 20.h),
-                  getVerSpace(16.87.h),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bookings'),
+      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Show loading until data is fetched
+          : StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('new_orders')
+                  .where('user_name', isEqualTo: userName) // Use userName after it's set
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-                  Container(
-                    height: 72.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.h),
-                      color: context.theme.focusColor,
-                    ),
-                    child: TabBar(
-                      unselectedLabelColor: Color(0XFF6E758A),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.h, vertical: 16.h),
-                      labelStyle: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15.sp,
-                          fontFamily: Constant.fontsFamily),
-                      labelColor: buttonColor,
-                      unselectedLabelStyle: TextStyle(
-                          color: Color(0XFF23408F),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp,
-                          fontFamily: Constant.fontsFamily),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: ShapeDecoration(
-                          color: buttonColor.withOpacity(0.10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.h))),
-                      controller: bookingScreenController.tabController,
-                      tabs: const [
-                        Tab(
-                          text: "Upcoming ",
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text('No bookings found.'));
+                }
+
+                final bookings = snapshot.data!.docs;
+
+                return ListView.builder(
+                  itemCount: bookings.length,
+                  itemBuilder: (context, index) {
+                    var booking = bookings[index];
+                    var data = booking.data() as Map<String, dynamic>;
+
+                    return Card(
+                      margin: EdgeInsets.all(10),
+                      child: ListTile(
+                        title: Text(data['service_name'] ?? 'No Service Name'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Order #: ${data['order_number'] ?? 'N/A'}'),
+                            Text('Provider: ${data['provider_name'] ?? 'No provider'}'),
+                            Text('Location: ${data['location'] ?? 'No Location'}'),
+                            Text('Date: ${data['date'] ?? 'No Date'}'),
+                            Text('Time: ${data['time'] ?? 'No Time'}'),
+                            Text('Status: ${data['status'] ?? 'Unknown'}'),
+                          ],
                         ),
-                        Tab(
-                          text: "History",
+                        trailing: IconButton(
+                          icon: Icon(Icons.phone),
+                          onPressed: () => _makePhoneCall(data['phone_number']),
                         ),
-                        //Tab(
-                        // text: "Draft ",
-                        //),
-                      ],
-                      onTap: (value) {
-                        bookingScreenController.pController.animateToPage(value,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      },
-                    ),
-                  ).paddingSymmetric(horizontal: 16.h),
-                  getVerSpace(2.h),
-                  Expanded(
-                    child: PageView.builder(
-                      physics: BouncingScrollPhysics(),
-                      controller: bookingScreenController.pController,
-                      onPageChanged: (value) {
-                        bookingScreenController.tabController.animateTo(value,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      },
-                      itemCount: 2,
-                      itemBuilder: (context, index) {
-                        return bookingPage[index];
-                      },
-                    ),
-                  ),
-                  // Expanded(
-                  //     flex: 1,
-                  //     child: Container(
-                  //       decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(8.h),
-                  //         color: context.theme.focusColor,
-                  //       ),
-                  //       child:
-                  //     ).paddingOnly(left: 16.h, right: 16.h))
-                ],
-              ),
-            ));
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+    );
+  }
+
+  void _makePhoneCall(String? phoneNumber) async {
+    if (phoneNumber != null && phoneNumber.isNotEmpty) {
+      final url = 'tel:$phoneNumber';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
   }
 }
