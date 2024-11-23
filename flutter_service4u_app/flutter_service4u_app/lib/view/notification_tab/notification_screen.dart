@@ -27,7 +27,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getVerSpace(24.h),
-                  getCustomAppBar("Notification", () {
+                  getCustomAppBar("Notification Test", () {
                     backCLick();
                   }).paddingSymmetric(horizontal: 20.h),
                   getVerSpace(20.h),
