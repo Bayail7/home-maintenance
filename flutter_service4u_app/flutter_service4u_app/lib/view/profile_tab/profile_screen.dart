@@ -86,16 +86,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Get.to(MyAddress());
                   }),
                 ),
-                getVerSpace(20.h),
-                GetBuilder<SideMenuPaymentMenuScreenController>(
-                  init: SideMenuPaymentMenuScreenController(),
-                  builder: (sideMenuPaymentMenuScreenController) =>
-                      getProfileOption("card_icon.svg", "My Card", () {
-                    sideMenuPaymentMenuScreenController.setPaymentScreen(false);
-                    Constant.sendToNext(context, Routes.payMentScreenRoute);
-                    // Get.to(MyCard());
-                  }),
-                ),
+                // getVerSpace(20.h),
+                // GetBuilder<SideMenuPaymentMenuScreenController>(
+                //   init: SideMenuPaymentMenuScreenController(),
+                //   builder: (sideMenuPaymentMenuScreenController) =>
+                //       getProfileOption("card_icon.svg", "My Card", () {
+                //     sideMenuPaymentMenuScreenController.setPaymentScreen(false);
+                //     Constant.sendToNext(context, Routes.payMentScreenRoute);
+                //     // Get.to(MyCard());
+                //   }),
+                // ),
                 getVerSpace(20.h),
                 getProfileOption("setting_icon.svg", "Settings", () {
                   Constant.sendToNext(context, Routes.settingScreensRoute);

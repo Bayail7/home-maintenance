@@ -58,9 +58,13 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
                   position: selectedLocation!));
               setState(() {});
             },
-            label: const Text("Current Location"),
+            label: Text("Current Location",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey[900],
+                )),
             icon: const Icon(Icons.location_history),
-            backgroundColor: const Color.fromARGB(255, 115, 177, 228),
+            backgroundColor: Colors.grey[100],
             heroTag: 'currentLocationFAB', // Add a unique tag
           ),
           const SizedBox(height: 10),
@@ -70,9 +74,10 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
                 String placeName =
                     await _getPlaceName(selectedLocation!); // Get place name
                 widget.onLocationSelected(
-                  placeName, 
-                  selectedLocation!.latitude,
-                  selectedLocation!.longitude); // Pass place name, latitude, longitude
+                    placeName,
+                    selectedLocation!.latitude,
+                    selectedLocation!
+                        .longitude); // Pass place name, latitude, longitude
                 await _saveLocationToFirebase(placeName); // Save to Firebase
                 Navigator.pop(context);
               } else {
@@ -82,9 +87,13 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
                 );
               }
             },
-            label: const Text("Done"),
+            label: Text("Done",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey[900],
+                )),
             icon: const Icon(Icons.check),
-            backgroundColor: const Color.fromARGB(255, 115, 177, 228),
+            backgroundColor: Colors.grey[100],
           ),
         ],
       ),
@@ -115,23 +124,24 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
   }
- Future<String> _getPlaceName(LatLng latLng) async {
-  try {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
-    Placemark place = placemarks.first; // Take the first placemark
 
-    // Extract the desired details: country, city, and district
-    String country = place.country ?? "Unknown Country";
-    String city = place.locality ?? "Unknown City";
-    String district = place.subLocality ?? "Unknown District";
+  Future<String> _getPlaceName(LatLng latLng) async {
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+      Placemark place = placemarks.first; // Take the first placemark
 
-    return "$district, $city, $country"; // Return district, city, and country
-  } catch (e) {
-    print("Error getting place name: $e");
-    return "Unknown Location"; // Default value if error occurs
+      // Extract the desired details: country, city, and district
+      String country = place.country ?? "Unknown Country";
+      String city = place.locality ?? "Unknown City";
+      String district = place.subLocality ?? "Unknown District";
+
+      return "$district, $city, $country"; // Return district, city, and country
+    } catch (e) {
+      print("Error getting place name: $e");
+      return "Unknown Location"; // Default value if error occurs
+    }
   }
-}
 
   // Function to save location to Firestore
   Future<void> _saveLocationToFirebase(String placeName) async {

@@ -88,7 +88,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 getSvgImage(
-                                  "no_notifications_icon.svg",
+                                  "no_notification_icon.svg",
                                   height: 100.h,
                                   width: 100.h,
                                 ),

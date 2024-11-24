@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:service_hub_app/current_location_screen.dart';
+import 'package:service_hub_app/utils/constant.dart';
+import 'package:service_hub_app/utils/constantWidget.dart';
 
 class SideMenuAddressScreen extends StatefulWidget {
   @override
@@ -85,33 +89,112 @@ class _SideMenuAddressScreenState extends State<SideMenuAddressScreen> {
     }, SetOptions(merge: true));
   }
 
+  backClick() {
+    Constant.backToFinish();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Your Location"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              userLocation ?? 'Loading location...',
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _modifyLocation,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(
-                    255, 115, 177, 228), // Set the background color to blue
-              ),
-              child: const Text(
-                "Modify Location",
-                style: TextStyle(
-                    color: Colors.black), // Set the text color to black
+            getVerSpace(24.h),
+            getCustomAppBar("Address", () {
+              backClick();
+            }).paddingSymmetric(horizontal: 20.h),
+            getVerSpace(40.h),
+            Center(
+              child: Column(
+                children: [
+                  // Card widget to display the address and icon with styling
+                  Card(
+                    margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(color: Color(0xFFE0E0E0), width: 1), // border color
+                    ),
+                    color: Colors.white, // background color
+                    child: Container(
+                      height: 115.h, // Fixed height for the card
+                      padding: EdgeInsets.all(16.0), // Increase padding for more space inside the card
+                      child: Row(
+                        children: [
+                          // Home icon
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(221, 242, 235, 190),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.home,
+                              size: 24,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(width: 16), // Space between icon and address
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getVerSpace(5.h),
+                                Text(
+                                  'Home',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                getVerSpace(6.h),
+                                Text(
+                                  userLocation ?? 'Loading address...',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Change button with edit icon inside it
+                          ElevatedButton(
+                            onPressed: _modifyLocation,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[100],
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(color: const Color.fromRGBO(245, 245, 245, 1), width: 1), // border color
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Change",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey[900],
+                                  ),
+                                ),
+                                SizedBox(width: 5), // Space between text and icon
+                                Icon(
+                                  Icons.edit,
+                                  color: Colors.grey[800],
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

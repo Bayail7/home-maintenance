@@ -1570,6 +1570,10 @@ class ProviderBookingController extends GetxController {
   // Your existing logic here
 }
 
+class HistoryPageController extends GetxController {
+  // Add any necessary properties or methods for the controller here
+}
+
 class MyProfileScreenController extends GetxController {}
 
 class ProviderMyProfileScreenController extends GetxController {}

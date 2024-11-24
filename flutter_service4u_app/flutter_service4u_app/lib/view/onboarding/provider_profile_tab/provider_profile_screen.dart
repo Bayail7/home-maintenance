@@ -99,14 +99,14 @@ class _ProviderProfileScreenState extends State<ProviderProfileScreen> {
                       // Get.to(MyAddress());
                     }),
                   ),
-                  getVerSpace(20.h),
-                  getProfileOption("major_icon.png", "My Major", () async {
-                    var result = await Get.to(
-                        () => EditMajorScreen()); // Navigate to EditMajorScreen
-                    if (result == true) {
-                      _loadMajor(); // Reload major if it was updated
-                    }
-                  }),
+                  // getVerSpace(20.h),
+                  // getProfileOption("major_icon.png", "My Major", () async {
+                  //   var result = await Get.to(
+                  //       () => EditMajorScreen()); // Navigate to EditMajorScreen
+                  //   if (result == true) {
+                  //     _loadMajor(); // Reload major if it was updated
+                  //   }
+                  // }),
                   getVerSpace(20.h),
                   getProfileOption("setting_icon.svg", "Settings", () {
                     Constant.sendToNext(context, Routes.settingScreensRoute);
